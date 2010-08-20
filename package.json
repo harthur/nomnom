@@ -1,0 +1,17 @@
+{
+    "name": "argparse",
+    "description": "small option parser for node",
+    "version": "0.1",
+    "author": "Heather Arthur <fayearthur@gmail.com>",
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/harthur/argparse.git"
+    },
+    "directories": {
+        "lib": "./lib"
+    },
+    "dependencies": {
+        "wu": "*"
+    },
+    "main": "./lib/argparse"
+}
