@@ -1,7 +1,7 @@
 {
     "name": "argparse",
     "description": "small option parser for node",
-    "version": "0.1",
+    "version": "0.1.0",
     "author": "Heather Arthur <fayearthur@gmail.com>",
     "repository": {
         "type": "git",
