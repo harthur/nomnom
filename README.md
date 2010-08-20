@@ -10,7 +10,7 @@ using [npm](http://github.com/isaacs/npm):
 # Usage
 	var argparse = require("argparse");
 	
-	var options = [
+	var opts = [
 	  { name: 'config',
 	    flag: '-c',
 	    full: '--config=PATH TO CONFIG',
@@ -20,7 +20,7 @@ using [npm](http://github.com/isaacs/npm):
 	    flag: '-d'}
 	];
 	
-	var parser = new argparse.ArgParser(options);
+	var parser = new argparse.ArgParser(opts);
 	var options = parser.parse();
 
 	if(options.debug)
