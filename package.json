@@ -10,8 +10,5 @@
     "directories": {
         "lib": "./lib"
     },
-    "dependencies": {
-        "wu": "*"
-    },
     "main": "./lib/argparse"
 }
