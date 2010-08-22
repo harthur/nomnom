@@ -2,7 +2,7 @@
 argparse is a small option parser for CommonJS. Currently it does not print out 'help'.
 
 # Install
-using [npm](http://github.com/isaacs/npm):
+for [node.js](http://nodejs.org/) and [npm](http://github.com/isaacs/npm):
 	git clone http://github.com/harthur/argparse
 	cd argparse
 	npm install .
@@ -26,5 +26,5 @@ using [npm](http://github.com/isaacs/npm):
 	if(options.debug)
 	  // do stuff
 	
-by default, argparse parses [node.js](http://nodejs.org/)'s `process.argv`. You can also pass in the arguments to override this:
+by default, argparse parses [node.js](http://nodejs.org/)'s `process.argv`. You can also pass in the argv to override this:
 	var options = parser.parse(["-xvf", "--atomic=true"])
