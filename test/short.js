@@ -10,3 +10,14 @@ assert.ok(options.x);
 assert.ok(options.f);
 assert.ok(!options.k);
 
+var opts = [
+  { name: 'logfile',
+    string: '-l FILE'
+  }
+];
+
+parser = new argparse.ArgParser(opts);
+var options = parser.parse(["-l"]);
+
+assert.ok(options.logfile);
+assert.ok(!options.F);
