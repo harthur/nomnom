@@ -1,5 +1,5 @@
 # argparse
-argparse is a mainly-correct options parser for [node.js](http://nodejs.org/). It parses `process.argv`. Currently it does not print out 'help'.
+argparse is a small option parser for CommonJS. Currently it does not print out 'help'.
 
 # Install
 using [npm](http://github.com/isaacs/npm):
@@ -25,3 +25,6 @@ using [npm](http://github.com/isaacs/npm):
 
 	if(options.debug)
 	  // do stuff
+	
+by default, argparse parses [node.js](http://nodejs.org/)'s `process.argv`. You can also pass in the arguments to override this:
+	var options = parser.parse(["-xvf", "--atomic=true"])
