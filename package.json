@@ -1,6 +1,6 @@
 {
     "name": "argparse",
-    "description": "small option parser for node",
+    "description": "Small option parser that doesn't try to do anything",
     "version": "0.1.0",
     "author": "Heather Arthur <fayearthur@gmail.com>",
     "repository": {

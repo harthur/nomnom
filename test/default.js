@@ -4,7 +4,7 @@ var argparse = require("../lib/argparse"),
 
 opts = [
   { name: 'config',
-    flag: '-c',
+    string: '-c',
     default: 'c.json' 
   },
   { name: 'debug',
@@ -18,6 +18,7 @@ var options = parser.parse(["-c", "other.json", "--debug=false"]);
 
 assert.equal(options.config, "other.json");
 assert.equal(options.debug, false);
+
 
 var options = parser.parse(["-c", "--debug"]);
 

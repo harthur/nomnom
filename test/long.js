@@ -11,11 +11,11 @@ assert.ok(options.atomic);
 
 opts = [
   { name: 'atomic',
-    flag: '--atomic'
+    string: '--atomic'
   },
   { name: 'config',
     full: '--config=PATH'
-  }
+  },
 ];
 
 var parser = new argparse.ArgParser(opts);

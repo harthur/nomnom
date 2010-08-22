@@ -12,12 +12,12 @@ using [npm](http://github.com/isaacs/npm):
 	
 	var opts = [
 	  { name: 'config',
-	    flag: '-c',
-	    full: '--config=PATH TO CONFIG',
+	    string: '-c',
+	    full: '--config=PATH',
 	    default: 'config.json'},
 	
 	  { name: 'debug',
-	    flag: '-d'}
+	    string: '-d'}
 	];
 	
 	var parser = new argparse.ArgParser(opts);
