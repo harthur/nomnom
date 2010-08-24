@@ -12,7 +12,7 @@ for [node.js](http://nodejs.org/) and [npm](http://github.com/isaacs/npm):
 	
 	var opts = [
 	  { name: 'config',
-	    string: '-c',
+	    string: '-c PATH',
 	    full: '--config=PATH',
 	    default: 'config.json',
 	    help: 'JSON file with tests to run'},
