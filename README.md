@@ -27,10 +27,10 @@ for [node.js](http://nodejs.org/) and [npm](http://github.com/isaacs/npm):
 	if(options.debug)
 	  // do stuff
 	
-by default, argparse parses [node.js](http://nodejs.org/)'s `process.argv`. You can also pass in the args:
+By default, argparse parses [node](http://nodejs.org/)'s `process.argv`. You can also pass in the args:
 	var options = parser.parse(["-xvf", "--atomic=true"])
 	
-positional arguments are supported, but only at the beginning (the help message reflects this):
+Positional arguments are supported, but only at the beginning:
 	var opts = [
 	  { name: 'filename',
 	    position: 0,
@@ -42,12 +42,12 @@ positional arguments are supported, but only at the beginning (the help message 
 	
 	sys.puts(options.filename);
 	
-by default argparse will print out a usage message if `--help` or `-h` is an argument. You can disable this with the `printHelp` flag and override the printing function if you're not using node:
+Argparse prints out a usage message if `--help` or `-h` is an argument. You can disable this with the `printHelp` flag and override the printing function if you're not using node:
 
 	var parser = new argparse.ArgParser(opts,
-		{ printHelp: true, 
-		  printFunc: function(helpStr) {
-			  sys.puts(helpStr);
-			}
-		}
+	  { printHelp: true, 
+	    printFunc: function(helpStr) {
+	      sys.puts(helpStr);
+	    }
+	  }
 	);
