@@ -1,6 +1,5 @@
 var argparse = require("../lib/argparse"),
-    assert = require("assert"),
-    sys = require("sys");
+    assert = require("assert");
 
 opts = [
   { name: 'config',
