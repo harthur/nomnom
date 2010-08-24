@@ -1,13 +1,6 @@
 # argparse
 argparse is a small option parser for CommonJS.
 
-# Install
-for [node.js](http://nodejs.org/) and [npm](http://github.com/isaacs/npm):
-	git clone http://github.com/harthur/argparse
-	cd argparse
-	npm install .
-
-# Usage
 	var argparse = require("argparse");
 	
 	var opts = [
@@ -26,8 +19,14 @@ for [node.js](http://nodejs.org/) and [npm](http://github.com/isaacs/npm):
 
 	if(options.debug)
 	  // do stuff
-
 	
+# Install
+for [node.js](http://nodejs.org/) and [npm](http://github.com/isaacs/npm):
+	git clone http://github.com/harthur/argparse
+	cd argparse
+	npm install .
+
+# More Details
 By default, argparse parses [node](http://nodejs.org/)'s `process.argv`. You can also pass in the args:
 	var options = parser.parse(["-xvf", "--atomic=true"])
 	
