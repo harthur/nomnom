@@ -4,7 +4,7 @@ var argparse = require("argparse"),
 var opts = [
   { name: 'config',
     string: '-c',
-    full: '--config=PATH',
+    long: '--config=PATH',
     default: 'config.json',
     help: 'JSON config with test info'},
 

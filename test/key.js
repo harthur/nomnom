@@ -6,7 +6,7 @@ opts = [
     string: '-a'
   },
   { name: 'cname',
-    full: '--config=PATH'
+    long: '--config=PATH'
   },
   { name: 'bname',
     string: '--bkey'

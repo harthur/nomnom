@@ -7,7 +7,7 @@ opts = [
     default: 'c.json' 
   },
   { name: 'debug',
-    full: '--debug=BOOL',
+    long: '--debug=BOOL',
     default: true
   },
   { name: "aname",
@@ -16,7 +16,7 @@ opts = [
   { string: "--bname",
     default: 'bdef',
   },
-  { full: "--cname",
+  { long: "--cname",
     default: 'cdef',
   }
 ];
