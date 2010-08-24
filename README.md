@@ -27,8 +27,18 @@ for [node.js](http://nodejs.org/) and [npm](http://github.com/isaacs/npm):
 	if(options.debug)
 	  // do stuff
 	
-by default, argparse parses [node.js](http://nodejs.org/)'s `process.argv`. You can also pass in the argv:
+by default, argparse parses [node.js](http://nodejs.org/)'s `process.argv`. You can also pass in the args:
 	var options = parser.parse(["-xvf", "--atomic=true"])
 	
-you can get a help string for the options:
-	var msg = parser.helpString();
+positional args are supported, but only at the beginning of the args:
+	var opts = [
+	  { name: 'filename',
+	    position: 0,
+	    default: 'test.js'},
+	];
+	
+	var parser = new argparse.ArgParser(opts);
+	var options = parser.parse();
+	
+	sys.puts(options.filename);
+	
