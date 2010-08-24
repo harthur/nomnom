@@ -3,35 +3,62 @@ var argparse = require("../lib/argparse"),
 
 
 var opts = [
-  { name: 'config',
+  { name: 'test0',
     position: 0
   },
-  {
-    name: 'test',
+  { name: 'file',
+    string: '-f FILE',
+  },
+  { name: 'logfile',
+    string: '-l',
+    default: 'log.txt'
+  },
+  { name: 'atomic',
+    string: '-a'
+  },
+  { name: 'count',
+    string: '-c',
+    long: '--count=3'
+  },
+  { name: 'test2',
+    position: 2
+  },
+  { name: 'test1',
     position: 1,
-    default: 'def.js'
+    default: 'def1'
   }
 ];
 
 parser = new argparse.ArgParser(opts);
-var options = parser.parse(["config.json", "test.js", "-v", "git"]);
 
-assert.equal(options.config, "config.json");
-assert.equal(options.test, "test.js");
-assert.equal(options.v, "git");
+// mix args w/ values with positional args
+var options = parser.parse(["-l", "temp.log", "-c", "12", "-a", "test0.js",
+  "test1.js", "-f", "file.js", "test2.js"]);
 
-options = parser.parse(["config.json", "-v", "git", "extra"]);
+assert.equal(options.test0, "test0.js");
+assert.equal(options.test1, "test1.js");
+assert.equal(options.test2, "test2.js");
+assert.equal(options.logfile, "temp.log");
+assert.equal(options.count, 12);
+assert.equal(options.file, "file.js");
+assert.ok(options.atomic);
 
-assert.equal(options.config, "config.json");
-assert.equal(options.test, "def.js");
-assert.equal(options.v, "git");
-assert.ok(!options.extra);
-
-// positional that wasn't specified in opts
-options = parser.parse(["config.json", "pos1", "pos3"]);
-assert.equal(options[2], "pos3");
+// defaults
+var options = parser.parse([]);
+assert.ok(!options.test0);
+assert.equal(options.test1, "def1");
+assert.ok(!options.test2);
+assert.equal(options.logfile, "log.txt")
 
 // make sure we don't parse 'node test/runtests.js'
 options = parser.parse();
-assert.ok(!options.config);
-assert.equal(options.test,"def.js");
+assert.ok(!options.test0);
+assert.equal(options.test1, "def1");
+assert.ok(!options.test2);
+
+// positionals that weren't specified in opts
+parser = new argparse.ArgParser([]);
+options = parser.parse(["pos1", "pos2", "pos3"]);
+assert.equal(options[0], "pos1");
+assert.equal(options[1], "pos2");
+assert.equal(options[2], "pos3");

@@ -31,7 +31,7 @@ for [node.js](http://nodejs.org/) and [npm](http://github.com/isaacs/npm):
 By default, argparse parses [node](http://nodejs.org/)'s `process.argv`. You can also pass in the args:
 	var options = parser.parse(["-xvf", "--atomic=true"])
 	
-Positional arguments are supported, but only at the beginning:
+All parsed arguments that don't follow the form '-a' or '--atomic' and can't be attached to an option are positional and can be matched on via the `position`:
 	var opts = [
 	  { name: 'filename',
 	    position: 0,
