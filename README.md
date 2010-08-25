@@ -30,11 +30,11 @@ for [node.js](http://nodejs.org/) and [npm](http://github.com/isaacs/npm):
 By default, nomnom parses [node](http://nodejs.org/)'s `process.argv`. You can also pass in the args:
 	var options = parser.parse(["-xvf", "--atomic=true"])
 	
-All parsed arguments that don't fit the `-a` or `--atomic' format and aren't attached to an option are positional and can be matched on via the `position`:
+All parsed arguments that don't fit the `-a` or `--atomic` format and aren't attached to an option are positional and can be matched on via the `position`:
 	var opts = [
 	  { name: 'filename',
 	    position: 0
-    }
+          }
 	];
 	
 	var parser = new nomnom.ArgParser(opts);
