@@ -1,4 +1,4 @@
-var argparse = require("argparse"),
+var nomnom = require("../lib/nomnom"),
     sys = require("sys"),
     assert = require("assert");
 
@@ -16,7 +16,7 @@ var opts = [
   { name: 'logfile',
     string: '-l LOG'}
 ];
-var parser = new argparse.ArgParser(opts);
+var parser = new nomnom.ArgParser(opts);
 assert.equal(strip(parser.helpString()), strip("usage:<script>[options]\
     options:-c,--config=PATHJSONconfigwithtestinfo-lLOG"));
 
@@ -34,6 +34,6 @@ var opts = [
     position: 1}
 ];
 
-var parser = new argparse.ArgParser(opts);
+var parser = new nomnom.ArgParser(opts);
 assert.equal(strip(parser.helpString()), strip("usage: <script> aname0\
     aname1 aname2 [options]options:-d"));

@@ -1,8 +1,8 @@
-var argparse = require("../lib/argparse"),
+var nomnom = require("../lib/nomnom"),
     assert = require("assert");
 
 
-var parser = new argparse.ArgParser();
+var parser = new nomnom.ArgParser();
 var options = parser.parse(["--atomic"]);
 
 assert.ok(options.atomic);
@@ -17,7 +17,7 @@ opts = [
   },
 ];
 
-var parser = new argparse.ArgParser(opts);
+var parser = new nomnom.ArgParser(opts);
 var options = parser.parse(["--atomic","--config"]);
 
 assert.ok(options.atomic);

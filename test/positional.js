@@ -1,4 +1,4 @@
-var argparse = require("../lib/argparse"),
+var nomnom = require("../lib/nomnom"),
     assert = require("assert");
 
 
@@ -29,7 +29,7 @@ var opts = [
   }
 ];
 
-parser = new argparse.ArgParser(opts);
+parser = new nomnom.ArgParser(opts);
 
 // mix args w/ values with positional args
 var options = parser.parse(["-l", "temp.log", "-c", "12", "-a", "test0.js",
@@ -57,7 +57,7 @@ assert.equal(options.test1, "def1");
 assert.ok(!options.test2);
 
 // positionals that weren't specified in opts
-parser = new argparse.ArgParser([]);
+parser = new nomnom.ArgParser([]);
 options = parser.parse(["pos1", "pos2", "pos3"]);
 assert.equal(options[0], "pos1");
 assert.equal(options[1], "pos2");

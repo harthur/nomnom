@@ -1,14 +1,14 @@
 {
-    "name": "argparse",
+    "name": "nomnom",
     "description": "Small option parser that doesn't try to do anything",
     "version": "0.1.0",
     "author": "Heather Arthur <fayearthur@gmail.com>",
     "repository": {
         "type": "git",
-        "url": "http://github.com/harthur/argparse.git"
+        "url": "http://github.com/harthur/nomnomargs.git"
     },
     "directories": {
         "lib": "./lib"
     },
-    "main": "./lib/argparse"
+    "main": "./lib/nomnom"
 }

@@ -1,4 +1,4 @@
-var argparse = require("../lib/argparse"),
+var nomnom = require("../lib/nomnom"),
     assert = require("assert");
 
 opts = [
@@ -21,7 +21,7 @@ opts = [
   }
 ];
 
-var parser = new argparse.ArgParser(opts);
+var parser = new nomnom.ArgParser(opts);
 var options = parser.parse(["-c", "other.json", "--debug=false"]);
 
 assert.equal(options.config, "other.json");

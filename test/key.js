@@ -1,4 +1,4 @@
-var argparse = require("../lib/argparse"),
+var nomnom = require("../lib/nomnom"),
     assert = require("assert");
 
 opts = [
@@ -13,7 +13,7 @@ opts = [
   }
 ];
 
-var parser = new argparse.ArgParser(opts);
+var parser = new nomnom.ArgParser(opts);
 var options = parser.parse(["-a", "--config", "--bkey"]);
 
 assert.ok(options.aname);

@@ -1,4 +1,4 @@
-var argparse = require("argparse"),
+var nomnom = require("../lib/nomnom"),
     sys = require("sys");
 
 var opts = [
@@ -11,7 +11,7 @@ var opts = [
   { name: 'logfile',
     string: '-l LOG'}
 ];
-var parser = new argparse.ArgParser(opts, {printHelp: true, printFunc : function(msg) {
+var parser = new nomnom.ArgParser(opts, {printHelp: true, printFunc : function(msg) {
   sys.puts("heeeeeeeeeeeelp" + msg);
 }});
 parser.parse();
