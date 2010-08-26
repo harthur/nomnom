@@ -13,8 +13,7 @@ opts = [
   }
 ];
 
-var parser = new nomnom.ArgParser(opts);
-var options = parser.parse(["-a", "--config", "--bkey"]);
+var options = nomnom.parseArgs(opts, ["-a", "--config", "--bkey"]);
 
 assert.ok(options.aname);
 assert.ok(options.cname);

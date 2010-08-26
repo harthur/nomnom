@@ -1,22 +1,20 @@
 var nomnom = require("../lib/nomnom"),
     assert = require("assert");
 
-var parser = new nomnom.ArgParser();
-var options = parser.parse(["-cxf"]);
+var options = nomnom.parseArgs([], ["-cxf"]);
 
 assert.ok(options.c);
 assert.ok(options.x);
 assert.ok(options.f);
 assert.ok(!options.k);
 
+
 var opts = [
   { name: 'logfile',
-    string: '-l FILE'
-  }
+    string: '-l FILE'}
 ];
 
-parser = new nomnom.ArgParser(opts);
-var options = parser.parse(["-l"]);
+var options = nomnom.parseArgs(opts, ["-l"]);
 
 assert.ok(options.logfile);
 assert.ok(!options.F);
