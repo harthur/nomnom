@@ -4,7 +4,7 @@ var nomnom = require("../lib/nomnom"),
 var options = nomnom.parseArgs([], ["-d", "file.js", "--atomic=true", "addon.xpi"]);
 
 var url = options[0]; // get the first positional arg
-var debug = options.debug // see if --debug was specified
+var debug = options.debug; // see if --debug was specified
 
 assert.ok(options.d);
 assert.equal(options[0], "file.js");
