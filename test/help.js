@@ -37,3 +37,7 @@ var opts = [
 var parser = new nomnom.ArgParser(opts);
 assert.equal(strip(parser.helpString()), strip("usage: <script> aname0\
     aname1 aname2 [options]options:-d"));
+    
+parser = new nomnom.ArgParser(opts, {script: 'test.js'});
+assert.equal(strip(parser.helpString()), strip("usage: test.js aname0\
+        aname1 aname2 [options]options:-d"));
