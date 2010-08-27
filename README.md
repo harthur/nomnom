@@ -1,5 +1,5 @@
 # nomnom
-nomnom is a small option parser for CommonJS. It just parses your args and gives them back to you in a hash.
+nomnom is a small option parser for node and CommonJS. It just parses your args and gives them back to you in a hash.
 
 	var nomnom = require("nomnom");
 	
