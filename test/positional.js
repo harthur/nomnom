@@ -57,7 +57,7 @@ assert.equal(options.test1, "def1");
 assert.ok(!options.test2);
 
 // positionals that weren't specified in opts
-options = nomnom.parseArgs([], ["pos1", "pos2", "pos3"]);
+options = nomnom.parseArgs([], {}, ["pos1", "pos2", "pos3"]);
 assert.equal(options[0], "pos1");
 assert.equal(options[1], "pos2");
 assert.equal(options[2], "pos3");
