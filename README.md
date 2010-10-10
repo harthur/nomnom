@@ -21,7 +21,7 @@ nomnom is a small option parser for node and CommonJS. It just parses your args 
 
 # Install
 for [node.js](http://nodejs.org/) and [npm](http://github.com/isaacs/npm):
-	git clone http://github.com/harthur/nomnomargs
+	git clone http://github.com/harthur/nomnomargs.git
 	cd nomnomargs
 	npm install .
 
