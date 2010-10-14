@@ -5,8 +5,7 @@ nomnom is a small option parser for node and CommonJS. It just parses your args 
 	
 	var opts = [
 	  { name: 'config',
-	    string: '-c PATH',
-	    long: '--config=PATH',
+	    string: '-c PATH, --config=PATH',
 	    default: 'config.json',
 	    help: 'JSON file with tests to run'},
 	

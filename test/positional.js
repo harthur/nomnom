@@ -17,8 +17,7 @@ var opts = [
     string: '-a'
   },
   { name: 'count',
-    string: '-c',
-    long: '--count=3'
+    string: '-c, --count=3'
   },
   { name: 'test2',
     position: 2

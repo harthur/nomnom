@@ -13,7 +13,7 @@ opts = [
     string: '--atomic'
   },
   { name: 'config',
-    long: '--config=PATH'
+    string: '--config=PATH'
   },
 ];
 

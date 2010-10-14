@@ -8,8 +8,7 @@ function strip(str) {
 
 var opts = [
   { name: 'config',
-    string: '-c',
-    long: '--config=PATH',
+    string: '-c, --config=PATH',
     default: 'config.json',
     help: 'JSON config with test info'},
 
