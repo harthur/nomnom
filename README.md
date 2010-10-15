@@ -29,9 +29,7 @@ You don't even have to specify anything if you don't want to:
 
 # Install
 for [node.js](http://nodejs.org/) and [npm](http://github.com/isaacs/npm):
-	git clone http://github.com/harthur/nomnomargs.git
-	cd nomnomargs
-	npm install .
+	npm install nomnom
 
 # More Details
 By default, nomnom parses [node](http://nodejs.org/)'s `process.argv`. You can also pass in the args:
