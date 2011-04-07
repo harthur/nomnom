@@ -1,14 +1,15 @@
 {
     "name": "nomnom",
     "description": "Limited option parser",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "author": "Heather Arthur <fayearthur@gmail.com>",
     "repository": {
         "type": "git",
-        "url": "http://github.com/harthur/nomnomargs"
+        "url": "http://github.com/harthur/nomnomargs.git"
     },
     "directories": {
         "lib": "./lib"
     },
-    "main": "./lib/nomnom"
+    "main": "./lib/nomnom",
+    "keywords": ["arguments", "option parser", "command line"]
 }
