@@ -3,17 +3,17 @@ nomnom is a small option parser for node and CommonJS. It just parses your args 
 
 	var nomnom = require("nomnom");
 	
-	var opts = [
-	  { name: 'config',
+	var opts = {
+	  config: {
 	    string: '-c PATH, --config=PATH',
 	    default: 'config.json',
 	    help: 'JSON file with tests to run'
 	  },
-	  { name: 'debug',
+	  debug: {
 	    string: '-d',
 	    help: 'Use debug mode'
 	  }
-	];
+	};
 	
 	var options = nomnom.parseArgs(opts);
 
@@ -36,12 +36,12 @@ By default, nomnom parses [node](http://nodejs.org/)'s `process.argv`. You can a
 	var options = nomnom.parseArgs(opts, {}, ["-xvf", "--atomic=true"])
 	
 All parsed arguments that don't fit the `-a` or `--atomic` format and aren't attached to an option are positional and can be matched on via the `position`:
-	var opts = [
-	  { name: 'filename',
+	var opts = {
+	  filename: {
 	    position: 0,
 	    help: 'file to edit'
 	  }
-	];
+	};
 	var options = nomnom.parseArgs(opts);
 	
 	sys.puts(options.filename);
