@@ -10,7 +10,6 @@ var opts = [
   { name: 'logfile',
     string: '-l LOG'}
 ];
-var parser = new nomnom.ArgParser(opts, {printHelp: true, printFunc : function(msg) {
+nomnom.parseArgs(opts, { printHelp: true, printFunc : function(msg) {
   sys.puts("heeeeeeeeeeeelp" + msg);
 }});
-parser.parse();

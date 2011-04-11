@@ -33,7 +33,7 @@ for [node.js](http://nodejs.org/) and [npm](http://github.com/isaacs/npm):
 
 # More Details
 By default, nomnom parses [node](http://nodejs.org/)'s `process.argv`. You can also pass in the args:
-	var options = nomnom.parseArgs(opts, {}, ["-xvf", "--atomic=true"])
+	var options = nomnom.parseArgs(opts, { argv: ["-xvf", "--atomic=true"] })
 	
 Values are JSON parsed, so `--debug=true --count=3 --file=log.txt` would give you:
 	{ debug: true,

@@ -11,6 +11,6 @@ var opts = [
 var args = ["--test=test.js", "-l", "test.log"];
 
 var options = (new nomnom.ArgParser(opts)).parse(args);
-var shortOpts = nomnom.parseArgs(opts, {}, args);
+var shortOpts = nomnom.parseArgs(opts, { argv: args });
 
 assert.equal(JSON.stringify(options), JSON.stringify(shortOpts));

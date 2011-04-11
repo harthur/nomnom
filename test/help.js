@@ -15,10 +15,8 @@ var opts = [
   { name: 'logfile',
     string: '-l LOG'}
 ];
-var parser = new nomnom.ArgParser(opts);
-assert.equal(strip(parser.helpString()), strip("usage:<script>[options]\
-    options:-c,--config=PATHJSONconfigwithtestinfo-lLOG"));
-
+var parser = new nomnom.ArgParser(opts, {script: 'test.js'});
+assert.equal(strip(parser.helpString()), strip("Usage:test.js[options]options:-c,--config=PATHJSONconfigwithtestinfo-lLOG"));
 var opts = [
   { name: 'aname0',
     position: 0},
@@ -33,10 +31,5 @@ var opts = [
     position: 1}
 ];
 
-var parser = new nomnom.ArgParser(opts);
-assert.equal(strip(parser.helpString()), strip("usage: <script> <aname0>\
-    <aname1> <aname2> [options] aname0 aname1 aname2 options:-d"));
-    
 parser = new nomnom.ArgParser(opts, {script: 'test.js'});
-assert.equal(strip(parser.helpString()), strip("usage: test.js <aname0>\
-        <aname1> <aname2> [options] aname0 aname1 aname2 options:-d"));
+assert.equal(strip(parser.helpString()), strip("Usage:test.js<aname0><aname1><aname2>[options]<aname0><aname1><aname2>options:-d"));
