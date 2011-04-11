@@ -85,9 +85,3 @@ Usage for these options in `test.js`:
 	
 Nomnom can't detect the alias used to run your script. You can use the `script` option to print the correct name instead of e.g. `node test.js`:
 	nomnom.parseArgs(opts, { script : "test" });
-
-
-
-	
-	
-
