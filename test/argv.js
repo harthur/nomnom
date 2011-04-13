@@ -10,6 +10,9 @@ var opts = [
   { name: 'logfile',
     string: '-l LOG'}
 ];
-nomnom.parseArgs(opts, { printHelp: true, printFunc : function(msg) {
-  sys.puts("heeeeeeeeeeeelp" + msg);
-}});
+nomnom(opts, {
+  printHelp: true,
+  printFunc : function(msg) {
+    sys.puts("heeeeeeeeeeeelp" + msg);
+  }
+}).parseArgs();

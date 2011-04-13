@@ -11,5 +11,8 @@
         "lib": "./lib"
     },
     "main": "./lib/nomnom",
-    "keywords": ["arguments", "option parser", "command line"]
+    "keywords": ["arguments", "option parser", "command line"],
+    "dependencies": {
+      "underscore": "*"
+    }
 }

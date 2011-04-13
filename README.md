@@ -15,13 +15,13 @@ nomnom is a small option parser for node and CommonJS. It just parses your args 
 	  }
 	};
 	
-	var options = nomnom.parseArgs(opts);
+	var options = nomnom(opts).parseArgs();
 
 	if(options.debug)
 	  // do stuff
 	
 You don't even have to specify anything if you don't want to:
-	var options = nomnom.parseArgs();
+	var options = nomnom().parseArgs();
 
 	var url = options[0]; // get the first positional arg
 	var debug = options.debug // see if --debug was specified
@@ -33,7 +33,7 @@ for [node.js](http://nodejs.org/) and [npm](http://github.com/isaacs/npm):
 
 # More Details
 By default, nomnom parses [node](http://nodejs.org/)'s `process.argv`. You can also pass in the args:
-	var options = nomnom.parseArgs(opts, { argv: ["-xvf", "--atomic=true"] })
+	var options = nomnom(opts).parseArgs(["-xvf", "--atomic=true"])
 	
 Values are JSON parsed, so `--debug=true --count=3 --file=log.txt` would give you:
 	{ debug: true,
@@ -49,14 +49,14 @@ All parsed arguments that don't fit the `-a` or `--atomic` format and aren't att
 	    help: 'file to edit'
 	  }
 	};
-	var options = nomnom.parseArgs(opts);
+	var options = nomnom(opts).parseArgs();
 	
 	sys.puts(options.filename);
 
 ### printing usage
 Nomnom prints out a usage message if `--help` or `-h` is an argument. You can disable this with the `printHelp` flag and specify the printing function with `printFunc` if you're not using node:
 
-	nomnom.parseArgs(opts, { printHelp: false });
+	nomnom(opts, { printHelp: false }).parseArgs();
 
 Usage for these options in `test.js`:
 	var options = {
@@ -84,4 +84,4 @@ Usage for these options in `test.js`:
 	-d, --debug		use debug mode
 	
 Nomnom can't detect the alias used to run your script. You can use the `script` option to print the correct name instead of e.g. `node test.js`:
-	nomnom.parseArgs(opts, { script : "test" });
+	nomnom(opts, { script : "test" });

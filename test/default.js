@@ -21,13 +21,13 @@ opts = [
   }
 ];
 
-var parser = new nomnom.ArgParser(opts);
-var options = parser.parse(["-c", "other.json", "--debug=false"]);
+var parser = nomnom(opts);
+var options = parser.parseArgs(["-c", "other.json", "--debug=false"]);
 
 assert.equal(options.config, "other.json");
 assert.equal(options.debug, false);
 
-var options = parser.parse(["-c", "--debug"]);
+var options = parser.parseArgs(["-c", "--debug"]);
 
 assert.equal(options.config, "c.json");
 assert.equal(options.debug, true);

@@ -46,8 +46,7 @@ var opts = [
 ];
 
 
-var parser = new nomnom.ArgParser(opts);
-var options = parser.parse(["-c", "other.json", "--debug=false", "-v", "neuralnetwork",
+var options = nomnom(opts).parseArgs(["-c", "other.json", "--debug=false", "-v", "neuralnetwork",
   "-d", "http://db", "--options={}"]);
 
 assert.equal(options.target, "neuralnetwork");

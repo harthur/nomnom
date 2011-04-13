@@ -28,10 +28,10 @@ var opts = [
   }
 ];
 
-parser = new nomnom.ArgParser(opts);
+parser = nomnom(opts);
 
 // mix args w/ values with positional args
-var options = parser.parse(["-l", "temp.log", "-c", "12", "-a", "test0.js",
+var options = parser.parseArgs(["-l", "temp.log", "-c", "12", "-a", "test0.js",
   "test1.js", "-f", "file.js", "test2.js"]);
 
 assert.equal(options.test0, "test0.js");
@@ -56,7 +56,7 @@ assert.equal(options.test1, "def1");
 assert.ok(!options.test2);
 
 // positionals that weren't specified in opts
-options = nomnom.parseArgs([], { argv: ["pos1", "pos2", "pos3"] });
+options = nomnom().parseArgs(["pos1", "pos2", "pos3"]);
 assert.equal(options[0], "pos1");
 assert.equal(options[1], "pos2");
 assert.equal(options[2], "pos3");
