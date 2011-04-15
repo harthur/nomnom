@@ -1,5 +1,5 @@
 # nomnom
-nomnom is a small option parser for node and CommonJS. It just parses your args and gives them back to you in a hash.
+nomnom is an option parser for node and CommonJS. It just noms your args and gives them back to you in a hash.
 
 	var nomnom = require("nomnom");
 	
@@ -31,9 +31,38 @@ You don't even have to specify anything if you don't want to:
 for [node.js](http://nodejs.org/) and [npm](http://github.com/isaacs/npm):
 	npm install nomnom
 
+# Commands
+Nomnom supports command-based interfaces, e.g. with git: `git add -p` and
+`git rebase -i` where `add` and `rebase` are the commands:
+
+	var parser = nomnom();
+
+	parser.command('sanity')
+	  .opts({
+	    filename: {
+	      position: 1,
+	      help: 'test file to run'
+	    },
+	    config: {
+	      string: '-c FILE, --config=FILE',
+	      default: 'config.json',
+	      help: 'json file with tests to run'
+	    }
+	  })
+	  .callback(function(options) {
+	    runSanity(options.filename);
+	  })
+	  .help("run the sanity tests")
+	
+	parser.command('browser')
+	  .callback(runBrowser)
+	  .help("run browser tests");
+	
+	parser.parseArgs(globalOpts);
+
 # More Details
 By default, nomnom parses [node](http://nodejs.org/)'s `process.argv`. You can also pass in the args:
-	var options = nomnom(opts).parseArgs(["-xvf", "--atomic=true"])
+	var options = nomnom.parseArgs(opts, { argv: ["-xvf", "--atomic=true"] })
 	
 Values are JSON parsed, so `--debug=true --count=3 --file=log.txt` would give you:
 	{ debug: true,
@@ -54,7 +83,7 @@ All parsed arguments that don't fit the `-a` or `--atomic` format and aren't att
 	sys.puts(options.filename);
 
 ### printing usage
-Nomnom prints out a usage message if `--help` or `-h` is an argument. You can disable this with the `printHelp` flag and specify the printing function with `printFunc` if you're not using node:
+Nomnom prints out a usage message if `--help` or `-h` is an argument. You can disable this with the `printHelp` flag and specify the printing function with `printFunc`:
 
 	nomnom(opts, { printHelp: false }).parseArgs();
 
