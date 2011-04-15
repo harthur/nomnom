@@ -43,3 +43,12 @@ var globalOpts = {
 };
 
 parser.parseArgs(globalOpts, { argv: ["node", "test.js", "-c", "test.json"] });
+
+/* 
+parser.parseArgs(globalOpts, {
+  argv: ["notarealcommand", "test.js", "-c", "test.json"],
+  printFunc: function(str) {
+    assert.ok(/no such command/.test(str), "should notify if unknown command");
+  }
+});
+*/
