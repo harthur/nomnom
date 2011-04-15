@@ -1,7 +1,7 @@
 {
     "name": "nomnom",
-    "description": "Limited option parser",
-    "version": "0.2",
+    "description": "Option parser with support for usage and commands",
+    "version": "0.3.0",
     "author": "Heather Arthur <fayearthur@gmail.com>",
     "repository": {
         "type": "git",
@@ -13,6 +13,6 @@
     "main": "./lib/nomnom",
     "keywords": ["arguments", "option parser", "command line"],
     "dependencies": {
-      "underscore": "*"
+      "underscore": ">= 1.1.5"
     }
 }

@@ -49,7 +49,7 @@ var opts = {
 };
 
 
-var options = nomnom.parseArgs(opts, {argv: ["-c", "other.json", "--debug=false", "-v", "neuralnetwork",
+var options = nomnom().parseArgs(opts, {argv: ["-c", "other.json", "--debug=false", "-v", "neuralnetwork",
   "-d", "http://db", "--options={}"]});
 
 assert.equal(options.target, "neuralnetwork");
