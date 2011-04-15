@@ -8,12 +8,10 @@ var opts = {
   }
 }
 
-nomnom(opts, {
-  printFunc : function(str) {
-   assert.equal(str, "filename argument is required");
- }
-}).parseArgs([]);
+nomnom.parseArgs(opts, { argv: [], printFunc : function(str) {
+  assert.equal(str, "filename argument is required");
+}});
 
-nomnom(opts).parseArgs([]);
+nomnom.parseArgs(opts, { argv: [] });
 
 assert.ok(false, "program should have exited when required arg wasn't present");

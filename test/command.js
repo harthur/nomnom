@@ -2,18 +2,7 @@ var nomnom = require("../lib/nomnom"),
     assert = require('assert'),
     sys = require('sys');
 
-var opts = {
-  version: {
-    string: "-v, --version",
-    help: "print version info"
-  },
-  debug: {
-    string: '-d, --debug',
-    default: true
-  }
-}
-var parser = nomnom(opts);
-
+var parser = nomnom();
 
 parser.command('browser')
   .opts({
@@ -40,11 +29,17 @@ parser.command('node')
     }
   })
   .callback(function(options) {
-    sys.puts('in node command');
     assert.equal(options.filename, "test.js");
     assert.equal(options.config, "test.json");
     assert.ok(options.debug, "should pick up global arg");
   })
   .help("** Run all the node tests **");
 
-parser.parseArgs(["node", "test.js", "-c", "test.json"]);
+var globalOpts = {
+  debug : {
+    string: "--debug",
+    default: true
+  }
+};
+
+parser.parseArgs(globalOpts, { argv: ["node", "test.js", "-c", "test.json"] });

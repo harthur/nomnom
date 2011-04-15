@@ -28,11 +28,11 @@ var opts = [
   }
 ];
 
-parser = nomnom(opts);
+parser = nomnom();
 
 // mix args w/ values with positional args
-var options = parser.parseArgs(["-l", "temp.log", "-c", "12", "-a", "test0.js",
-  "test1.js", "-f", "file.js", "test2.js"]);
+var options = parser.parseArgs(opts, {argv: ["-l", "temp.log", "-c", "12", "-a", "test0.js",
+  "test1.js", "-f", "file.js", "test2.js"]});
 
 assert.equal(options.test0, "test0.js");
 assert.equal(options.test1, "test1.js");
@@ -43,20 +43,20 @@ assert.equal(options.file, "file.js");
 assert.ok(options.atomic);
 
 // defaults
-var options = parser.parse([]);
+var options = parser.parseArgs(opts, { argv: []});
 assert.ok(!options.test0);
 assert.equal(options.test1, "def1");
 assert.ok(!options.test2);
 assert.equal(options.logfile, "log.txt")
 
 // make sure we don't parse 'node test/runtests.js'
-options = parser.parse([]);
+options = parser.parseArgs(opts, {argv: []});
 assert.ok(!options.test0);
 assert.equal(options.test1, "def1");
 assert.ok(!options.test2);
 
 // positionals that weren't specified in opts
-options = nomnom().parseArgs(["pos1", "pos2", "pos3"]);
+options = nomnom.parseArgs({}, { argv: ["pos1", "pos2", "pos3"] });
 assert.equal(options[0], "pos1");
 assert.equal(options[1], "pos2");
 assert.equal(options[2], "pos3");

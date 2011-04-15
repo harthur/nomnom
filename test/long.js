@@ -2,7 +2,7 @@ var nomnom = require("../lib/nomnom"),
     assert = require("assert");
 
 
-var options = nomnom().parseArgs(["--atomic"]);
+var options = nomnom.parseArgs({}, {argv: ["--atomic"]});
 
 assert.ok(options.atomic);
 
@@ -16,13 +16,13 @@ opts = [
   },
 ];
 
-var parser = nomnom(opts);
-var options = parser.parseArgs(["--atomic","--config"]);
+var parser = nomnom();
+var options = parser.parseArgs(opts, {argv: ["--atomic","--config"]});
 
 assert.ok(options.atomic);
 assert.ok(options.config);
 
-options = parser.parseArgs(["--atomic=3", "--config=tests.json"]);
+options = parser.parseArgs(opts, {argv: ["--atomic=3", "--config=tests.json"]});
 assert.equal(options.atomic, 3);
 assert.equal(options.config, "tests.json");
 

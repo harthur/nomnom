@@ -15,13 +15,13 @@ nomnom is a small option parser for node and CommonJS. It just parses your args 
 	  }
 	};
 	
-	var options = nomnom(opts).parseArgs();
+	var options = nomnom.parseArgs(opts);
 
 	if(options.debug)
 	  // do stuff
 	
 You don't even have to specify anything if you don't want to:
-	var options = nomnom().parseArgs();
+	var options = nomnom.parseArgs();
 
 	var url = options[0]; // get the first positional arg
 	var debug = options.debug // see if --debug was specified

@@ -15,10 +15,10 @@ var opts = [
   { name: 'logfile',
     string: '-l LOG'}
 ];
-var parser = nomnom(opts, {script: 'test.js', printHelp: false});
-parser.parseArgs();
+var parser = nomnom();
+parser.parseArgs(opts, {script: 'test.js', printHelp: false});
 
-assert.equal(strip(parser.helpString()), strip("Usage:test.js[options]options:-c,--config=PATHJSONconfigwithtestinfo-lLOG"));
+assert.equal(strip(parser.usageString()), strip("Usage:test.js[options]options:-c,--config=PATHJSONconfigwithtestinfo-lLOG"));
 var opts = [
   { name: 'aname0',
     position: 0},
@@ -33,7 +33,7 @@ var opts = [
     position: 1}
 ];
 
-parser = nomnom(opts, {script: 'test.js', printHelp: false});
-parser.parseArgs();
+parser = nomnom();
+parser.parseArgs(opts, {script: 'test.js', printHelp: false});
 
-assert.equal(strip(parser.helpString()), strip("Usage:test.js<aname0><aname1><aname2>[options]<aname0><aname1><aname2>options:-d"));
+assert.equal(strip(parser.usageString()), strip("Usage:test.js<aname0><aname1><aname2>[options]<aname0><aname1><aname2>options:-d"));
