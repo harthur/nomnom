@@ -3,14 +3,14 @@ nomnom is an option parser for node and CommonJS. It noms your args and gives th
 
 	var options = require("nomnom")
 	  .opts({
+	    debug: {
+	      string: '-d, --debug',
+	      help: 'Print debugging info'
+	    },
 	    config: {
 	      string: '-c PATH, --config=PATH',
 	      default: 'config.json',
 	      help: 'JSON file with tests to run'
-	    },
-	    debug: {
-	      string: '-d, --debug',
-	      help: 'Print debugging info'
 	    }
 	  })
 	  .parseArgs();
@@ -34,13 +34,12 @@ for [node.js](http://nodejs.org/) and [npm](http://github.com/isaacs/npm):
 # Commands
 Nomnom supports command-based interfaces, e.g. with git: `git add -p` and `git rebase -i` where `add` and `rebase` are the commands:
 
-	var parser = require("nomnom")
-	  .opts({ // global opts
-	    debug: {
-	      string: '-d, --debug',
-	      help: 'print debugging info'
-	    }
-	  });
+	var parser = nomnom.opts({
+	  debug: {
+	    string: '-d, --debug',
+	    help: 'print debugging info'
+	  }
+	});
 
 	parser.command('sanity')
 	  .opts({
@@ -72,24 +71,44 @@ By default, nomnom parses [node](http://nodejs.org/)'s `process.argv`. You can a
 	
 Values are JSON parsed, so `--debug=true --count=3 --file=log.txt` would give you:
 
-	{ debug: true,
-	  count: 3,
-	  file: "log.txt"
+	{
+	  "debug": true,
+	  "count": 3,
+	  "file": "log.txt"
 	}
 	
 ### positional args
 All parsed arguments that don't fit the `-a` or `--atomic` format and aren't attached to an option are positional and can be matched on via the `position`:
 
-	var options = require("nomnom")
-	  .opts({
-	    filename: {
-	      position: 0,
-	      help: 'file to edit'
-	    }		 
-	  })
-	  .parseArgs();
+	var options = nomnom.opts({
+	  filename: {
+	    position: 0,
+	    help: 'file to edit'
+	  }
+	}).parseArgs();
 	
 	console.log(options.filename);
+	
+### callbacks
+You can provide a callback that will be executed as soon as the arg is encountered. If the callback returns a string it will print the string and exit:
+
+	var opts = {
+	  version: {
+	    string: '--version'
+	    callback: function() {
+	      return "version 1.2.4";
+	    }
+	  },
+	  date: {
+	    string: '-d YYYY-MM-DD, --date=YYYY-MM-DD',
+	    callback: function(date) {
+	      if(!(/^\d{4}\-\d\d\-\d\d$/).test(date))
+	        return "date must be in format yyyy-mm-dd";
+	    }
+	  }
+	}
+	
+	var options = nomnom.opts(opts).parseArgs();
 
 ### printing usage
 Nomnom prints out a usage message if `--help` or `-h` is an argument. You can override the usage string with `usage`:
