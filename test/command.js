@@ -1,4 +1,4 @@
-var nomnom = require("../lib/nomnom"),
+var nomnom = require("../nomnom"),
     assert = require('assert'),
     sys = require('sys');
 

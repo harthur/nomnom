@@ -1,16 +1,13 @@
 {
     "name": "nomnom",
     "description": "Option parser with support for usage and commands",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "author": "Heather Arthur <fayearthur@gmail.com>",
     "repository": {
         "type": "git",
         "url": "http://github.com/harthur/nomnomargs.git"
     },
-    "directories": {
-        "lib": "./lib"
-    },
-    "main": "./lib/nomnom",
+    "main": "./nomnom",
     "keywords": ["arguments", "option parser", "command line"],
     "dependencies": {
       "underscore": ">= 1.1.5"

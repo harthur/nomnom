@@ -1,4 +1,4 @@
-var nomnom = require("../lib/nomnom"),
+var nomnom = require("../nomnom"),
     assert = require("assert");
 
 var options = nomnom.parseArgs([], { argv: ["-cxf"] });
