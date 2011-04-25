@@ -3,6 +3,13 @@ nomnom is an option parser for node and CommonJS. It noms your args and gives th
 
 	var options = require("nomnom")
 	  .opts({
+	    version: {
+	      string: '--version',
+	      help: 'print version and exit',
+	      callback: function() {
+	        return "version 1.2.4";
+	      }
+	    },
 	    debug: {
 	      string: '-d, --debug',
 	      help: 'Print debugging info'
@@ -65,7 +72,9 @@ Nomnom supports command-based interfaces, e.g. with git: `git add -p` and `git r
 	parser.parseArgs();
 
 # More Details
-By default, nomnom parses [node](http://nodejs.org/)'s `process.argv`. You can also pass in the args:
+Nomnom supports args like `-d`, `--debug`, `--no-debug`, `--file=test.txt`, `-f test.txt`, `-xvf`, and positionals.
+
+By default it parses [node](http://nodejs.org/)'s `process.argv`. You can also pass in the args:
 
 	var options = nomnom.parseArgs(["-xvf", "--atomic=true"])
 	
@@ -94,7 +103,7 @@ You can provide a callback that will be executed as soon as the arg is encounter
 
 	var opts = {
 	  version: {
-	    string: '--version'
+	    string: '--version',
 	    callback: function() {
 	      return "version 1.2.4";
 	    }
