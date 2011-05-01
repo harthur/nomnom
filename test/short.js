@@ -1,7 +1,7 @@
 var nomnom = require("../nomnom"),
     assert = require("assert");
 
-var options = nomnom.parseArgs([], { argv: ["-cxf"] });
+var options = nomnom().parseArgs([], { argv: ["-cxf"] });
 
 assert.ok(options.c);
 assert.ok(options.x);
@@ -14,7 +14,7 @@ var opts = [
     string: '-l FILE'}
 ];
 
-var options = nomnom.parseArgs(opts, { argv: ["-l"] });
+var options = nomnom().parseArgs(opts, { argv: ["-l"] });
 
 assert.ok(options.logfile);
 assert.ok(!options.F);

@@ -10,7 +10,7 @@ var opts = [
 
 var args = ["--test=test.js", "-l", "test.log"];
 
-var options = nomnom.parseArgs(opts, { argv: args });
+var options = nomnom().parseArgs(opts, { argv: args });
 var shortcutOpts = nomnom().parseArgs(opts, { argv: args });
 
 assert.equal(JSON.stringify(options), JSON.stringify(shortcutOpts));

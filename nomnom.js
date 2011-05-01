@@ -34,7 +34,7 @@ function ArgParser() {
   
   var parser = {
     commands : {},    
-    specs: [],
+    specs: {},
 
     command : function(name) {
       var command = parser.commands[name] = {
@@ -60,9 +60,19 @@ function ArgParser() {
       return chain;
     },
     
+    globalOpts : function(specs) {
+      parser.globalSpecs = specs;
+      return parser;
+    },
+    
     opts : function(specs) {
       parser.specs = specs;
-      return parser; 
+      return parser;
+    },
+    
+    callback : function(fallbackCb) {
+      parser.fallbackCb = fallbackCb;
+      return parser;
     },
     
     usage : function(usageString) {
@@ -105,8 +115,8 @@ function ArgParser() {
       parser.helpString = parser.helpString || "";
       parser.script = parser.script || process.argv[0] + " "
             + require('path').basename(process.argv[1]);
+      
       parser.specs = parser.specs || {};
-
       var argv = argv || process.argv.slice(2);
 
       var commandName;
@@ -120,16 +130,17 @@ function ArgParser() {
             position: 0,
             help: 'one of: ' + _(parser.commands).keys().join(", ")
           }
+          _(parser.specs).extend(parser.globalSpecs);
         }
         else {
           // command specified e.g. 'git add -p'
           var command = parser.commands[commandName];
           if(!command)
             parser.print(parser.script + ": no such command '" + commandName + "'");  
-          parser.specs = _(command.specs).extend(parser.specs);  
+          parser.specs = _(command.specs).extend(parser.globalSpecs);  
           parser.script += " " + command.name;
           if(command.help)
-            parser.helpString = command.help;  
+            parser.helpString = command.help;
         }
       }
 
@@ -202,6 +213,9 @@ function ArgParser() {
     
       if(command && command.callback)
         command.callback(options);
+      else if(parser.fallbackCb)
+        parser.fallbackCb(options);
+
       return options;
     },
 
@@ -211,13 +225,12 @@ function ArgParser() {
 
       var str = "Usage: " + parser.script;
 
-      var positionals = parser.specs.filter(function(opt) {
+      var positionals = _(parser.specs).select(function(opt) {
         return opt.position != undefined;
       }).sort(function(opt1, opt2) {
         return opt1.position > opt2.position;
-      });
-      
-      var options = parser.specs.filter(function(opt) {
+      });      
+      var options = _(parser.specs).select(function(opt) {
         return opt.position == undefined;
       });
 
@@ -225,19 +238,21 @@ function ArgParser() {
       positionals.forEach(function(pos) {
         str += " <" + (pos.name || "arg" + pos.position) + ">"; 
       });
-      if(options.length)
+      if(options.length || positionals.length)
         str += " [options]\n\n";
 
       positionals.forEach(function(pos) {
         str += "<" + pos.name + ">\t\t" + (pos.help || "") + "\n"; 
       });
+      if(positionals.length && options.length)
+        str += "\n";
       if(options.length)
-        str += "\noptions:\n"
+        str += "options:\n"
 
       options.forEach(function(opt) {
         str += opt.string + "\t\t" + (opt.help || "") + "\n";
       });
-      return str + "\n" + (parser.helpString || "");
+      return str + "\n" + (parser.helpString || "") + "\n";
     }
   }
 

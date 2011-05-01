@@ -1,7 +1,7 @@
 var nomnom = require("../nomnom"),
     assert = require("assert");
 
-var options = nomnom.parseArgs({}, {argv: ["-d", "file.js", "--atomic=true", "addon.xpi"]});
+var options = nomnom().parseArgs(["-d", "file.js", "--atomic=true", "addon.xpi"]);
 
 var url = options[0]; // get the first positional arg
 var debug = options.debug; // see if --debug was specified

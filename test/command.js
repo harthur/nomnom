@@ -2,7 +2,14 @@ var nomnom = require("../nomnom"),
     assert = require('assert'),
     sys = require('sys');
 
-var parser = nomnom();
+var called;
+
+var parser = nomnom()
+  .globalOpts({
+    debug : {
+      string: '-d, --debug'
+    }
+  });
 
 parser.command('browser')
   .opts({
@@ -29,20 +36,34 @@ parser.command('node')
     }
   })
   .callback(function(options) {
+    called = true;
     assert.equal(options.filename, "test.js");
     assert.equal(options.config, "test.json");
     assert.ok(options.debug, "should pick up global arg");
   })
   .help("** Run all the node tests **");
 
-var globalOpts = {
-  debug : {
-    string: "--debug",
-    default: true
-  }
-};
+parser.parseArgs(["node", "test.js", "-c", "test.json", "-d"]);
 
-parser.parseArgs(globalOpts, { argv: ["node", "test.js", "-c", "test.json"] });
+assert.ok(called, "node command callback should be called");
+
+
+/* no command specified */
+called = false;
+parser = nomnom()
+  .opts({
+    version : {
+      string: '-v, --version'
+    }
+  })
+  .callback(function(options) {
+    called = true;
+    assert.ok(options.test);
+    assert.ok(options.version);
+  })
+  .parseArgs(["test.js", "--test", "-v"]);
+
+assert.ok(called, "no-command callback should be called");
 
 /* 
 parser.parseArgs(globalOpts, {

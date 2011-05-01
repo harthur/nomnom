@@ -41,10 +41,11 @@ for [node.js](http://nodejs.org/) and [npm](http://github.com/isaacs/npm):
 # Commands
 Nomnom supports command-based interfaces, e.g. with git: `git add -p` and `git rebase -i` where `add` and `rebase` are the commands:
 
-	var parser = nomnom.opts({
-	  debug: {
-	    string: '-d, --debug',
-	    help: 'print debugging info'
+	var parser = nomnom.globalOpts({
+	  version: {
+	    string: '-v, --version',
+	    help: 'print version and exit',
+	    callback: function() { return "1.2.4"; }
 	  }
 	});
 
