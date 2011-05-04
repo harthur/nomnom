@@ -179,6 +179,7 @@ function ArgParser() {
         else if(arg.chars) {
           /* -cfv */
           (arg.chars).forEach(function(ch) {
+            if(val.isValue && ch === arg.lastChar && opt(arg.lastChar).expectsValue()) return;
             setOption(options, ch, true);
           });
           /* -c 3 */
