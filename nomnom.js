@@ -177,18 +177,20 @@ function ArgParser() {
         }
         /* -c */
         else if(arg.chars) {
+          var lastChar = arg.chars.pop();
+          
           /* -cfv */
           (arg.chars).forEach(function(ch) {
-            if(val.isValue && ch === arg.lastChar && opt(arg.lastChar).expectsValue()) return;
             setOption(options, ch, true);
           });
+
           /* -c 3 */
-          if(val.isValue) {
-            var expectsValue = opt(arg.lastChar).expectsValue();
-            if(expectsValue) {
-              setOption(options, arg.lastChar, val.value);
-              return Arg(""); // skip next turn - swallow arg
-            }
+          if(val.isValue && opt(lastChar).expectsValue()) {
+            setOption(options, lastChar, val.value);
+            return Arg(""); // skip next turn - swallow arg
+          }
+          else {
+            setOption(options, lastChar, true);
           }
         }
         /* --config=tests.json or --debug */
