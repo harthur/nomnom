@@ -1,7 +1,7 @@
 {
     "name": "nomnom",
     "description": "Option parser with support for usage and commands",
-    "version": "0.4.2",
+    "version": "0.4.3",
     "author": "Heather Arthur <fayearthur@gmail.com>",
     "repository": {
         "type": "git",
