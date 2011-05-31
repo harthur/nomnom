@@ -25,11 +25,19 @@ function ArgParser() {
     var option = opt(arg);
     if(option.callback) {
       var message = option.callback(value);
-      if(typeof message == "string"){
+      if(typeof message == "string") {
         parser.print(message);
       }
     }
-    options[option.name || arg] = value;
+    var name = option.name || arg;
+    if(option.list) {
+      if(!options[name])
+        options[name] = [value];
+      else
+        options[name].push(value);
+    }
+    else
+      options[name] = value;
   };
   
   var parser = {
@@ -125,7 +133,7 @@ function ArgParser() {
           commandName = argv[0];
 
         if(!commandName) {
-          // no command but command expected e.g. 'git --version'
+          // no command but command expected e.g. 'git -h'
           parser.specs.command = {
             position: 0,
             help: 'one of: ' + _(parser.commands).keys().join(", ")
@@ -161,10 +169,6 @@ function ArgParser() {
         parser.print(parser.getUsage());
 
       var options = {};
-      parser.specs.forEach(function(opt) {
-        options[opt.name] = opt.default;
-      });
-
       args = argv.concat([""]).map(function(arg) {
         return Arg(arg);
       });
@@ -206,6 +210,11 @@ function ArgParser() {
 
       positionals.forEach(function(pos, index) {
         setOption(options, index, pos);
+      });
+      
+      parser.specs.forEach(function(opt) {
+        if(typeof options[opt.name] == "undefined")
+          options[opt.name] = opt.default;
       });
 
       // exit if required arg isn't present
@@ -278,7 +287,8 @@ Opt = function(opt) {
     lg: lg,
     metavar: metavar,
     matches: function(arg) {
-      return opt.lg == arg || opt.sh == arg || opt.position == arg;
+      return opt.lg == arg || opt.sh == arg || opt.position == arg
+             || (opt.list && arg >= opt.position);
     },
     expectsValue: function() {
       return opt.metavar || opt.default;

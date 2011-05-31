@@ -41,7 +41,7 @@ for [node.js](http://nodejs.org/) and [npm](http://github.com/isaacs/npm):
 # Commands
 Nomnom supports command-based interfaces (e.g. with git: `git add -p` and `git rebase -i` where `add` and `rebase` are the commands):
 
-	var parser = require("nomnom")();
+	var parser = require("nomnom");
 	
 	parser.command('browser')
 	    .callback(runBrowser)
@@ -61,7 +61,7 @@ Nomnom supports command-based interfaces (e.g. with git: `git add -p` and `git r
 	    })
 	    .callback(function(options) {
 	         runSanity(options.filename);
-	     })
+	    })
 	    .help("run the sanity tests")
 	
 	parser.parseArgs();
@@ -109,7 +109,7 @@ Nomnom prints out a usage message if `--help` or `-h` is an argument. Usage for 
 
 
 # Options hash
-The options hash that is passed in to `nomnom.opts()` is a hash keyed on option name. Each option specification can have the following fields:
+The options hash that is passed to `nomnom.opts()` is a hash keyed on option name. Each option specification can have the following fields:
 
 #### string
 
@@ -154,6 +154,14 @@ A callback that will be executed as soon as the option is encountered. If the ca
 #### position
 
 The position of the option if it's a positional argument. If the option should be matched to the first positional arg use position `0`
+
+#### list
+
+Specifies that the option is a list. Appending can be achieved by specifying the arg more than once on the command line:
+
+	node test.js --file=test1.js --file=test2.js
+
+If the option has a `position` and `list` is true, all positional args including and after `position` will be appended to the array.
 
 #### required
 

@@ -18,7 +18,7 @@ var options = nomnom()
 assert.ok(options.debug);
 assert.equal(options.config, "test.json");
 
-var options = nomnom.parseArgs(["-xvf", "--file=test.js"]);
+var options = nomnom().parseArgs(["-xvf", "--file=test.js"]);
 assert.ok(options.x);
 assert.equal(options.file, "test.js");
 
