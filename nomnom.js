@@ -191,7 +191,7 @@ function ArgParser() {
           /* -c 3 */
           if(val.isValue && opt(lastChar).expectsValue()) {
             setOption(options, lastChar, val.value);
-            return Arg(""); // skip next turn - swallow arg
+            return Arg(); // skip next turn - swallow arg
           }
           else {
             setOption(options, lastChar, true);
@@ -304,24 +304,29 @@ Arg = function(str) {
   var shRegex = /^\-(\w+?)$/,
       lgRegex = /^\-\-(no\-)?(.+?)(?:=(.+))?$/,
       valRegex = /^[^\-].*/;
-      
-  var charMatch = shRegex.exec(str);
-  var chars = charMatch && charMatch[1].split("");
-  
-  var lgMatch = lgRegex.exec(str);
-  var lg = lgMatch && lgMatch[2];
-  
-  var val = valRegex.test(str) && str;
-  var value = val || (lg && (lgMatch[1] ? false : lgMatch[3]));
+
+  var charMatch = shRegex.exec(str),
+      chars = charMatch && charMatch[1].split("");
+
+  var lgMatch = lgRegex.exec(str),
+      lg = lgMatch && lgMatch[2];
+
+  var isValue = str !== undefined && (str === "" || valRegex.test(str)),
+      value;
+  if(isValue)
+    value = str;
+  else if(lg)
+    value = lgMatch[1] ? false : lgMatch[3];
+
   try { // try to infer type by JSON parsing the string
     value = JSON.parse(value)
   } catch(e) {}
-  
+
   return {
+    str: str,
     chars: chars,
     lg: lg,
     value: value,
-    lastChar: str[str.length - 1],
-    isValue: str && valRegex.test(str)
+    isValue: isValue
   }
 }

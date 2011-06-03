@@ -6,11 +6,16 @@ var options = nomnom().opts({
     file: {
       string: "--file=FILE",
       list: true
+    },
+    counts: {
+      string: "-c X",
+      list: true
     }
   })
-  .parseArgs(["--file=f1", "--file=f2"]);
+  .parseArgs(["--file=f1", "-c", "3", "--file=f2", "-c", "4"]);
 
 assert.deepEqual(options.file, ["f1", "f2"]);
+assert.deepEqual(options.counts, [3, 4]);
 
 var options = nomnom().opts({
     files : {

@@ -60,3 +60,8 @@ options = nomnom().parseArgs({}, { argv: ["pos1", "pos2", "pos3"] });
 assert.equal(options[0], "pos1");
 assert.equal(options[1], "pos2");
 assert.equal(options[2], "pos3");
+
+options = nomnom().opts(opts).parseArgs(["", "", "test2.js"]);
+assert.strictEqual(options.test0, "");
+assert.strictEqual(options.test1, "");
+assert.strictEqual(options.test2, "test2.js");
