@@ -240,8 +240,9 @@ function ArgParser() {
 
       var positionals = _(parser.specs).select(function(opt) {
         return opt.position != undefined;
-      }).sort(function(opt1, opt2) {
-        return opt1.position > opt2.position;
+      })
+      positionals = _(positionals).sortBy(function(opt) {
+        return opt.position;
       });      
       var options = _(parser.specs).select(function(opt) {
         return opt.position === undefined;
@@ -249,13 +250,15 @@ function ArgParser() {
 
       // assume there are no gaps in the specified pos. args
       positionals.forEach(function(pos) {
-        str += " <" + (pos.name || "arg" + pos.position) + ">"; 
+        str += " <" + (pos.name || "arg" + pos.position) + ">";
+        if(pos.list)
+          str += "..."; 
       });
       if(options.length || positionals.length)
         str += " [options]\n\n";
 
       positionals.forEach(function(pos) {
-        str += "<" + pos.name + ">\t\t" + (pos.help || "") + "\n"; 
+        str += pos.name + "\t\t" + (pos.help || "") + "\n"; 
       });
       if(positionals.length && options.length)
         str += "\n";

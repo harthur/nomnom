@@ -36,4 +36,4 @@ var opts = [
 parser = nomnom();
 parser.parseArgs(opts, {script: 'test.js', printHelp: false});
 
-assert.equal(strip(parser.getUsage()), strip("Usage:test.js<aname0><aname1><aname2>[options]<aname0><aname1><aname2>options:-d"));
+assert.equal(strip(parser.getUsage()), strip("Usage:test.js<aname0><aname1><aname2>[options]aname0aname1aname2options:-d"));
