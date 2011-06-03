@@ -112,7 +112,7 @@ function ArgParser() {
         parser.script = parserOpts.script;
         parser.print = parserOpts.pringFunc;
         printHelp = parserOpts.printHelp;
-        if(printHelp == undefined)
+        if(printHelp === undefined)
           printHelp = true;
         argv = parserOpts.argv;
       }
@@ -152,7 +152,7 @@ function ArgParser() {
         }
       }
 
-      if(parser.specs.length == undefined) {
+      if(parser.specs.length === undefined) {
         // specs is a hash not an array
         parser.specs = _(parser.specs).map(function(opt, name) {
           opt.name = name;
@@ -201,7 +201,7 @@ function ArgParser() {
         else if(arg.full) {
           var value = arg.value;
           /* --debug */
-          if(value == undefined)
+          if(value === undefined)
             value = true;
           setOption(options, arg.full, value);
         }
@@ -219,7 +219,7 @@ function ArgParser() {
 
       // exit if required arg isn't present
       parser.specs.forEach(function(opt) {
-        if(opt.required && !options[opt.name])
+        if(opt.required && options[opt.name] === undefined)
           parser.print(opt.name + " argument is required");
       });
     
@@ -244,7 +244,7 @@ function ArgParser() {
         return opt1.position > opt2.position;
       });      
       var options = _(parser.specs).select(function(opt) {
-        return opt.position == undefined;
+        return opt.position === undefined;
       });
 
       // assume there are no gaps in the specified pos. args

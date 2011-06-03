@@ -161,7 +161,7 @@ Specifies that the option is a list. Appending can be achieved by specifying the
 
 	node test.js --file=test1.js --file=test2.js
 
-If the option has a `position` and `list` is true, all positional args including and after `position` will be appended to the array.
+If the option has a `position` and `list` is `true`, all positional args including and after `position` will be appended to the array.
 
 #### required
 
