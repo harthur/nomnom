@@ -189,7 +189,7 @@ function ArgParser() {
           });
 
           /* -c 3 */
-          if(val.isValue && opt(lastChar).expectsValue()) {
+          if(val.isValue && opt(lastChar).expectsValue) {
             setOption(options, lastChar, val.value);
             return Arg(); // skip next turn - swallow arg
           }
@@ -198,12 +198,12 @@ function ArgParser() {
           }
         }
         /* --config=tests.json or --debug */
-        else if(arg.lg) {
+        else if(arg.full) {
           var value = arg.value;
           /* --debug */
           if(value == undefined)
             value = true;
-          setOption(options, arg.lg, value);
+          setOption(options, arg.full, value);
         }
         return val;
       });
@@ -235,6 +235,7 @@ function ArgParser() {
       if(parser.usageString)
         return parser.usageString;
 
+      // todo: use a template
       var str = "Usage: " + parser.script;
 
       var positionals = _(parser.specs).select(function(opt) {
@@ -273,26 +274,41 @@ function ArgParser() {
 
 /* an opt is what's specified by the user in opts hash */
 Opt = function(opt) {
-  var string = opt.string || (opt.name ? "--" + opt.name : "");
   var matches = /^(?:\-(\w+?)(?:\s+([^-][^\s]*))?)?\,?\s*(?:\-\-(.+?)(?:=(.+))?)?$/
-                .exec(string);
-  var sh = matches[1],   // e.g. v from -v
-      lg = matches[3], // e.g. verbose from --verbose
-      metavar = matches[2] || matches[4];   // e.g. PATH from '--config=PATH'
+                .exec(opt.string);
+
+  matches = matches || [];
+  var abbr = opt.abbr || matches[1],   // e.g. v from -v
+      full = opt.full || matches[3] || opt.name, // e.g. verbose from --verbose
+      metavar = opt.metavar || matches[2] || matches[4],  // e.g. PATH from '--config=PATH'
+      expectsValue = opt.expectsValue || metavar || opt.default;
+
+  var string= "";
+  if(abbr) {
+    string += "-" + abbr;
+    if(metavar)
+      string += " " + metavar
+    string += ", ";
+  }
+  if(full) {
+    string += "--" + full;
+    if(metavar)
+      string += "=" + metavar;
+  }
+  if(opt.string)
+    string = opt.string;
   
   opt = _(opt).extend({
-    name: opt.name || lg || sh,
+    name: opt.name || full || abbr,
     string: string,
-    sh: sh,
-    lg: lg,
+    abbr: abbr,
+    full: full,
     metavar: metavar,
     matches: function(arg) {
-      return opt.lg == arg || opt.sh == arg || opt.position == arg
+      return opt.full == arg || opt.abbr == arg || opt.position == arg
              || (opt.list && arg >= opt.position);
     },
-    expectsValue: function() {
-      return opt.metavar || opt.default;
-    }
+    expectsValue: expectsValue
   });
   
   return opt;
@@ -301,22 +317,22 @@ Opt = function(opt) {
 /* an arg is an item that's actually parsed from the command line 
    e.g. "-l", "log.txt", or "--logfile=log.txt" */
 Arg = function(str) {  
-  var shRegex = /^\-(\w+?)$/,
-      lgRegex = /^\-\-(no\-)?(.+?)(?:=(.+))?$/,
+  var abbrRegex = /^\-(\w+?)$/,
+      fullRegex = /^\-\-(no\-)?(.+?)(?:=(.+))?$/,
       valRegex = /^[^\-].*/;
 
-  var charMatch = shRegex.exec(str),
+  var charMatch = abbrRegex.exec(str),
       chars = charMatch && charMatch[1].split("");
 
-  var lgMatch = lgRegex.exec(str),
-      lg = lgMatch && lgMatch[2];
+  var fullMatch = fullRegex.exec(str),
+      full = fullMatch && fullMatch[2];
 
   var isValue = str !== undefined && (str === "" || valRegex.test(str)),
       value;
   if(isValue)
     value = str;
-  else if(lg)
-    value = lgMatch[1] ? false : lgMatch[3];
+  else if(full)
+    value = fullMatch[1] ? false : fullMatch[3];
 
   try { // try to infer type by JSON parsing the string
     value = JSON.parse(value)
@@ -325,7 +341,7 @@ Arg = function(str) {
   return {
     str: str,
     chars: chars,
-    lg: lg,
+    full: full,
     value: value,
     isValue: isValue
   }

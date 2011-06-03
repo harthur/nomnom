@@ -9,10 +9,11 @@ assert.ok(options.f);
 assert.ok(!options.k);
 
 
-var opts = [
-  { name: 'logfile',
-    string: '-l FILE'}
-];
+var opts = {
+  logfile : {
+    string: '-l FILE'
+  }
+};
 
 var options = nomnom().parseArgs(opts, { argv: ["-l"] });
 
