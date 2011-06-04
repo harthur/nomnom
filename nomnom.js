@@ -256,18 +256,33 @@ function ArgParser() {
       });
       if(options.length || positionals.length)
         str += " [options]\n\n";
-
+    
+      function spaces(length) {
+        var spaces = "";
+        for(var i = 0; i < length; i++)
+          spaces += " ";
+        return spaces;
+      }
+      var longest = positionals.reduce(function(max, pos) {
+          return pos.name.length > max ? pos.name.length : max; 
+      }, 0);
       positionals.forEach(function(pos) {
-        str += pos.name + "\t\t" + (pos.help || "") + "\n"; 
+        str += pos.name + spaces(longest - pos.name.length) + "     "
+               + (pos.help || "") + "\n"; 
       });
       if(positionals.length && options.length)
         str += "\n";
-      if(options.length)
-        str += "options:\n"
 
+      if(options.length)
+        str += "options:\n";
+
+      var longest = options.reduce(function(max, opt) {
+        return opt.string.length > max ? opt.string.length : max; 
+      }, 0);
       options.forEach(function(opt) {
         if(!opt.hidden)
-          str += opt.string + "\t\t" + (opt.help || "") + "\n";
+          str += opt.string + spaces(longest - opt.string.length) + "   "
+                 + (opt.help || "") + "\n";
       });
       return str + "\n" + (parser.helpString || "") + "\n";
     }

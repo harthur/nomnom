@@ -89,7 +89,7 @@ Nomnom prints out a usage message if `--help` or `-h` is an argument. Usage for 
 	    },
 	    config: {
 	        string: '-c FILE, --config=FILE',
-	        help: 'json file with tests to run',
+	        help: 'Config file with tests to run',
 	    },
 	    debug: {
 	        string: '-d, --debug',
@@ -101,11 +101,11 @@ Nomnom prints out a usage message if `--help` or `-h` is an argument. Usage for 
 
 	Usage: node test.js <action> [options]
 	
-	<action>		either 'test', 'run', or 'xpi'
+	action     either 'test', 'run', or 'xpi'
 	
 	options:
-	-c FILE, --config=FILE		json file with tests to run
-	-d, --debug		Print debugging info
+	-c FILE, --config=FILE   Config file with tests to run
+	-d, --debug              Print debugging info
 
 
 # Options hash
