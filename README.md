@@ -167,6 +167,10 @@ If the option has a `position` and `list` is `true`, all positional args includi
 
 If this is set to `true` and the option isn't in the args, a message will be printed and the program will exit.
 
+#### hidden
+
+Option won't be printed in the usage
+
 
 # Parser interface
 `require("nomnom")` will give you the option parser. You can also make an instance of a parser with `require("nomnom")()`. You can chain any of these functions off of a parser:

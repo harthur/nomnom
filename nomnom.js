@@ -266,7 +266,8 @@ function ArgParser() {
         str += "options:\n"
 
       options.forEach(function(opt) {
-        str += opt.string + "\t\t" + (opt.help || "") + "\n";
+        if(!opt.hidden)
+          str += opt.string + "\t\t" + (opt.help || "") + "\n";
       });
       return str + "\n" + (parser.helpString || "") + "\n";
     }
