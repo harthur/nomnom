@@ -236,7 +236,7 @@ function ArgParser() {
         return parser.usageString;
 
       // todo: use a template
-      var str = "Usage: " + parser.script;
+      var str = "usage: " + parser.script;
 
       var positionals = _(parser.specs).select(function(opt) {
         return opt.position != undefined;
@@ -277,12 +277,12 @@ function ArgParser() {
         str += "options:\n";
 
       var longest = options.reduce(function(max, opt) {
-        return opt.string.length > max ? opt.string.length : max; 
+        return opt.string.length > max && !opt.hidden ? opt.string.length : max; 
       }, 0);
       options.forEach(function(opt) {
         if(!opt.hidden)
-          str += opt.string + spaces(longest - opt.string.length) + "   "
-                 + (opt.help || "") + "\n";
+          str += "   " + opt.string + spaces(longest - opt.string.length)
+                 + "   " + (opt.help || "") + "\n";
       });
       return str + "\n" + (parser.helpString || "") + "\n";
     }

@@ -31,6 +31,6 @@ var parser = nomnom()
   .scriptName("test")
   .help("help");
   
-assert.equal(parser.getUsage(), "Usage: test\nhelp\n");
+assert.equal(parser.getUsage(), "usage: test\nhelp\n");
 
 

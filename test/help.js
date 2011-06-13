@@ -18,7 +18,7 @@ var opts = [
 var parser = nomnom();
 parser.parseArgs(opts, {script: 'test.js', printHelp: false});
 
-assert.equal(strip(parser.getUsage()), strip("Usage:test.js[options]options:-c,--config=PATHJSONconfigwithtestinfo-lLOG"));
+assert.equal(strip(parser.getUsage()), strip("usage:test.js[options]options:-c,--config=PATHJSONconfigwithtestinfo-lLOG"));
 var opts = [
   { name: 'aname0',
     position: 0},
@@ -36,4 +36,4 @@ var opts = [
 parser = nomnom();
 parser.parseArgs(opts, {script: 'test.js', printHelp: false});
 
-assert.equal(strip(parser.getUsage()), strip("Usage:test.js<aname0><aname1><aname2>[options]aname0aname1aname2options:-d"));
+assert.equal(strip(parser.getUsage()), strip("usage:test.js<aname0><aname1><aname2>[options]aname0aname1aname2options:-d"));

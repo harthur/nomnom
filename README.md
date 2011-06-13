@@ -90,31 +90,31 @@ Nomnom prints out a usage message if `--help` or `-h` is an argument. Usage for 
 
 ```javascript
 var options = nomnom.opts({
-    action: {
+    path: {
         position: 0,
-        help: "either 'test', 'run', or 'xpi'" 
+        help: "Test file to run",
+        list: true
     },
     config: {
         string: '-c FILE, --config=FILE',
-        help: 'Config file with tests to run',
+        help: "Config file with tests to run",
     },
     debug: {
         string: '-d, --debug',
-        help: 'Print debugging info'
+        help: "Print debugging info"
     }
 }).parseArgs();
 ```
 
 ...would look like this:
 
-	Usage: node test.js <action> [options]
-	
-	action     either 'test', 'run', or 'xpi'
-	
-	options:
-	-c FILE, --config=FILE   Config file with tests to run
-	-d, --debug              Print debugging info
+	usage: node test.js <path>... [options]
 
+	path     Test file to run
+
+	options:
+	   -c FILE, --config=FILE   Config file with tests to run
+	   -d, --debug              Print debugging info
 
 # Options hash
 The options hash that is passed to `nomnom.opts()` is a hash keyed on option name. Each option specification can have the following fields:
