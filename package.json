@@ -1,6 +1,6 @@
 {
     "name": "nomnom",
-    "description": "Option parser with support for usage and commands",
+    "description": "Option parser with generated usage and commands",
     "version": "0.4.8",
     "author": "Heather Arthur <fayearthur@gmail.com>",
     "repository": {
@@ -8,7 +8,7 @@
         "url": "http://github.com/harthur/nomnom.git"
     },
     "main": "./nomnom",
-    "keywords": ["arguments", "option parser", "command line", "options"],
+    "keywords": ["arguments", "option parser", "command line", "options", "parser"],
     "dependencies": {
       "underscore": ">= 1.1.5"
     }
