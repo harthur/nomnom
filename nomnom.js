@@ -63,6 +63,10 @@ function ArgParser() {
         help : function(help) {
           command.help = help;
           return chain;
+        },
+        usage : function(usage) {
+          command.usageString = usage;
+          return chain;
         }
       };
       return chain;
@@ -166,7 +170,7 @@ function ArgParser() {
       /* parse the args */
       if(printHelp && (argv.indexOf("--help") != -1
            || argv.indexOf("-h") != -1))
-        parser.print(parser.getUsage());
+        parser.print(parser.getUsage(command));
 
       var options = {};
       args = argv.concat([""]).map(function(arg) {
@@ -233,7 +237,9 @@ function ArgParser() {
       return options;
     },
 
-    getUsage : function() {
+    getUsage : function(command) {
+      if(command && command.usageString)
+        return command.usageString;
       if(parser.usageString)
         return parser.usageString;
 

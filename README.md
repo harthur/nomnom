@@ -235,5 +235,9 @@ A callback that will be called with the parsed options when the command is used.
 
 A help string describing the function of this command.
 
+#### usage
+
+Override the default generated usage string for this command.
+
 
 

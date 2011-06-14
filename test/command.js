@@ -43,10 +43,16 @@ parser.command('node')
   })
   .help("** Run all the node tests **");
 
+parser.command('usagetest')
+  .usage('testing command.usage()')
+
 parser.parseArgs(["node", "test.js", "-c", "test.json", "-d"]);
 
 assert.ok(called, "node command callback should be called");
 
+/*
+parser.parseArgs(["usagetest", "-h"]);
+*/
 
 /* no command specified */
 called = false;
