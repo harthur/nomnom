@@ -35,6 +35,7 @@ var options = require("nomnom").parseArgs();
 var url = options[0];      // get the first positional arg
 var debug = options.debug  // see if --debug was specified
 var verbose = options.v    // see if -v was specified
+var extras = options._     // get an array of the unmatched, positional args
 ```
 
 # Install

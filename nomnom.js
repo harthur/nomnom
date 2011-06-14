@@ -212,6 +212,8 @@ function ArgParser() {
         setOption(options, index, pos);
       });
       
+      options._ = positionals;
+      
       parser.specs.forEach(function(opt) {
         if(typeof options[opt.name] == "undefined")
           options[opt.name] = opt.default;

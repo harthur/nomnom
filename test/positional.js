@@ -41,6 +41,7 @@ assert.equal(options.logfile, "temp.log");
 assert.equal(options.count, 12);
 assert.equal(options.file, "file.js");
 assert.ok(options.atomic);
+assert.deepEqual(options._, ["test0.js", "test1.js", "test2.js"])
 
 // defaults
 var options = parser.parseArgs(opts, { argv: []});
