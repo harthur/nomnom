@@ -90,26 +90,28 @@ Values are JSON parsed, so `--debug=true --count=3 --file=log.txt` would give yo
 Nomnom prints out a usage message if `--help` or `-h` is an argument. Usage for these options in `test.js`:
 
 ```javascript
-var options = nomnom.opts({
-    path: {
-        position: 0,
-        help: "Test file to run",
-        list: true
-    },
-    config: {
-        string: '-c FILE, --config=FILE',
-        help: "Config file with tests to run",
-    },
-    debug: {
-        string: '-d, --debug',
-        help: "Print debugging info"
-    }
-}).parseArgs();
+var options = require("nomnom")
+    .scriptName("runtests")
+    .opts({
+        path: {
+            position: 0,
+            help: "Test file to run",
+            list: true
+        },
+        config: {
+            string: '-c FILE, --config=FILE',
+            help: "Config file with tests to run",
+        },
+        debug: {
+            string: '-d, --debug',
+            help: "Print debugging info"
+        }
+    }).parseArgs();
 ```
 
 ...would look like this:
 
-	usage: node test.js <path>... [options]
+	usage: runtests <path>... [options]
 
 	path     Test file to run
 
@@ -238,6 +240,3 @@ A help string describing the function of this command.
 #### usage
 
 Override the default generated usage string for this command.
-
-
-
