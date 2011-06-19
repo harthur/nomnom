@@ -226,7 +226,7 @@ function ArgParser() {
       // exit if required arg isn't present
       parser.specs.forEach(function(opt) {
         if(opt.required && options[opt.name] === undefined)
-          parser.print(opt.name + " argument is required");
+          parser.print(opt.name + " argument is required\n\n" + parser.getUsage(command));
       });
     
       if(command && command.callback)
