@@ -273,9 +273,14 @@ function ArgParser() {
 
       // assume there are no gaps in the specified pos. args
       positionals.forEach(function(pos) {
-        str += " <" + (pos.name || "arg" + pos.position) + ">";
-        if(pos.list)
-          str += "..."; 
+        str += " ";
+        var posStr = pos.string;
+        if(!posStr) {
+          posStr = "<" + (pos.name || "arg" + pos.position) + ">";
+          if(pos.list)
+            posStr += "...";
+        }
+        str += posStr;
       });
       if(options.length || positionals.length)
         str += " [options]\n\n";
@@ -290,7 +295,8 @@ function ArgParser() {
           return pos.name.length > max ? pos.name.length : max; 
       }, 0);
       positionals.forEach(function(pos) {
-        str += pos.name + spaces(longest - pos.name.length) + "     "
+        var posStr = pos.string || pos.name;
+        str += posStr + spaces(longest - posStr.length) + "     "
                + (pos.help || "") + "\n"; 
       });
       if(positionals.length && options.length)
@@ -333,7 +339,7 @@ Opt = function(opt) {
 
   matches = matches || [];
   var abbr = opt.abbr || abbr,   // e.g. v from -v
-      full = opt.full || full || opt.name, // e.g. verbose from --verbose
+      full = opt.full || full, // e.g. verbose from --verbose
       metavar = opt.metavar || metavar;  // e.g. PATH from '--config=PATH'
       expectsValue = opt.expectsValue || metavar || opt.default;
 

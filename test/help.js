@@ -6,19 +6,28 @@ function strip(str) {
   return str.replace(/\s+/g, '');  
 };
 
-var opts = [
-  { name: 'config',
+var opts = {
+  config: {
     string: '-c, --config=PATH',
     default: 'config.json',
-    help: 'JSON config with test info'},
+    help: 'JSON config with test info'
+  },
+  logfile : {
+    string: '-l LOG'
+  },
+  pos0: {
+    position: 0,
+    string: '<files>'
+  },
+  pos1: {
+    position: 1
+  }
+};
 
-  { name: 'logfile',
-    string: '-l LOG'}
-];
 var parser = nomnom();
 parser.parseArgs(opts, {script: 'test.js', printHelp: false});
 
-assert.equal(strip(parser.getUsage()), strip("usage:test.js[options]options:-c,--config=PATHJSONconfigwithtestinfo-lLOG"));
+assert.equal(strip(parser.getUsage()), strip("usage:test.js<files><pos1>[options]<files>pos1options:-c,--config=PATHJSONconfigwithtestinfo-lLOG"));
 var opts = [
   { name: 'aname0',
     position: 0},
