@@ -76,7 +76,7 @@ parser.parseArgs();
 Each command generates its own usage message when `-h` or `--help` is specified with the command.
 
 # More Details
-Nomnom supports args like `-d`, `--debug`, `--no-debug`, `--file=test.txt`, `-f test.txt`, `-xvf`, and positionals. Positionals are arguments that don't fit the `-a` or `--atomic` format and aren't attached to an option.
+Nomnom supports args like `-d`, `--debug`, `--no-debug`, `--file=test.txt`, `--file test.txt`, `-f test.txt`, `-xvf`, and positionals. Positionals are arguments that don't fit the `-a` or `--atomic` format and aren't attached to an option.
 
 Values are JSON parsed, so `--debug=true --count=3 --file=log.txt` would give you:
 

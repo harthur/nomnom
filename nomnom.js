@@ -174,17 +174,17 @@ function ArgParser() {
         return Opt(opt);
       });
 
-      /* parse the args */
       if(printHelp && (argv.indexOf("--help") != -1
            || argv.indexOf("-h") != -1))
         parser.print(parser.getUsage(command));
 
       var options = {};
-      args = argv.concat([""]).map(function(arg) {
+      args = argv.map(function(arg) {
         return Arg(arg);
-      });
+      }).concat(Arg());
       var positionals = [];
 
+      /* parse the args */
       args.reduce(function(arg, val) {
         /* word */
         if(arg.isValue) {
@@ -212,8 +212,16 @@ function ArgParser() {
         else if(arg.full) {
           var value = arg.value;
           /* --debug */
-          if(value === undefined)
-            value = true;
+          if(value === undefined) {
+            /* --config test */
+            if(val.isValue && opt(arg.full).expectsValue) {
+               setOption(options, arg.full, val.value);
+               return Arg();
+            }
+            else {
+              value = true;
+            }
+          }
           setOption(options, arg.full, value);
         }
         return val;
@@ -308,13 +316,25 @@ function ArgParser() {
 
 /* an opt is what's specified by the user in opts hash */
 Opt = function(opt) {
-  var matches = /^(?:\-(\w+?)(?:\s+([^-][^\s]*))?)?\,?\s*(?:\-\-(.+?)(?:=(.+))?)?$/
-                .exec(opt.string);
+  var strings = (opt.string || "").split(","),
+      abbr, full, metavar;
+  for (var i = 0; i < strings.length; i++) {
+    var string = strings[i].trim(),
+        matches;
+    if (matches = string.match(/^\-([^-])(?:\s+(.*))?$/)) {
+      abbr = matches[1];
+      metavar = matches[2];
+    }
+    else if(matches = string.match(/^\-\-(.+?)(?:[=\s]+(.+))?$/)) {
+      full = matches[1];
+      metavar = metavar || matches[2];
+    }
+  }
 
   matches = matches || [];
-  var abbr = opt.abbr || matches[1],   // e.g. v from -v
-      full = opt.full || matches[3] || opt.name, // e.g. verbose from --verbose
-      metavar = opt.metavar || matches[2] || matches[4],  // e.g. PATH from '--config=PATH'
+  var abbr = opt.abbr || abbr,   // e.g. v from -v
+      full = opt.full || full || opt.name, // e.g. verbose from --verbose
+      metavar = opt.metavar || metavar;  // e.g. PATH from '--config=PATH'
       expectsValue = opt.expectsValue || metavar || opt.default;
 
   var string= "";
@@ -344,7 +364,6 @@ Opt = function(opt) {
     },
     expectsValue: expectsValue
   });
-  
   return opt;
 }
 
