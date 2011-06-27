@@ -174,6 +174,10 @@ If the option has a `position` and `list` is `true`, all positional args includi
 
 If this is set to `true` and the option isn't in the args, a message will be printed and the program will exit.
 
+#### type
+
+If you don't want the option JSON-parsed, specify type `"string"`.
+
 #### hidden
 
 Option won't be printed in the usage

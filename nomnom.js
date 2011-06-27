@@ -30,6 +30,13 @@ function ArgParser() {
       }
     }
     var name = option.name || arg;
+
+    if (option.type != "string") {
+       try { // try to infer type by JSON parsing the string
+         value = JSON.parse(value)
+       } catch(e) {}
+    }
+
     if(option.list) {
       if(!options[name])
         options[name] = [value];
@@ -360,10 +367,6 @@ Arg = function(str) {
     value = str;
   else if(full)
     value = fullMatch[1] ? false : fullMatch[3];
-
-  try { // try to infer type by JSON parsing the string
-    value = JSON.parse(value)
-  } catch(e) {}
 
   return {
     str: str,
