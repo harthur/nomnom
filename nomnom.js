@@ -36,6 +36,10 @@ function ArgParser() {
          value = JSON.parse(value)
        } catch(e) {}
     }
+    
+    if (option.choices && option.choices.indexOf(value) == -1) {
+       parser.print(name + " must be one of: " + option.choices.join(", "));
+    }
 
     if(option.list) {
       if(!options[name])

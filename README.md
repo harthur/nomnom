@@ -43,6 +43,19 @@ for [node.js](http://nodejs.org/) and [npm](http://github.com/isaacs/npm):
 
 	npm install nomnom
 
+# More Details
+Nomnom supports args like `-d`, `--debug`, `--no-debug`, `--file=test.txt`, `--file test.txt`, `-f test.txt`, `-xvf`, and positionals. Positionals are arguments that don't fit the `-a` or `--atomic` format and aren't attached to an option.
+
+Values are JSON parsed, so `--debug=true --count=3 --file=log.txt` would give you:
+
+```
+{
+    "debug": true,
+    "count": 3,
+    "file": "log.txt"
+}
+```
+
 # Commands
 Nomnom supports command-based interfaces (e.g. with git: `git add -p` and `git rebase -i` where `add` and `rebase` are the commands):
 
@@ -74,17 +87,6 @@ parser.parseArgs();
 ```
 
 Each command generates its own usage message when `-h` or `--help` is specified with the command.
-
-# More Details
-Nomnom supports args like `-d`, `--debug`, `--no-debug`, `--file=test.txt`, `--file test.txt`, `-f test.txt`, `-xvf`, and positionals. Positionals are arguments that don't fit the `-a` or `--atomic` format and aren't attached to an option.
-
-Values are JSON parsed, so `--debug=true --count=3 --file=log.txt` would give you:
-
-	{
-	    "debug": true,
-	    "count": 3,
-	    "file": "log.txt"
-	}
 
 # Usage
 Nomnom prints out a usage message if `--help` or `-h` is an argument. Usage for these options in `test.js`:
@@ -173,6 +175,10 @@ If the option has a `position` and `list` is `true`, all positional args includi
 #### required
 
 If this is set to `true` and the option isn't in the args, a message will be printed and the program will exit.
+
+#### choices
+
+A list of the possible values for the option (e.g. `['run', 'test', 'open']`). If the parsed value isn't in the list a message will be printed and the program will exit.
 
 #### type
 
