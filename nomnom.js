@@ -347,21 +347,23 @@ Opt = function(opt) {
       metavar = opt.metavar || metavar;  // e.g. PATH from '--config=PATH'
       expectsValue = opt.expectsValue || metavar || opt.default;
 
-  var string= "";
-  if(abbr) {
-    string += "-" + abbr;
-    if(metavar)
-      string += " " + metavar
-    string += ", ";
-  }
-  if(full) {
-    string += "--" + full;
-    if(metavar)
-      string += "=" + metavar;
-  }
-  if(opt.string)
+  var string;
+  if(opt.string) {
     string = opt.string;
-  
+  }
+  else if (opt.position === undefined) {
+    string= "";
+    if(abbr) {
+      string += "-" + abbr;
+      if(metavar)
+        string += " " + metavar
+      string += ", ";
+    }
+    string += "--" + (full || opt.name);
+    if(metavar)
+      string += " " + metavar;
+  }
+
   opt = _(opt).extend({
     name: opt.name || full || abbr,
     string: string,
@@ -370,7 +372,7 @@ Opt = function(opt) {
     metavar: metavar,
     matches: function(arg) {
       return opt.full == arg || opt.abbr == arg || opt.position == arg
-             || (opt.list && arg >= opt.position);
+        || opt.name == arg || (opt.list && arg >= opt.position);
     },
     expectsValue: expectsValue
   });

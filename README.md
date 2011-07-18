@@ -4,19 +4,18 @@ nomnom is an option parser for node and CommonJS. It noms your args and gives th
 ```javascript
 var options = require("nomnom")
     .opts({
+        debug : {
+            abbr: 'd',
+            help: 'Print debugging info'
+        },
         version: {
-          	string: '--version',
             help: 'print version and exit',
             callback: function() {
                 return "version 1.2.4";
             }
         },
-        debug : {
-            string: '-d, --debug',
-            help: 'Print debugging info'
-        },
         config: {
-            string: '-c PATH, --config=PATH',
+            abbr: 'c',
             default: 'config.json',
             help: 'JSON file with tests to run'
         }
@@ -73,7 +72,8 @@ parser.command('sanity')
             help: 'test file to run'
         },
         config: {
-            string: '-c FILE, --config=FILE',
+            abbr: 'c',
+            metavar: 'FILE',
             default: 'config.json',
             help: 'json file with tests to run'
         }
@@ -101,11 +101,12 @@ var options = require("nomnom")
             list: true
         },
         config: {
-            string: '-c FILE, --config=FILE',
-            help: "Config file with tests to run",
+            abbr: 'c',
+            metavar: 'FILE',
+            help: "Config file with tests to run"
         },
         debug: {
-            string: '-d, --debug',
+            abbr: 'd',
             help: "Print debugging info"
         }
     }).parseArgs();
@@ -124,17 +125,40 @@ var options = require("nomnom")
 # Options hash
 The options hash that is passed to `nomnom.opts()` is a hash keyed on option name. Each option specification can have the following fields:
 
+#### abbr, full, and metavar
+`abbr` is the single character string to match to this option, `full` is the full-length string (defaults to the name of the option). `metavar` is used in the usage printout and specifies that the option expects a value, `expectsValue` can also be set to `true` for this purpose (default is `false`).
+
+This option matches `-d` and `--debug` on the command line:
+
+```javascript
+debug: {
+  abbr: 'd'
+}
+```
+
+This option matches `-n 3`, `--num-lines 12` on the command line:
+
+```javascript
+numLines: {
+   abbr: 'n',
+   full: 'num-lines',
+   expectsValue: true
+}
+```
+
+as does:
+
+```javascript
+numLines: {
+   abbr: 'n',
+   full: 'num-lines',
+   metavar: "NUM"
+}
+```
+
 #### string
 
-specifies what command line arguments to match on and wether the option takes an argument.
-
-To attach an option to `--version` use `"--version"`
-	
-To attach to `-v` or `--version` use `"-v, --version"`
-	
-To attach to `-c` and `--config` and require an argument use `"-c FILE, --config=FILE"`
-	
-The metavar (e.g. `"FILE"`) is just a guide and can be any string. Note that `string` will be used when printing the usage for this option.
+A shorthand for `abbr`, `full`, and `metavar`. For example, to attach an options to `-c` and `--config` and require an argument use a `string: "-c FILE, --config=FILE"`
 
 #### help
 
@@ -149,13 +173,12 @@ The value to give the option if it's not specified in the arguments.
 A callback that will be executed as soon as the option is encountered. If the callback returns a string it will print the string and exit:
 
 ```javascript
-var opts = {
-    count: {
-        string: '-n COUNT',
-        callback: function(count) {
-            if(count != parseInt(count))
-                return "count must be an integer";
-        }
+
+count: {
+    expectsValue: true,
+    callback: function(count) {
+        if(count != parseInt(count))
+            return "count must be an integer";
     }
 }
 ```
