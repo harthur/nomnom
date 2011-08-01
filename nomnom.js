@@ -125,7 +125,7 @@ function ArgParser() {
         parserOpts = parserOpts || {};
         parser.specs = argv;
         parser.script = parserOpts.script;
-        parser.print = parserOpts.pringFunc;
+        parser.print = parserOpts.printFunc;
         printHelp = parserOpts.printHelp;
         if(printHelp === undefined)
           printHelp = true;
