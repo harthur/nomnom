@@ -208,6 +208,9 @@ function ArgParser() {
             setOption(options, lastChar, val.value);
             return Arg(); // skip next turn - swallow arg
           }
+          else if(opt(lastChar).expectsValue && val.value === undefined) {
+            parser.print(opt(lastChar).name + " expects a value\n\n" + parser.getUsage(command));
+          }
           else {
             setOption(options, lastChar, true);
           }
@@ -219,8 +222,11 @@ function ArgParser() {
           if(value === undefined) {
             /* --config test */
             if(val.isValue && opt(arg.full).expectsValue) {
-               setOption(options, arg.full, val.value);
-               return Arg();
+              setOption(options, arg.full, val.value);
+              return Arg();
+            }
+            else if(opt(arg.full).expectsValue && val.value === undefined) {
+              parser.print(opt(lastChar).name + " expects a value\n\n" + parser.getUsage(command));
             }
             else {
               value = true;
