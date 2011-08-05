@@ -15,7 +15,7 @@ var opts = {
   }
 };
 
-var options = nomnom().parseArgs(opts, { argv: ["-l"] });
+var options = nomnom().parseArgs(opts, { argv: ["-l", "log"] });
 
 assert.ok(options.logfile);
 assert.ok(!options.F);

@@ -17,7 +17,7 @@ opts = [
 ];
 
 var parser = nomnom();
-var options = parser.parseArgs(opts, {argv: ["--atomic","--config"]});
+var options = parser.parseArgs(opts, {argv: ["--atomic","--config=path"]});
 
 assert.ok(options.atomic);
 assert.ok(options.config);
