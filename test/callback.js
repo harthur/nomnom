@@ -1,42 +1,33 @@
-var nomnom = require("../nomnom"),
-    assert = require('assert');
-    
-var opts = {
-  version: {
-    string: '--version',
-    callback: function() {
-      assert.ok(true, "called version callback");
-    }
-  },
-  date: {
-    string: '-d YYYY-MM-DD, --date=YYYY-MM-DD',
-    callback: function(date) {
-      assert.equal(date, "2010-02-03", "date should match value")
-    }
-  }
+var nomnom = require("../nomnom");
+
+exports.testVersion = function(test) {
+   test.expect(1);
+   
+   nomnom().opts({
+      date: {
+         callback: function(date) {
+            test.equal(date, "2010-02-03", "date should match value")
+         }
+      }
+   }).parseArgs(["--date=2010-02-03"]);
+
+   test.done();
 }
-var options = nomnom().opts(opts).parseArgs(["--version", "--date=2010-02-03"]);
 
+exports.testReturnString = function(test) {
+   test.expect(1);
 
-var opts = {
-  date : {
-    string: "-d Y, --date=Y",
-    callback: function(date) {
-      assert.equal(date, "2010-03-02", "date argument is wrong");
-    }
-  }
+   nomnom().opts({
+      version: {
+         flag: true,
+         callback: function() {
+            return "v0.3";
+         }
+      }
+   })
+   .printFunc(function(string) { 
+      test.equal(0, string.indexOf("v0.3"))
+      test.done();
+   })
+   .parseArgs(["--version"]);
 }
-var options = nomnom().opts(opts).parseArgs(["-d", "2010-03-02"]);
-
-/* // exits process
-nomnom().opts({
-  version: {
-    string: '--version',
-    callback: function() {
-      return "called version callback";
-    }
-  }
-}).parseArgs(["--version"]);
-
-assert.ok(false, "should have exited when --version specified");
-*/
