@@ -118,20 +118,8 @@ function ArgParser() {
       return parser;
     },
   
-    parseArgs : function(argv, parserOpts) {
+    parseArgs : function(argv) {
       var printHelp = true;
-      if(!Array.isArray(argv) || (argv.length
-           && typeof argv[0] != "string")) {
-        // using old API
-        parserOpts = parserOpts || {};
-        parser.specs = argv;
-        parser.script = parserOpts.script;
-        parser.print = parserOpts.printFunc;
-        printHelp = parserOpts.printHelp;
-        if(printHelp === undefined)
-          printHelp = true;
-        argv = parserOpts.argv;
-      }
       parser.print = parser.print || function(str) {
         require("sys").puts(str);
         process.exit(0);
