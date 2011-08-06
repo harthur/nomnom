@@ -120,7 +120,8 @@ function ArgParser() {
   
     parseArgs : function(argv, parserOpts) {
       var printHelp = true;
-      if(argv && (!argv.length || typeof argv[0] != "string")) {
+      if(!Array.isArray(argv) || (argv.length
+           && typeof argv[0] != "string")) {
         // using old API
         parserOpts = parserOpts || {};
         parser.specs = argv;
@@ -159,7 +160,7 @@ function ArgParser() {
           // command specified e.g. 'git add -p'
           var command = parser.commands[commandName];
           if(!command)
-            parser.print(parser.script + ": no such command '" + commandName + "'");  
+            return parser.print(parser.script + ": no such command '" + commandName + "'");  
           parser.specs = _(command.specs).extend(parser.globalSpecs);  
           parser.script += " " + command.name;
           if(command.help)
@@ -180,7 +181,7 @@ function ArgParser() {
 
       if(printHelp && (argv.indexOf("--help") != -1
            || argv.indexOf("-h") != -1))
-        parser.print(parser.getUsage(command));
+        return parser.print(parser.getUsage(command));
 
       var options = {};
       args = argv.map(function(arg) {
@@ -190,11 +191,10 @@ function ArgParser() {
 
       /* parse the args */
       args.reduce(function(arg, val) {
-        /* word */
+        /* positional */
         if(arg.isValue) {
           positionals.push(arg.value);
         }
-        /* -c */
         else if(arg.chars) {
           var lastChar = arg.chars.pop();
           
@@ -203,32 +203,41 @@ function ArgParser() {
             setOption(options, ch, true);
           });
 
-          /* -c 3 */
-          if(val.isValue && opt(lastChar).expectsValue) {
-            setOption(options, lastChar, val.value);
-            return Arg(); // skip next turn - swallow arg
-          }
-          else if(opt(lastChar).expectsValue && val.value === undefined) {
-            parser.print(opt(lastChar).name + " expects a value\n\n" + parser.getUsage(command));
+          /* -v key */
+          if(!opt(lastChar).flag) {
+             if(val.isValue)  {
+                setOption(options, lastChar, val.value);
+                return Arg(); // skip next turn - swallow arg                
+             }
+             else {
+                parser.print("'-" + (opt(lastChar).name || lastChar) + "'"
+                  + " expects a value\n\n" + parser.getUsage(command));
+             }
           }
           else {
+            /* -v */
             setOption(options, lastChar, true);
           }
+
         }
-        /* --config=tests.json or --debug */
         else if(arg.full) {
           var value = arg.value;
-          /* --debug */
+
+          /* --key */
           if(value === undefined) {
-            /* --config test */
-            if(val.isValue && opt(arg.full).expectsValue) {
-              setOption(options, arg.full, val.value);
-              return Arg();
-            }
-            else if(opt(arg.full).expectsValue && val.value === undefined) {
-              parser.print(opt(arg.full).name + " expects a value\n\n" + parser.getUsage(command));
+            /* --key value */
+            if(!opt(arg.full).flag) {
+              if (val.isValue) {
+                setOption(options, arg.full, val.value);
+                return Arg();           
+              }
+              else {
+                parser.print("'--" + (opt(arg.full).name || arg.full) + "'"
+                  + " expects a value\n\n" + parser.getUsage(command));                  
+              }
             }
             else {
+              /* --flag */
               value = true;
             }
           }
@@ -250,8 +259,9 @@ function ArgParser() {
 
       // exit if required arg isn't present
       parser.specs.forEach(function(opt) {
-        if(opt.required && options[opt.name] === undefined)
-          parser.print(opt.name + " argument is required\n\n" + parser.getUsage(command));
+        if(opt.required && options[opt.name] === undefined) {
+           parser.print(opt.name + " argument is required\n\n" + parser.getUsage(command));           
+        }
       });
     
       if(command && command.callback)
@@ -351,7 +361,6 @@ Opt = function(opt) {
   var abbr = opt.abbr || abbr,   // e.g. v from -v
       full = opt.full || full, // e.g. verbose from --verbose
       metavar = opt.metavar || metavar;  // e.g. PATH from '--config=PATH'
-      expectsValue = opt.expectsValue || metavar || opt.default;
 
   var string;
   if(opt.string) {
@@ -379,8 +388,7 @@ Opt = function(opt) {
     matches: function(arg) {
       return opt.full == arg || opt.abbr == arg || opt.position == arg
         || opt.name == arg || (opt.list && arg >= opt.position);
-    },
-    expectsValue: expectsValue
+    }
   });
   return opt;
 }

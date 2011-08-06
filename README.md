@@ -1,23 +1,25 @@
 # nomnom
-nomnom is an option parser for node and CommonJS. It noms your args and gives them back to you in a hash.
+nomnom is an option parser for node. It noms your args and gives them back to you in a hash.
 
 ```javascript
 var options = require("nomnom")
     .opts({
         debug : {
             abbr: 'd',
+            flag: true,
             help: 'Print debugging info'
-        },
-        version: {
-            help: 'print version and exit',
-            callback: function() {
-                return "version 1.2.4";
-            }
         },
         config: {
             abbr: 'c',
             default: 'config.json',
             help: 'JSON file with tests to run'
+        },
+        version: {
+            flag: true,
+            help: 'print version and exit',
+            callback: function() {
+                return "version 1.2.4";
+            }
         }
     })
     .parseArgs();
@@ -67,13 +69,12 @@ parser.command('browser')
 
 parser.command('sanity')
     .opts({
-        filename: {
-            position: 1,
-            help: 'test file to run'
+        outfile: {
+            abbr: 'o',
+            help: 'file to write results'
         },
         config: {
             abbr: 'c',
-            metavar: 'FILE',
             default: 'config.json',
             help: 'json file with tests to run'
         }
@@ -125,8 +126,8 @@ var options = require("nomnom")
 # Options hash
 The options hash that is passed to `nomnom.opts()` is a hash keyed on option name. Each option specification can have the following fields:
 
-#### abbr, full, and metavar
-`abbr` is the single character string to match to this option, `full` is the full-length string (defaults to the name of the option). `metavar` is used in the usage printout and specifies that the option expects a value, `expectsValue` can also be set to `true` for this purpose (default is `false`).
+#### abbr and full
+`abbr` is the single character string to match to this option, `full` is the full-length string (defaults to the name of the option).
 
 This option matches `-d` and `--debug` on the command line:
 
@@ -142,23 +143,28 @@ This option matches `-n 3`, `--num-lines 12` on the command line:
 numLines: {
    abbr: 'n',
    full: 'num-lines',
-   expectsValue: true
 }
 ```
 
-as does:
+#### flag
+
+If this is set to true, the option acts as a flag and doesn't swallow the next value on the command line. Default is `false`, so normally if you had a command line `--config test.js`, `config` would get a value of `test.js` in the options hash. Whereas if you specify:
 
 ```javascript
-numLines: {
-   abbr: 'n',
-   full: 'num-lines',
-   metavar: "NUM"
+config: {
+   flag: true
 }
 ```
+
+with a command line of `--config test.js`, `config` would get a value of `true` in the options hash, and `test.js` would be a free positional arg.
+
+#### metavar
+
+`metavar` is used in the usage printout e.g. `"PATH"` in `"-f PATH, --file PATH"`.
 
 #### string
 
-A shorthand for `abbr`, `full`, and `metavar`. For example, to attach an options to `-c` and `--config` and require an argument use a `string: "-c FILE, --config=FILE"`
+A shorthand for `abbr`, `full`, and `metavar`. For example, to attach an option to `-c` and `--config` use a `string: "-c FILE, --config=FILE"`
 
 #### help
 
@@ -175,7 +181,6 @@ A callback that will be executed as soon as the option is encountered. If the ca
 ```javascript
 
 count: {
-    expectsValue: true,
     callback: function(count) {
         if(count != parseInt(count))
             return "count must be an integer";
@@ -185,7 +190,7 @@ count: {
 
 #### position
 
-The position of the option if it's a positional argument. If the option should be matched to the first positional arg use position `0`
+The position of the option if it's a positional argument. If the option should be matched to the first positional arg use position `0`, etc.
 
 #### list
 
