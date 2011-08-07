@@ -4,9 +4,11 @@ module.exports = ArgParser;
 
 // for nomnom.parseArgs()
 var argParser = ArgParser();
-for(var i in argParser) {
-  if(typeof argParser[i] == "function")
-    ArgParser[i] = argParser[i];
+
+for (var i in argParser) {
+  if (typeof argParser[i] == "function") {
+     ArgParser[i] = argParser[i];     
+  }
 }
 
 function ArgParser() {
@@ -15,40 +17,47 @@ function ArgParser() {
     // get the specified opt for this parsed arg
     var match = Opt({});
     parser.specs.forEach(function(opt) {
-      if(opt.matches(arg))
-        match = opt;
+      if (opt.matches(arg)) {
+         match = opt;         
+      }
     });
     return match;
   };
   
   function setOption(options, arg, value) {
     var option = opt(arg);
-    if(option.callback) {
+    if (option.callback) {
       var message = option.callback(value);
-      if(typeof message == "string") {
+
+      if (typeof message == "string") {
         parser.print(message);
       }
     }
-    var name = option.name || arg;
 
     if (option.type != "string") {
-       try { // try to infer type by JSON parsing the string
+       try {
+         // infer type by JSON parsing the string
          value = JSON.parse(value)
-       } catch(e) {}
+       }
+       catch(e) {}
     }
     
+    var name = option.name || arg;
     if (option.choices && option.choices.indexOf(value) == -1) {
        parser.print(name + " must be one of: " + option.choices.join(", "));
     }
 
-    if(option.list) {
-      if(!options[name])
-        options[name] = [value];
-      else
-        options[name].push(value);
+    if (option.list) {
+      if (!options[name]) {
+        options[name] = [value];         
+      }
+      else {
+        options[name].push(value);        
+      }
     }
-    else
-      options[name] = value;
+    else {
+      options[name] = value;      
+    }
   };
   
   var parser = {
@@ -61,14 +70,14 @@ function ArgParser() {
         specs: {}
       };
 
-      // facilitates command('name').opts().callback().help()
+      // facilitates command('name').opts().cb().help()
       var chain = {
         opts : function(specs) {
           command.specs = specs;
           return chain;
         },
-        callback : function(callback) {
-          command.callback = callback;
+        callback : function(cb) {
+          command.cb = cb;
           return chain;
         },
         help : function(help) {
@@ -76,7 +85,7 @@ function ArgParser() {
           return chain;
         },
         usage : function(usage) {
-          command.usageString = usage;
+          command.usageStr = usage;
           return chain;
         }
       };
@@ -93,13 +102,13 @@ function ArgParser() {
       return parser;
     },
     
-    callback : function(fallbackCb) {
-      parser.fallbackCb = fallbackCb;
+    callback : function(cb) {
+      parser.cb = cb;
       return parser;
     },
     
     usage : function(usageString) {
-      parser.usageString = usageString;
+      parser.usageStr = usageString;
       return parser;
     },
     
@@ -113,50 +122,50 @@ function ArgParser() {
       return parser;
     },
   
-    help : function(helpString) {
-      parser.helpString = helpString;
+    help : function(helpStr) {
+      parser.helpStr = helpStr;
       return parser;
     },
   
     parseArgs : function(argv) {
-      var printHelp = true;
       parser.print = parser.print || function(str) {
-        require("sys").puts(str);
+        console.log(str);
         process.exit(0);
       };
-      parser.helpString = parser.helpString || "";
+      parser.helpStr = parser.helpStr || "";
       parser.script = parser.script || process.argv[0] + " "
-            + require('path').basename(process.argv[1]);
-      
+            + require('path').basename(process.argv[1]);    
       parser.specs = parser.specs || {};
+
       var argv = argv || process.argv.slice(2);
-
-      var commandName;
-      if(JSON.stringify(parser.commands) != "{}") {
-        if(argv.length && Arg(argv[0]).isValue)
-          commandName = argv[0];
-
-        if(!commandName) {
-          // no command but command expected e.g. 'git -h'
-          parser.specs.command = {
-            position: 0,
-            help: 'one of: ' + _(parser.commands).keys().join(", ")
-          }
-          _(parser.specs).extend(parser.globalSpecs);
-        }
-        else {
-          // command specified e.g. 'git add -p'
-          var command = parser.commands[commandName];
-          if(!command)
-            return parser.print(parser.script + ": no such command '" + commandName + "'");  
-          parser.specs = _(command.specs).extend(parser.globalSpecs);  
-          parser.script += " " + command.name;
-          if(command.help)
-            parser.helpString = command.help;
-        }
+      
+      var arg = Arg(argv[0]).isValue && argv[0],
+          command = arg && parser.commands[arg],
+          commandExpected = !_(parser.commands).isEmpty();
+      
+      if (commandExpected) {
+         if (command) {
+            parser.specs = _(command.specs).extend(parser.globalSpecs);  
+            parser.script += " " + command.name;
+            if (command.help) {
+              parser.helpStr = command.help;
+            }
+            parser.command = command;
+         }
+         else if (arg) {
+            return parser.print(parser.script + ": no such command '" + arg + "'");            
+         }
+         else {
+            // no command but command expected e.g. 'git -v'
+            parser.specs.command = {
+              position: 0,
+              help: 'one of: ' + _(parser.commands).keys().join(", ")
+            }
+            _(parser.specs).extend(parser.globalSpecs);            
+         }
       }
 
-      if(parser.specs.length === undefined) {
+      if (parser.specs.length === undefined) {
         // specs is a hash not an array
         parser.specs = _(parser.specs).map(function(opt, name) {
           opt.name = name;
@@ -167,23 +176,25 @@ function ArgParser() {
         return Opt(opt);
       });
 
-      if(printHelp && (argv.indexOf("--help") != -1
-           || argv.indexOf("-h") != -1))
-        return parser.print(parser.getUsage(command));
+      if (argv.indexOf("--help") >= 0 || argv.indexOf("-h") >= 0) {
+        return parser.print(parser.getUsage());        
+      }
 
       var options = {};
-      args = argv.map(function(arg) {
+      var args = argv.map(function(arg) {
         return Arg(arg);
-      }).concat(Arg());
+      })
+      .concat(Arg());
+
       var positionals = [];
 
       /* parse the args */
       args.reduce(function(arg, val) {
         /* positional */
-        if(arg.isValue) {
+        if (arg.isValue) {
           positionals.push(arg.value);
         }
-        else if(arg.chars) {
+        else if (arg.chars) {
           var lastChar = arg.chars.pop();
           
           /* -cfv */
@@ -192,14 +203,14 @@ function ArgParser() {
           });
 
           /* -v key */
-          if(!opt(lastChar).flag) {
-             if(val.isValue)  {
+          if (!opt(lastChar).flag) {
+             if (val.isValue)  {
                 setOption(options, lastChar, val.value);
                 return Arg(); // skip next turn - swallow arg                
              }
              else {
                 parser.print("'-" + (opt(lastChar).name || lastChar) + "'"
-                  + " expects a value\n\n" + parser.getUsage(command));
+                  + " expects a value\n\n" + parser.getUsage());
              }
           }
           else {
@@ -208,20 +219,20 @@ function ArgParser() {
           }
 
         }
-        else if(arg.full) {
+        else if (arg.full) {
           var value = arg.value;
 
           /* --key */
-          if(value === undefined) {
+          if (value === undefined) {
             /* --key value */
-            if(!opt(arg.full).flag) {
+            if (!opt(arg.full).flag) {
               if (val.isValue) {
                 setOption(options, arg.full, val.value);
                 return Arg();           
               }
               else {
                 parser.print("'--" + (opt(arg.full).name || arg.full) + "'"
-                  + " expects a value\n\n" + parser.getUsage(command));                  
+                  + " expects a value\n\n" + parser.getUsage());                  
               }
             }
             else {
@@ -241,30 +252,35 @@ function ArgParser() {
       options._ = positionals;
       
       parser.specs.forEach(function(opt) {
-        if(typeof options[opt.name] == "undefined")
+        if (opt.default !== undefined && options[opt.name] === undefined) {
           options[opt.name] = opt.default;
+        }
       });
 
       // exit if required arg isn't present
       parser.specs.forEach(function(opt) {
-        if(opt.required && options[opt.name] === undefined) {
-           parser.print(opt.name + " argument is required\n\n" + parser.getUsage(command));           
+        if (opt.required && options[opt.name] === undefined) {
+           parser.print(opt.name + " argument is required\n\n" + parser.getUsage());           
         }
       });
     
-      if(command && command.callback)
-        command.callback(options);
-      else if(parser.fallbackCb)
-        parser.fallbackCb(options);
+      if (command && command.cb) {
+        command.cb(options);        
+      }
+      else if (parser.cb) {
+        parser.cb(options);        
+      }
 
       return options;
     },
 
-    getUsage : function(command) {
-      if(command && command.usageString)
-        return command.usageString;
-      if(parser.usageString)
-        return parser.usageString;
+    getUsage : function() {
+      if (parser.command && parser.command.usageStr) {
+        return parser.command.usageStr;        
+      }
+      if (parser.usageStr) {
+        return parser.usageStr;        
+      }
 
       // todo: use a template
       var str = "usage: " + parser.script;
@@ -283,45 +299,54 @@ function ArgParser() {
       positionals.forEach(function(pos) {
         str += " ";
         var posStr = pos.string;
-        if(!posStr) {
+        if (!posStr) {
           posStr = "<" + (pos.name || "arg" + pos.position) + ">";
-          if(pos.list)
-            posStr += "...";
+          if (pos.list) {
+            posStr += "...";            
+          }
         }
         str += posStr;
       });
-      if(options.length || positionals.length)
-        str += " [options]\n\n";
+
+      if (options.length || positionals.length) {
+        str += " [options]\n\n";        
+      }
     
       function spaces(length) {
         var spaces = "";
-        for(var i = 0; i < length; i++)
-          spaces += " ";
+        for (var i = 0; i < length; i++) {
+          spaces += " ";          
+        }
         return spaces;
       }
       var longest = positionals.reduce(function(max, pos) {
-          return pos.name.length > max ? pos.name.length : max; 
+        return pos.name.length > max ? pos.name.length : max; 
       }, 0);
+
       positionals.forEach(function(pos) {
         var posStr = pos.string || pos.name;
         str += posStr + spaces(longest - posStr.length) + "     "
                + (pos.help || "") + "\n"; 
       });
-      if(positionals.length && options.length)
-        str += "\n";
+      if (positionals.length && options.length) {
+        str += "\n";        
+      }
 
-      if(options.length)
-        str += "options:\n";
+      if (options.length) {
+        str += "options:\n";        
+      }
 
       var longest = options.reduce(function(max, opt) {
         return opt.string.length > max && !opt.hidden ? opt.string.length : max; 
       }, 0);
+
       options.forEach(function(opt) {
-        if(!opt.hidden)
+        if (!opt.hidden) {
           str += "   " + opt.string + spaces(longest - opt.string.length)
-                 + "   " + (opt.help || "") + "\n";
+                 + "   " + (opt.help || "") + "\n";          
+        }
       });
-      return str + "\n" + (parser.helpString || "") + "\n";
+      return str + "\n" + (parser.helpStr || "") + "\n";
     }
   }
 
@@ -339,7 +364,7 @@ Opt = function(opt) {
       abbr = matches[1];
       metavar = matches[2];
     }
-    else if(matches = string.match(/^\-\-(.+?)(?:[=\s]+(.+))?$/)) {
+    else if (matches = string.match(/^\-\-(.+?)(?:[=\s]+(.+))?$/)) {
       full = matches[1];
       metavar = metavar || matches[2];
     }
@@ -351,20 +376,21 @@ Opt = function(opt) {
       metavar = opt.metavar || metavar;  // e.g. PATH from '--config=PATH'
 
   var string;
-  if(opt.string) {
+  if (opt.string) {
     string = opt.string;
   }
   else if (opt.position === undefined) {
-    string= "";
-    if(abbr) {
+    string = "";
+    if (abbr) {
       string += "-" + abbr;
-      if(metavar)
+      if (metavar)
         string += " " + metavar
       string += ", ";
     }
     string += "--" + (full || opt.name);
-    if(metavar)
-      string += " " + metavar;
+    if (metavar) {
+      string += " " + metavar;      
+    }
   }
 
   opt = _(opt).extend({
@@ -394,12 +420,14 @@ Arg = function(str) {
   var fullMatch = fullRegex.exec(str),
       full = fullMatch && fullMatch[2];
 
-  var isValue = str !== undefined && (str === "" || valRegex.test(str)),
-      value;
-  if(isValue)
-    value = str;
-  else if(full)
-    value = fullMatch[1] ? false : fullMatch[3];
+  var isValue = str !== undefined && (str === "" || valRegex.test(str));
+  var value;
+  if (isValue) {
+    value = str;    
+  }
+  else if (full) {
+    value = fullMatch[1] ? false : fullMatch[3];    
+  }
 
   return {
     str: str,
