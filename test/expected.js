@@ -40,16 +40,20 @@ exports.testRequired = function(test) {
 }
 
 exports.testChoices = function(test) {
-   test.expect(1);
+   test.expect(2);
 
-   nomnom().opts({
+   var parser = nomnom().opts({
       color: {
          choices: ['green', 'blue']
       }
    })
    .printFunc(function(string) {
       test.equal(0, string.indexOf("color must be one of: green, blue"))
-      test.done();
-   })
-   .parseArgs(['--color', 'red']);
+   });
+   
+   parser.parseArgs(['--color', 'red']);
+   
+   var options = parser.parseArgs(['--color', 'green']);
+   test.equal(options.color, 'green');
+   test.done();
 }
