@@ -3,29 +3,29 @@ nomnom is an option parser for node. It noms your args and gives them back to yo
 
 ```javascript
 var options = require("nomnom")
-    .opts({
-        debug : {
-            abbr: 'd',
-            flag: true,
-            help: 'Print debugging info'
-        },
-        config: {
-            abbr: 'c',
-            default: 'config.json',
-            help: 'JSON file with tests to run'
-        },
-        version: {
-            flag: true,
-            help: 'print version and exit',
-            callback: function() {
-                return "version 1.2.4";
-            }
-        }
-    })
-    .parseArgs();
+   .opts({
+      debug : {
+         abbr: 'd',
+         flag: true,
+         help: 'Print debugging info'
+      },
+      config: {
+         abbr: 'c',
+         default: 'config.json',
+         help: 'JSON file with tests to run'
+      },
+      version: {
+         flag: true,
+         help: 'print version and exit',
+         callback: function() {
+            return "version 1.2.4";
+         }
+      }
+   })
+   .parseArgs();
 
-if(options.debug)
-    // do stuff
+if (options.debug)
+   // do stuff
 ```
 	
 You don't have to specify anything if you don't want to:
@@ -33,10 +33,10 @@ You don't have to specify anything if you don't want to:
 ```javascript
 var options = require("nomnom").parseArgs();
 
-var url = options[0];      // get the first positional arg
-var debug = options.debug  // see if --debug was specified
-var verbose = options.v    // see if -v was specified
-var extras = options._     // get an array of the unmatched, positional args
+var url = options[0];     // get the first positional arg
+var file = options.file   // see if --file was specified
+var verbose = options.v   // see if -v was specified
+var extras = options._    // get an array of the unmatched, positional args
 ```
 
 # Install
@@ -51,9 +51,9 @@ Values are JSON parsed, so `--debug=true --count=3 --file=log.txt` would give yo
 
 ```
 {
-    "debug": true,
-    "count": 3,
-    "file": "log.txt"
+   "debug": true,
+   "count": 3,
+   "file": "log.txt"
 }
 ```
 
@@ -64,25 +64,25 @@ Nomnom supports command-based interfaces (e.g. with git: `git add -p` and `git r
 var parser = require("nomnom");
 
 parser.command('browser')
-    .callback(runBrowser)
-    .help("run browser tests");
+   .callback(runBrowser)
+   .help("run browser tests");
 
 parser.command('sanity')
-    .opts({
-        outfile: {
-            abbr: 'o',
-            help: 'file to write results'
-        },
-        config: {
-            abbr: 'c',
-            default: 'config.json',
-            help: 'json file with tests to run'
-        }
-    })
-    .callback(function(options) {
-         runSanity(options.filename);
-    })
-    .help("run the sanity tests")
+   .opts({
+      outfile: {
+         abbr: 'o',
+         help: 'file to write results to'
+      },
+      config: {
+         abbr: 'c',
+         default: 'config.json',
+         help: 'json manifest of tests to run'
+      }
+   })
+   .callback(function(options) {
+      runSanity(options.filename);
+   })
+   .help("run the sanity tests")
 
 parser.parseArgs();
 ```
@@ -94,23 +94,24 @@ Nomnom prints out a usage message if `--help` or `-h` is an argument. Usage for 
 
 ```javascript
 var options = require("nomnom")
-    .scriptName("runtests")
-    .opts({
-        path: {
-            position: 0,
-            help: "Test file to run",
-            list: true
-        },
-        config: {
-            abbr: 'c',
-            metavar: 'FILE',
-            help: "Config file with tests to run"
-        },
-        debug: {
-            abbr: 'd',
-            help: "Print debugging info"
-        }
-    }).parseArgs();
+   .scriptName("runtests")
+   .opts({
+      path: {
+         position: 0,
+         help: "Test file to run",
+         list: true
+      },
+      config: {
+         abbr: 'c',
+         metavar: 'FILE',
+         help: "Config file with tests to run"
+      },
+      debug: {
+         abbr: 'd',
+         flag: true,
+         help: "Print debugging info"
+      }
+   }).parseArgs();
 ```
 
 ...would look like this:
@@ -120,11 +121,11 @@ var options = require("nomnom")
 	path     Test file to run
 
 	options:
-	   -c FILE, --config=FILE   Config file with tests to run
+	   -c FILE, --config FILE   Config file with tests to run
 	   -d, --debug              Print debugging info
 
 # Options hash
-The options hash that is passed to `nomnom.opts()` is a hash keyed on option name. Each option specification can have the following fields:
+The options hash passed to `nomnom.opts()` is a hash keyed on option name. Each option specification can have the following fields:
 
 #### abbr and full
 `abbr` is the single character string to match to this option, `full` is the full-length string (defaults to the name of the option).
@@ -133,7 +134,7 @@ This option matches `-d` and `--debug` on the command line:
 
 ```javascript
 debug: {
-  abbr: 'd'
+   abbr: 'd'
 }
 ```
 
@@ -181,10 +182,10 @@ A callback that will be executed as soon as the option is encountered. If the ca
 ```javascript
 
 count: {
-    callback: function(count) {
-        if(count != parseInt(count))
-            return "count must be an integer";
-    }
+   callback: function(count) {
+      if (count != parseInt(count))
+         return "count must be an integer";
+   }
 }
 ```
 
@@ -234,7 +235,7 @@ A string that is appended to the usage.
 
 #### scriptName
 
-Nomnom can't detect the alias used to run your script. You can use `scriptName` to provide the correct name instead of e.g. `node test.js`.
+Nomnom can't detect the alias used to run your script. You can use `scriptName` to provide the correct name for the usage printout instead of e.g. `node test.js`.
 
 #### printFunc
 
