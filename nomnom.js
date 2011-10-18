@@ -137,6 +137,8 @@ function ArgParser() {
             + require('path').basename(process.argv[1]);    
       parser.specs = parser.specs || {};
 
+      if (!process.argv[2]) process.argv[2] = '-h';
+
       var argv = argv || process.argv.slice(2);
       
       var arg = Arg(argv[0]).isValue && argv[0],
