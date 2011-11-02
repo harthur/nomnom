@@ -7,7 +7,7 @@ function ArgParser() {
 }
 
 ArgParser.prototype = {
-  // add a command to the expected commands
+  /* Add a command to the expected commands */
   command : function(name) {
     var command;
     if (name) {
@@ -37,7 +37,7 @@ ArgParser.prototype = {
         return chain;
       },
       usage : function(usage) {
-        command.usageStr = usage;
+        command._usage = usage;
         return chain;
       }
     };
@@ -53,8 +53,8 @@ ArgParser.prototype = {
     return this;
   },
 
-  usage : function(usageString) {
-    this.usageStr = usageString;
+  usage : function(usage) {
+    this._usage = usage;
     return this;
   },
   
@@ -68,8 +68,8 @@ ArgParser.prototype = {
     return this;
   },
 
-  help : function(helpStr) {
-    this.helpStr = helpStr;
+  help : function(help) {
+    this._help = help;
     return this;
   },
 
@@ -78,7 +78,7 @@ ArgParser.prototype = {
       console.log(str);
       process.exit(0);
     };
-    this.helpStr = this.helpStr || "";
+    this._help = this._help || "";
     this.script = this.script || process.argv[0] + " "
           + require('path').basename(process.argv[1]);    
     this.specs = this.specs || {};
@@ -94,7 +94,7 @@ ArgParser.prototype = {
           _(this.specs).extend(command.specs);  
           this.script += " " + command.name;
           if (command.help) {
-            this.helpStr = command.help;
+            this._help = command.help;
           }
           this.command = command;
        }
@@ -109,7 +109,7 @@ ArgParser.prototype = {
           }
           if (this.fallback) {
             _(this.specs).extend(this.fallback.specs);
-            this.helpStr = this.fallback.help;         
+            this._help = this.fallback.help;         
           }
        }
     }
@@ -145,7 +145,7 @@ ArgParser.prototype = {
         positionals.push(arg.value);
       }
       else if (arg.chars) {
-        var lastChar = arg.chars.pop();
+        var last = arg.chars.pop();
         
         /* -cfv */
         (arg.chars).forEach(function(ch) {
@@ -153,19 +153,19 @@ ArgParser.prototype = {
         });
 
         /* -v key */
-        if (!that.opt(lastChar).flag) {
+        if (!that.opt(last).flag) {
            if (val.isValue)  {
-              that.setOption(options, lastChar, val.value);
+              that.setOption(options, last, val.value);
               return Arg(); // skip next turn - swallow arg                
            }
            else {
-              that.print("'-" + (this.opt(lastChar).name || lastChar) + "'"
+              that.print("'-" + (this.opt(last).name || last) + "'"
                 + " expects a value\n\n" + this.getUsage());
            }
         }
         else {
           /* -v */
-          that.setOption(options, lastChar, true);
+          that.setOption(options, last, true);
         }
 
       }
@@ -225,14 +225,14 @@ ArgParser.prototype = {
   },
 
   getUsage : function() {
-    if (this.command && this.command.usageStr) {
-      return this.command.usageStr;        
+    if (this.command && this.command._usage) {
+      return this.command._usage;        
     }
-    else if (this.fallback && this.fallback.usageStr) {
-      return this.fallback.usageStr;
+    else if (this.fallback && this.fallback._usage) {
+      return this.fallback._usage;
     }
-    if (this.usageStr) {
-      return this.usageStr;        
+    if (this._usage) {
+      return this._usage;        
     }
 
     // todo: use a template
@@ -299,7 +299,7 @@ ArgParser.prototype = {
                + "   " + (opt.help || "") + "\n";          
       }
     });
-    return str + "\n" + (this.helpStr || "") + "\n";
+    return str + "\n" + (this._help || "") + "\n";
   }
 };
 
