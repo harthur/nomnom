@@ -2,8 +2,8 @@
 nomnom is an option parser for node. It noms your args and gives them back to you in a hash.
 
 ```javascript
-var options = require("nomnom")
-   .opts({
+var opts = require("nomnom")
+   .options({
       debug : {
          abbr: 'd',
          flag: true,
@@ -24,19 +24,19 @@ var options = require("nomnom")
    })
    .parse();
 
-if (options.debug)
+if (opts.debug)
    // do stuff
 ```
 	
 You don't have to specify anything if you don't want to:
 
 ```javascript
-var options = require("nomnom").parse();
+var opts = require("nomnom").parse();
 
-var url = options[0];     // get the first positional arg
-var file = options.file   // see if --file was specified
-var verbose = options.v   // see if -v was specified
-var extras = options._    // get an array of the unmatched, positional args
+var url = opts[0];     // get the first positional arg
+var file = opts.file   // see if --file was specified
+var verbose = opts.v   // see if -v was specified
+var extras = opts._    // get an array of the unmatched, positional args
 ```
 
 # Install
@@ -68,7 +68,7 @@ parser.command('browser')
    .help("run browser tests");
 
 parser.command('sanity')
-   .opts({
+   .options({
       outfile: {
          abbr: 'o',
          help: 'file to write results to'
@@ -79,8 +79,8 @@ parser.command('sanity')
          help: 'json manifest of tests to run'
       }
    })
-   .callback(function(options) {
-      runSanity(options.filename);
+   .callback(function(opts) {
+      runSanity(opts.filename);
    })
    .help("run the sanity tests")
 
@@ -93,9 +93,9 @@ Each command generates its own usage message when `-h` or `--help` is specified 
 Nomnom prints out a usage message if `--help` or `-h` is an argument. Usage for these options in `test.js`:
 
 ```javascript
-var options = require("nomnom")
+var opts = require("nomnom")
    .script("runtests")
-   .opts({
+   .options({
       path: {
          position: 0,
          help: "Test file to run",
@@ -125,7 +125,7 @@ var options = require("nomnom")
 	   -d, --debug              Print debugging info
 
 # Options hash
-The options hash passed to `nomnom.opts()` is a hash keyed on option name. Each option specification can have the following fields:
+The options hash passed to `nomnom.options()` is a hash keyed on option name. Each option specification can have the following fields:
 
 #### abbr and full
 `abbr` is the single character string to match to this option, `full` is the full-length string (defaults to the name of the option).
@@ -183,8 +183,9 @@ A callback that will be executed as soon as the option is encountered. If the ca
 
 count: {
    callback: function(count) {
-      if (count != parseInt(count))
+      if (count != parseInt(count)) {
          return "count must be an integer";
+      }
    }
 }
 ```
@@ -221,7 +222,7 @@ Option won't be printed in the usage
 # Parser interface
 `require("nomnom")` will give you the option parser. You can also make an instance of a parser with `require("nomnom")()`. You can chain any of these functions off of a parser:
 
-#### opts
+#### options
 
 The options hash.
 
@@ -254,13 +255,13 @@ Gives a command object that will be used when no command is called.
 Parses node's `process.argv` and returns the parsed options hash. You can also provide argv:
 
 ```javascript
-var options = nomnom.parse(["-xvf", "--atomic=true"])
+var opts = nomnom.parse(["-xvf", "--atomic=true"])
 ```
 
 # Command interface
 A command is specified with `nomnom.command('name')`. All these functions can be chained on a command:
 
-#### opts
+#### options
 
 The options for this command.
 

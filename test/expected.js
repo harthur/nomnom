@@ -7,12 +7,12 @@ var opts = {
    }  
 }
 
-var parser = nomnom().opts(opts);
+var parser = nomnom().options(opts);
 
 exports.testFlag = function(test) {
    test.expect(1);
 
-   nomnom().opts({
+   nomnom().options({
       file: {
          position: 0,
       }
@@ -27,7 +27,7 @@ exports.testFlag = function(test) {
 exports.testRequired = function(test) {
    test.expect(1);
 
-   nomnom().opts({
+   nomnom().options({
       file: {
          required: true
       }
@@ -42,7 +42,7 @@ exports.testRequired = function(test) {
 exports.testChoices = function(test) {
    test.expect(2);
 
-   var parser = nomnom().opts({
+   var parser = nomnom().options({
       color: {
          choices: ['green', 'blue']
       }

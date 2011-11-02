@@ -37,7 +37,7 @@ var opts = {
    }
 }
 
-var parser = nomnom().opts(opts);
+var parser = nomnom().options(opts);
 
 exports.testPositional = function(test) {
    var options = parser.parse(["--flag1", "val1", "--config", "file", "val2"]);

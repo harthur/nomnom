@@ -22,11 +22,15 @@ ArgParser.prototype = {
       };
     }
 
-    // facilitates command('name').opts().cb().help()
+    // facilitates command('name').options().cb().help()
     var chain = {
-      opts : function(specs) {
+      options : function(specs) {
         command.specs = specs;
         return chain;
+      },
+      opts : function(specs) {
+        // old API
+        return this.options(specs);
       },
       callback : function(cb) {
         command.cb = cb;
@@ -48,9 +52,14 @@ ArgParser.prototype = {
     return this.command();
   },
   
-  opts : function(specs) {
+  options : function(specs) {
     this.specs = specs;
     return this;
+  },
+
+  opts : function(specs) {
+    // old API
+    return this.options(specs);
   },
 
   usage : function(usage) {

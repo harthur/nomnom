@@ -40,7 +40,7 @@ exports.testNoCommand = function(test) {
    var parser = nomnom();
    
    parser.nocommand()
-     .opts({
+     .options({
         version: {
            flag: true
         }
@@ -60,14 +60,14 @@ exports.testNoCommand = function(test) {
 
 function createParser() {
   var parser = nomnom().scriptName("test")
-     .opts({
+     .options({
         debug: {
            flag: true
         }
      });
 
   parser.command('run')
-    .opts({
+    .options({
        file: {
           help: 'file to run'
        }
@@ -77,7 +77,7 @@ function createParser() {
   parser.command('test').usage("test usage");
 
   parser.nocommand()
-    .opts({
+    .options({
        verbose: {
           flag: true
        }

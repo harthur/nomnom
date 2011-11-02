@@ -29,7 +29,7 @@ var opts = {
    }
 }
 
-var parser = nomnom().opts(opts);
+var parser = nomnom().options(opts);
 
 exports.testFlag = function(test) {
    var options = parser.parse(["--debug", "pos0", "--no-verbose"]);

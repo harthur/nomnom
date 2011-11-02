@@ -3,7 +3,7 @@ var nomnom = require("../nomnom");
 exports.testVersion = function(test) {
    test.expect(1);
    
-   nomnom().opts({
+   nomnom().options({
       date: {
          callback: function(date) {
             test.equal(date, "2010-02-03", "date should match value")
@@ -17,7 +17,7 @@ exports.testVersion = function(test) {
 exports.testReturnString = function(test) {
    test.expect(1);
 
-   nomnom().opts({
+   nomnom().options({
       version: {
          flag: true,
          callback: function() {

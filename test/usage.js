@@ -28,7 +28,7 @@ var opts = {
    }
 }
 
-var parser = nomnom().opts(opts).help("all the best foods").scriptName("test");
+var parser = nomnom().options(opts).help("all the best foods").scriptName("test");
 
 var expected = "usage:test<egg>[options]eggrobinoptions:-a,--applehowmanyapples--b-nana-cNUM,--carrots=NUM--dillPICKLEallthebestfoods"
 
@@ -79,7 +79,7 @@ exports.testUsage = function(test) {
 exports.testHidden = function(test) {
    test.expect(1);
 
-   nomnom().opts({
+   nomnom().options({
       file: {
          hidden: true
       }
