@@ -3,23 +3,21 @@ nomnom is an option parser for node. It noms your args and gives them back to yo
 
 ```javascript
 var opts = require("nomnom")
-   .options({
-      debug : {
-         abbr: 'd',
-         flag: true,
-         help: 'Print debugging info'
-      },
-      config: {
-         abbr: 'c',
-         default: 'config.json',
-         help: 'JSON file with tests to run'
-      },
-      version: {
-         flag: true,
-         help: 'print version and exit',
-         callback: function() {
-            return "version 1.2.4";
-         }
+   .option('debug', {
+      abbr: 'd',
+      flag: true,
+      help: 'Print debugging info'
+   })
+   .option('config', {
+      abbr: 'c',
+      default: 'config.json',
+      help: 'JSON file with tests to run'
+   })
+   .option('version', {
+      flag: true,
+      help: 'print version and exit',
+      callback: function() {
+         return "version 1.2.4";
       }
    })
    .parse();
@@ -64,20 +62,20 @@ Nomnom supports command-based interfaces (e.g. with git: `git add -p` and `git r
 var parser = require("nomnom");
 
 parser.command('browser')
-   .callback(runBrowser)
+   .callback(function(opts) {
+      runBrowser(opts.url);
+   })
    .help("run browser tests");
 
 parser.command('sanity')
-   .options({
-      outfile: {
-         abbr: 'o',
-         help: 'file to write results to'
-      },
-      config: {
-         abbr: 'c',
-         default: 'config.json',
-         help: 'json manifest of tests to run'
-      }
+   .option('outfile', {
+      abbr: 'o',
+      help: 'file to write results to'
+   })
+   .option('config', {
+      abbr: 'c',
+      default: 'config.json',
+      help: 'json manifest of tests to run'
    })
    .callback(function(opts) {
       runSanity(opts.filename);
@@ -124,8 +122,8 @@ var opts = require("nomnom")
 	   -c FILE, --config FILE   Config file with tests to run
 	   -d, --debug              Print debugging info
 
-# Options hash
-The options hash passed to `nomnom.options()` is a hash keyed on option name. Each option specification can have the following fields:
+# Options
+You can either add a specification for an option with `nomnom.option('name', spec)` or pass the specifications to `nomnom.options()` as a hash keyed on option name. Each option specification can have the following fields:
 
 #### abbr and full
 `abbr` is the single character string to match to this option, `full` is the full-length string (defaults to the name of the option).
@@ -133,18 +131,18 @@ The options hash passed to `nomnom.options()` is a hash keyed on option name. Ea
 This option matches `-d` and `--debug` on the command line:
 
 ```javascript
-debug: {
+nomnom.option('debug', {
    abbr: 'd'
-}
+})
 ```
 
 This option matches `-n 3`, `--num-lines 12` on the command line:
 
 ```javascript
-numLines: {
+nomnom.option('numLines', {
    abbr: 'n',
    full: 'num-lines',
-}
+})
 ```
 
 #### flag
@@ -152,9 +150,9 @@ numLines: {
 If this is set to true, the option acts as a flag and doesn't swallow the next value on the command line. Default is `false`, so normally if you had a command line `--config test.js`, `config` would get a value of `test.js` in the options hash. Whereas if you specify:
 
 ```javascript
-config: {
+nomnom.option('config', {
    flag: true
-}
+})
 ```
 
 with a command line of `--config test.js`, `config` would get a value of `true` in the options hash, and `test.js` would be a free positional arg.
@@ -181,13 +179,12 @@ A callback that will be executed as soon as the option is encountered. If the ca
 
 ```javascript
 
-count: {
+nomnom.option('count', {
    callback: function(count) {
-      if (count != parseInt(count)) {
+      if (count != parseInt(count))
          return "count must be an integer";
-      }
    }
-}
+})
 ```
 
 #### position
@@ -222,9 +219,34 @@ Option won't be printed in the usage
 # Parser interface
 `require("nomnom")` will give you the option parser. You can also make an instance of a parser with `require("nomnom")()`. You can chain any of these functions off of a parser:
 
+#### option
+
+Add an option specification with the given name:
+
+```javascript
+nomnom.option('debug', {
+   abbr: 'd',
+   flag: true,
+   help: "Print debugging info"
+});
+```
+
 #### options
 
-The options hash.
+Add options as a hash keyed by option name, good for a cli with tons of options like [this example](http://):
+
+```javascript
+nomnom.options({
+   debug: {
+      abbr: 'd',
+      flag: true,
+      help: "Print debugging info"
+   },
+   fruit: {
+      help: "Fruit to buy"
+   }
+})
+```
 
 #### usage
 
@@ -261,9 +283,13 @@ var opts = nomnom.parse(["-xvf", "--atomic=true"])
 # Command interface
 A command is specified with `nomnom.command('name')`. All these functions can be chained on a command:
 
+#### option
+
+Add an option specifically for this command.
+
 #### options
 
-The options for this command.
+Add options for this command as a hash of options keyed by name.
 
 #### callback
 

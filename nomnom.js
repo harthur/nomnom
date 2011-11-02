@@ -31,6 +31,10 @@ ArgParser.prototype = {
       opts : function(specs) {
         // old API
         return this.options(specs);
+      },      
+      option : function(name, spec) {
+        command.specs[name] = spec;
+        return chain;
       },
       callback : function(cb) {
         command.cb = cb;
@@ -61,6 +65,11 @@ ArgParser.prototype = {
     // old API
     return this.options(specs);
   },
+  
+  option : function(name, spec) {
+    this.specs[name] = spec;
+    return this;
+  },
 
   usage : function(usage) {
     this._usage = usage;
@@ -89,6 +98,10 @@ ArgParser.prototype = {
   
   parseArgs : function(argv) {
     // old API
+    return this.parse(argv);
+  },
+  
+  nom : function(argv) {
     return this.parse(argv);
   },
 
@@ -178,8 +191,8 @@ ArgParser.prototype = {
               return Arg(); // skip next turn - swallow arg                
            }
            else {
-              that.print("'-" + (this.opt(last).name || last) + "'"
-                + " expects a value\n\n" + this.getUsage());
+              that.print("'-" + (that.opt(last).name || last) + "'"
+                + " expects a value\n\n" + that.getUsage());
            }
         }
         else {
