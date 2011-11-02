@@ -66,6 +66,11 @@ ArgParser.prototype = {
     return this.options(specs);
   },
   
+  globalOpts : function(specs) {
+    // old API
+    return this.options(specs);
+  },
+  
   option : function(name, spec) {
     this.specs[name] = spec;
     return this;
