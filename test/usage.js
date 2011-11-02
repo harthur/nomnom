@@ -56,7 +56,7 @@ exports.testScriptName = function(test) {
    test.expect(1);
 
    nomnom()
-     .scriptName("test")
+     .script("test")
      .printer(function(string) {
         test.equal(strip(string),"usage:test")
         test.done();

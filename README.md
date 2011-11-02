@@ -94,7 +94,7 @@ Nomnom prints out a usage message if `--help` or `-h` is an argument. Usage for 
 
 ```javascript
 var options = require("nomnom")
-   .scriptName("runtests")
+   .script("runtests")
    .opts({
       path: {
          position: 0,
@@ -233,9 +233,9 @@ The string that will override the default generated usage message.
 
 A string that is appended to the usage.
 
-#### scriptName
+#### script
 
-Nomnom can't detect the alias used to run your script. You can use `scriptName` to provide the correct name for the usage printout instead of e.g. `node test.js`.
+Nomnom can't detect the alias used to run your script. You can use `script` to provide the correct name for the usage printout instead of e.g. `node test.js`.
 
 #### printer
 

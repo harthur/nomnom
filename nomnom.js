@@ -63,9 +63,13 @@ ArgParser.prototype = {
     return this;
   },
   
-  scriptName : function(script) {
-    this.script = script;
+  script : function(script) {
+    this._script = script;
     return this;
+  },
+  
+  scriptName : function(script) {
+    return this.script(script);
   },
 
   help : function(help) {
@@ -79,7 +83,7 @@ ArgParser.prototype = {
       process.exit(0);
     };
     this._help = this._help || "";
-    this.script = this.script || process.argv[0] + " "
+    this._script = this._script || process.argv[0] + " "
           + require('path').basename(process.argv[1]);    
     this.specs = this.specs || {};
 
@@ -92,14 +96,14 @@ ArgParser.prototype = {
     if (commandExpected) {
        if (command) {
           _(this.specs).extend(command.specs);  
-          this.script += " " + command.name;
+          this._script += " " + command.name;
           if (command.help) {
             this._help = command.help;
           }
           this.command = command;
        }
        else if (arg) {
-          return this.print(this.script + ": no such command '" + arg + "'");            
+          return this.print(this._script + ": no such command '" + arg + "'");            
        }
        else {
           // no command but command expected e.g. 'git -v'
@@ -236,7 +240,7 @@ ArgParser.prototype = {
     }
 
     // todo: use a template
-    var str = "usage: " + this.script;
+    var str = "usage: " + this._script;
 
     var positionals = _(this.specs).select(function(opt) {
       return opt.position != undefined;
