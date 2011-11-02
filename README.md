@@ -263,6 +263,10 @@ Nomnom can't detect the alias used to run your script. You can use `script` to p
 
 Overrides the usage printing function.
 
+#### colors
+
+calling `colors()` will cause usage printout to be slightly colorful.
+
 #### command
 
 Takes a command name and gives you a command object on which you can chain command options.

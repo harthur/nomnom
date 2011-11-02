@@ -1,4 +1,5 @@
-var _ = require("underscore")._;
+var _ = require("underscore")._,
+    colors = require("colors");
 
 
 function ArgParser() {
@@ -98,6 +99,11 @@ ArgParser.prototype = {
 
   help : function(help) {
     this._help = help;
+    return this;
+  },
+  
+  colors : function() {
+    this._colors = true;
     return this;
   },
   
@@ -273,7 +279,14 @@ ArgParser.prototype = {
     }
 
     // todo: use a template
-    var str = "usage: " + this._script;
+    var str = "\n"
+    if (this._colors) {
+      str += "usage:".bold;
+    }
+    else {
+      str += "usage:";
+    }
+    str += " " + this._script;
 
     var positionals = _(this.specs).select(function(opt) {
       return opt.position != undefined;
@@ -298,8 +311,18 @@ ArgParser.prototype = {
       str += posStr;
     });
 
+    if (options.length) {
+      if (this._colors) {
+        // must be a better way to do this
+        str += " [options]".blue;        
+      }
+      else {
+        str += " [options]";
+      }
+    }
+    
     if (options.length || positionals.length) {
-      str += " [options]\n\n";        
+      str += "\n\n";
     }
   
     function spaces(length) {
@@ -315,28 +338,50 @@ ArgParser.prototype = {
 
     positionals.forEach(function(pos) {
       var posStr = pos.string || pos.name;
-      str += posStr + spaces(longest - posStr.length) + "     "
-             + (pos.help || "") + "\n"; 
-    });
+      str += posStr + spaces(longest - posStr.length) + "     ";
+      if (this._colors) {
+        str += (pos.help || "").grey
+      }
+      else {
+        str += (pos.help || "")
+      }
+      str += "\n"; 
+    }, this);
     if (positionals.length && options.length) {
       str += "\n";        
     }
 
     if (options.length) {
-      str += "options:\n";        
+      if (this._colors) {
+        str += "options:".blue;
+      }
+      else {
+        str += "options:";
+      }
+      str += "\n"
+
+      var longest = options.reduce(function(max, opt) {
+        return opt.string.length > max && !opt.hidden ? opt.string.length : max; 
+      }, 0);
+
+      options.forEach(function(opt) {
+        if (!opt.hidden) {
+          str += "   " + opt.string + spaces(longest - opt.string.length) + "   ";
+          if (this._colors) {
+            str += (opt.help || "").grey;
+          }
+          else {
+            str += (opt.help || "")
+          }
+          str += "\n";     
+        }
+      }, this);
     }
 
-    var longest = options.reduce(function(max, opt) {
-      return opt.string.length > max && !opt.hidden ? opt.string.length : max; 
-    }, 0);
-
-    options.forEach(function(opt) {
-      if (!opt.hidden) {
-        str += "   " + opt.string + spaces(longest - opt.string.length)
-               + "   " + (opt.help || "") + "\n";          
-      }
-    });
-    return str + "\n" + (this._help || "") + "\n";
+    if (this._help) {
+      str += "\n" + this._help;
+    }
+    return str + "\n";
   }
 };
 
