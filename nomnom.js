@@ -9,10 +9,18 @@ function ArgParser() {
 ArgParser.prototype = {
   // add a command to the expected commands
   command : function(name) {
-    var command = this.commands[name] = {
-      name: name,
-      specs: {}
-    };
+    var command;
+    if (name) {
+      command = this.commands[name] = {
+        name: name,
+        specs: {}
+      };
+    }
+    else {
+      command = this.fallback = {
+        specs: {}
+      };
+    }
 
     // facilitates command('name').opts().cb().help()
     var chain = {
@@ -36,21 +44,15 @@ ArgParser.prototype = {
     return chain;
   },
   
-  globalOpts : function(specs) {
-    this.globalSpecs = specs;
-    return this;
+  nocommand : function() {
+    return this.command();
   },
   
   opts : function(specs) {
     this.specs = specs;
     return this;
   },
-  
-  callback : function(cb) {
-    this.cb = cb;
-    return this;
-  },
-  
+
   usage : function(usageString) {
     this.usageStr = usageString;
     return this;
@@ -89,7 +91,7 @@ ArgParser.prototype = {
     
     if (commandExpected) {
        if (command) {
-          this.specs = _(command.specs).extend(this.globalSpecs);  
+          _(this.specs).extend(command.specs);  
           this.script += " " + command.name;
           if (command.help) {
             this.helpStr = command.help;
@@ -105,7 +107,10 @@ ArgParser.prototype = {
             position: 0,
             help: 'one of: ' + _(this.commands).keys().join(", ")
           }
-          _(this.specs).extend(this.globalSpecs);            
+          if (this.fallback) {
+            _(this.specs).extend(this.fallback.specs);
+            this.helpStr = this.fallback.help;         
+          }
        }
     }
 
@@ -208,12 +213,12 @@ ArgParser.prototype = {
          this.print(opt.name + " argument is required\n\n" + this.getUsage());           
       }
     }, this);
-  
+
     if (command && command.cb) {
       command.cb(options);        
     }
-    else if (this.cb) {
-      this.cb(options);        
+    else if (this.fallback && this.fallback.cb) {
+      this.fallback.cb(options);        
     }
 
     return options;
@@ -222,6 +227,9 @@ ArgParser.prototype = {
   getUsage : function() {
     if (this.command && this.command.usageStr) {
       return this.command.usageStr;        
+    }
+    else if (this.fallback && this.fallback.usageStr) {
+      return this.fallback.usageStr;
     }
     if (this.usageStr) {
       return this.usageStr;        
@@ -235,7 +243,7 @@ ArgParser.prototype = {
     })
     positionals = _(positionals).sortBy(function(opt) {
       return opt.position;
-    });      
+    });
     var options = _(this.specs).select(function(opt) {
       return opt.position === undefined;
     });

@@ -245,13 +245,9 @@ Overrides the usage printing function.
 
 Takes a command name and gives you a command object on which you can chain command options.
 
-#### callback
+#### nocommand
 
-A callback that will be called with the parsed options. If a command is expected, this is the fallback callback when no command is specified.
-
-#### globalOpts
-
-The global options when commands are specified. Any options in here will be included in the usage string for any command.
+Gives a command object that will be used when no command is called.
 
 #### parseArgs
 

@@ -37,15 +37,19 @@ exports.testMissingCommand = function(test) {
 exports.testNoCommand = function(test) {
    test.expect(2);
 
-   var parser = nomnom().opts({
-      version: {
-         flag: true
-      }
-   })
-   .callback(function(options) {
-      test.strictEqual(options.version, true);
-   });
-
+   var parser = nomnom();
+   
+   parser.nocommand()
+     .opts({
+        version: {
+           flag: true
+        }
+     })
+     .callback(function(options) {
+        test.strictEqual(options.version, true);
+     })
+     .usage("fallback usage");
+   
    parser.command('run');
 
    var options = parser.parseArgs(["--version"]);
@@ -54,48 +58,63 @@ exports.testNoCommand = function(test) {
    test.done();
 }
 
-exports.testUsage = function(test) {
-   test.expect(3);
-
-   var parser = nomnom().scriptName("test")
-      .globalOpts({
-         debug: {
-            flag: true
-         }
-      })
-      .opts({
-         verbose: {
-            flag: true
-         }
-      });
- 
-   parser.command('run')
+function createParser() {
+  var parser = nomnom().scriptName("test")
      .opts({
-        file: {
-           help: 'file to run'
+        debug: {
+           flag: true
         }
-     })
-     .help("run all");
+     });
 
-   parser.command('test').usage("test usage");
+  parser.command('run')
+    .opts({
+       file: {
+          help: 'file to run'
+       }
+    })
+    .help("run all");
 
-   parser.printFunc(function(string) {
-      test.equal(strip(string), "usage:test<command>[options]commandoneof:run,testoptions:--verbose--debug");
-   });
+  parser.command('test').usage("test usage");
 
-   parser.parseArgs(["-h"]);
+  parser.nocommand()
+    .opts({
+       verbose: {
+          flag: true
+       }
+    })
+    .help("nocommand");
 
-   parser.printFunc(function(string) {
-      test.equal(strip(string), "usage:testrun[options]options:--filefiletorun--debugrunall");
-   });
+  return parser;
+}
 
-   parser.parseArgs(["run", "-h"]);
-
+exports.testUsage = function(test) {
+   test.expect(4);
+   
+   var parser = createParser();
    parser.printFunc(function(string) {
       test.equal(strip(string), "testusage");
    });
-
    parser.parseArgs(["test", "-h"]);
+
+   parser = createParser();
+   parser.printFunc(function(string) {
+      test.equal(strip(string), "usage:testrun[options]options:--debug--filefiletorunrunall");
+   });
+   parser.parseArgs(["run", "-h"]);
+
+   parser = createParser();
+   parser.printFunc(function(string) {
+      test.equal(strip(string), "usage:test<command>[options]commandoneof:run,testoptions:--debug--verbosenocommand");
+   });
+   parser.parseArgs(["-h"]);
    
+   parser = createParser();
+   parser.nocommand()
+      .usage("fallback");
+   parser.printFunc(function(string) {
+      test.equal(strip(string), "fallback");
+   });
+   parser.parseArgs(["-h"]);
+  
    test.done();
 }
