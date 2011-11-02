@@ -15,7 +15,7 @@ exports.testCallback = function(test) {
       test.ok(false, "callback for other command shouldn't be called");
    });
 
-   parser.parseArgs(["run","-v", "3"]);
+   parser.parse(["run","-v", "3"]);
    test.done();
 }
 
@@ -31,7 +31,7 @@ exports.testMissingCommand = function(test) {
       test.done();
    });
 
-   parser.parseArgs(["other"]);
+   parser.parse(["other"]);
 }
 
 exports.testNoCommand = function(test) {
@@ -52,7 +52,7 @@ exports.testNoCommand = function(test) {
    
    parser.command('run');
 
-   var options = parser.parseArgs(["--version"]);
+   var options = parser.parse(["--version"]);
    
    test.strictEqual(options.version, true);
    test.done();
@@ -94,19 +94,19 @@ exports.testUsage = function(test) {
    parser.printer(function(string) {
       test.equal(strip(string), "testusage");
    });
-   parser.parseArgs(["test", "-h"]);
+   parser.parse(["test", "-h"]);
 
    parser = createParser();
    parser.printer(function(string) {
       test.equal(strip(string), "usage:testrun[options]options:--debug--filefiletorunrunall");
    });
-   parser.parseArgs(["run", "-h"]);
+   parser.parse(["run", "-h"]);
 
    parser = createParser();
    parser.printer(function(string) {
       test.equal(strip(string), "usage:test<command>[options]commandoneof:run,testoptions:--debug--verbosenocommand");
    });
-   parser.parseArgs(["-h"]);
+   parser.parse(["-h"]);
    
    parser = createParser();
    parser.nocommand()
@@ -114,7 +114,7 @@ exports.testUsage = function(test) {
    parser.printer(function(string) {
       test.equal(strip(string), "fallback");
    });
-   parser.parseArgs(["-h"]);
+   parser.parse(["-h"]);
   
    test.done();
 }

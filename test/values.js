@@ -32,7 +32,7 @@ var opts = {
 var parser = nomnom().opts(opts);
 
 exports.testFlag = function(test) {
-   var options = parser.parseArgs(["--debug", "pos0", "--no-verbose"]);
+   var options = parser.parse(["--debug", "pos0", "--no-verbose"]);
 
    test.strictEqual(options.debug, true);
    test.strictEqual(options.verbose, false);
@@ -42,7 +42,7 @@ exports.testFlag = function(test) {
 }
 
 exports.testList = function(test) {
-   var options = parser.parseArgs(["pos0", "pos1", "--list1=val0", "--list2", "val1",
+   var options = parser.parse(["pos0", "pos1", "--list1=val0", "--list2", "val1",
      "--list2", "val2", "pos2"]);
   
    test.deepEqual(options.list1, ["val0"]);
@@ -52,7 +52,7 @@ exports.testList = function(test) {
 }
 
 exports.testDefault = function(test) {
-   var options = parser.parseArgs(["--def2", "val2", "--def3", "val3"]);
+   var options = parser.parse(["--def2", "val2", "--def3", "val3"]);
 
    test.strictEqual(options.def1, "val1");
    test.strictEqual(options.def2, "val2");

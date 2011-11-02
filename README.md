@@ -22,7 +22,7 @@ var options = require("nomnom")
          }
       }
    })
-   .parseArgs();
+   .parse();
 
 if (options.debug)
    // do stuff
@@ -31,7 +31,7 @@ if (options.debug)
 You don't have to specify anything if you don't want to:
 
 ```javascript
-var options = require("nomnom").parseArgs();
+var options = require("nomnom").parse();
 
 var url = options[0];     // get the first positional arg
 var file = options.file   // see if --file was specified
@@ -84,7 +84,7 @@ parser.command('sanity')
    })
    .help("run the sanity tests")
 
-parser.parseArgs();
+parser.parse();
 ```
 
 Each command generates its own usage message when `-h` or `--help` is specified with the command.
@@ -111,7 +111,7 @@ var options = require("nomnom")
          flag: true,
          help: "Print debugging info"
       }
-   }).parseArgs();
+   }).parse();
 ```
 
 ...would look like this:
@@ -249,12 +249,12 @@ Takes a command name and gives you a command object on which you can chain comma
 
 Gives a command object that will be used when no command is called.
 
-#### parseArgs
+#### parse
 
 Parses node's `process.argv` and returns the parsed options hash. You can also provide argv:
 
 ```javascript
-var options = nomnom.parseArgs(["-xvf", "--atomic=true"])
+var options = nomnom.parse(["-xvf", "--atomic=true"])
 ```
 
 # Command interface

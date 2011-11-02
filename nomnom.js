@@ -69,6 +69,7 @@ ArgParser.prototype = {
   },
   
   scriptName : function(script) {
+    // old API
     return this.script(script);
   },
 
@@ -76,8 +77,13 @@ ArgParser.prototype = {
     this._help = help;
     return this;
   },
-
+  
   parseArgs : function(argv) {
+    // old API
+    return this.parse(argv);
+  },
+
+  parse : function(argv) {
     this.print = this.print || function(str) {
       console.log(str);
       process.exit(0);

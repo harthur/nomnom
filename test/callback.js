@@ -9,7 +9,7 @@ exports.testVersion = function(test) {
             test.equal(date, "2010-02-03", "date should match value")
          }
       }
-   }).parseArgs(["--date=2010-02-03"]);
+   }).parse(["--date=2010-02-03"]);
 
    test.done();
 }
@@ -29,5 +29,5 @@ exports.testReturnString = function(test) {
       test.equal(0, string.indexOf("v0.3"))
       test.done();
    })
-   .parseArgs(["--version"]);
+   .parse(["--version"]);
 }

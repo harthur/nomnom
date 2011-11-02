@@ -21,7 +21,7 @@ exports.testFlag = function(test) {
       test.equal(0, string.indexOf("'--key1' expects a value"))
       test.done();
    })
-   .parseArgs(["--key1"]);
+   .parse(["--key1"]);
 }
 
 exports.testRequired = function(test) {
@@ -36,7 +36,7 @@ exports.testRequired = function(test) {
       test.equal(0, string.indexOf("file argument is required"))
       test.done();
    })
-   .parseArgs([]);
+   .parse([]);
 }
 
 exports.testChoices = function(test) {
@@ -51,9 +51,9 @@ exports.testChoices = function(test) {
       test.equal(0, string.indexOf("color must be one of: green, blue"))
    });
    
-   parser.parseArgs(['--color', 'red']);
+   parser.parse(['--color', 'red']);
    
-   var options = parser.parseArgs(['--color', 'green']);
+   var options = parser.parse(['--color', 'green']);
    test.equal(options.color, 'green');
    test.done();
 }

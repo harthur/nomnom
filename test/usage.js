@@ -39,7 +39,7 @@ exports.testH = function(test) {
       test.equal(strip(string), expected)
       test.done();
    })
-   .parseArgs(["-h"]);
+   .parse(["-h"]);
 }
 
 exports.testHelp = function(test) {
@@ -49,7 +49,7 @@ exports.testHelp = function(test) {
       test.equal(strip(string), expected)
       test.done();
    })
-   .parseArgs(["--help"]);
+   .parse(["--help"]);
 }
 
 exports.testScriptName = function(test) {
@@ -61,7 +61,7 @@ exports.testScriptName = function(test) {
         test.equal(strip(string),"usage:test")
         test.done();
      })
-     .parseArgs(["-h"]);
+     .parse(["-h"]);
 }
 
 exports.testUsage = function(test) {
@@ -73,7 +73,7 @@ exports.testUsage = function(test) {
          test.equal(string, "test usage")
          test.done();
       })
-      .parseArgs(["--help"]);   
+      .parse(["--help"]);   
 }
 
 exports.testHidden = function(test) {
@@ -89,5 +89,5 @@ exports.testHidden = function(test) {
       test.equal(strip("usage:test[options]options:"), strip(string))
       test.done();
    })
-   .parseArgs(["-h"]);
+   .parse(["-h"]);
 }

@@ -40,7 +40,7 @@ var opts = {
 var parser = nomnom().opts(opts);
 
 exports.testPositional = function(test) {
-   var options = parser.parseArgs(["--flag1", "val1", "--config", "file", "val2"]);
+   var options = parser.parse(["--flag1", "val1", "--config", "file", "val2"]);
    
    test.equal(options.pos1, "val1");
    test.equal(options.pos2, "val2");
@@ -49,7 +49,7 @@ exports.testPositional = function(test) {
 }
 
 exports.testAbbr = function(test) {
-   var options = parser.parseArgs(["-d", "yes", "--num-lines", "3"]);
+   var options = parser.parse(["-d", "yes", "--num-lines", "3"]);
    
    test.equal(options.debug, "yes")
    test.equal(options.numLines, 3)
@@ -57,7 +57,7 @@ exports.testAbbr = function(test) {
 }
 
 exports.testString = function(test) {
-   var options = parser.parseArgs(["-k", "val", "--config=test.js",
+   var options = parser.parse(["-k", "val", "--config=test.js",
       "--key2", "val2", "--key3", "val3", "--key4=val4", "-v", "v0.3"]);
 
    test.equal(options.version, "v0.3")
