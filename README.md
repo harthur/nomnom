@@ -70,12 +70,12 @@ parser.command('browser')
 parser.command('sanity')
    .option('outfile', {
       abbr: 'o',
-      help: 'file to write results to'
+      help: "file to write results to"
    })
    .option('config', {
       abbr: 'c',
       default: 'config.json',
-      help: 'json manifest of tests to run'
+      help: "json manifest of tests to run"
    })
    .callback(function(opts) {
       runSanity(opts.filename);
@@ -141,7 +141,7 @@ This option matches `-n 3`, `--num-lines 12` on the command line:
 ```javascript
 nomnom.option('numLines', {
    abbr: 'n',
-   full: 'num-lines',
+   full: 'num-lines'
 })
 ```
 
@@ -155,7 +155,7 @@ nomnom.option('config', {
 })
 ```
 
-with a command line of `--config test.js`, `config` would get a value of `true` in the options hash, and `test.js` would be a free positional arg.
+`config` would get a value of `true` in the options hash, and `test.js` would be a free positional arg.
 
 #### metavar
 
@@ -178,7 +178,6 @@ The value to give the option if it's not specified in the arguments.
 A callback that will be executed as soon as the option is encountered. If the callback returns a string it will print the string and exit:
 
 ```javascript
-
 nomnom.option('count', {
    callback: function(count) {
       if (count != parseInt(count))
@@ -228,12 +227,12 @@ nomnom.option('debug', {
    abbr: 'd',
    flag: true,
    help: "Print debugging info"
-});
+})
 ```
 
 #### options
 
-Add options as a hash keyed by option name, good for a cli with tons of options like [this example](http://):
+Add options as a hash keyed by option name, good for a cli with tons of options like [this example](http://github.com/harthur/replace/blob/master/bin/replace.js):
 
 ```javascript
 nomnom.options({
@@ -279,6 +278,10 @@ Parses node's `process.argv` and returns the parsed options hash. You can also p
 ```javascript
 var opts = nomnom.parse(["-xvf", "--atomic=true"])
 ```
+
+#### nom
+
+The same as `parse()`.
 
 # Command interface
 A command is specified with `nomnom.command('name')`. All these functions can be chained on a command:
