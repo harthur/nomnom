@@ -237,7 +237,7 @@ A string that is appended to the usage.
 
 Nomnom can't detect the alias used to run your script. You can use `scriptName` to provide the correct name for the usage printout instead of e.g. `node test.js`.
 
-#### printFunc
+#### printer
 
 Overrides the usage printing function.
 

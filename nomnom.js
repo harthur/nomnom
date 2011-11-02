@@ -58,7 +58,7 @@ ArgParser.prototype = {
     return this;
   },
   
-  printFunc : function(print) {
+  printer : function(print) {
     this.print = print;
     return this;
   },

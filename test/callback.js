@@ -25,7 +25,7 @@ exports.testReturnString = function(test) {
          }
       }
    })
-   .printFunc(function(string) { 
+   .printer(function(string) { 
       test.equal(0, string.indexOf("v0.3"))
       test.done();
    })

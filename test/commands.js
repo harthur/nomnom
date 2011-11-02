@@ -26,7 +26,7 @@ exports.testMissingCommand = function(test) {
 
    parser.command('run');
 
-   parser.printFunc(function(string) {
+   parser.printer(function(string) {
       test.equal(string, "test: no such command 'other'");
       test.done();
    });
@@ -91,19 +91,19 @@ exports.testUsage = function(test) {
    test.expect(4);
    
    var parser = createParser();
-   parser.printFunc(function(string) {
+   parser.printer(function(string) {
       test.equal(strip(string), "testusage");
    });
    parser.parseArgs(["test", "-h"]);
 
    parser = createParser();
-   parser.printFunc(function(string) {
+   parser.printer(function(string) {
       test.equal(strip(string), "usage:testrun[options]options:--debug--filefiletorunrunall");
    });
    parser.parseArgs(["run", "-h"]);
 
    parser = createParser();
-   parser.printFunc(function(string) {
+   parser.printer(function(string) {
       test.equal(strip(string), "usage:test<command>[options]commandoneof:run,testoptions:--debug--verbosenocommand");
    });
    parser.parseArgs(["-h"]);
@@ -111,7 +111,7 @@ exports.testUsage = function(test) {
    parser = createParser();
    parser.nocommand()
       .usage("fallback");
-   parser.printFunc(function(string) {
+   parser.printer(function(string) {
       test.equal(strip(string), "fallback");
    });
    parser.parseArgs(["-h"]);

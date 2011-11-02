@@ -35,7 +35,7 @@ var expected = "usage:test<egg>[options]eggrobinoptions:-a,--applehowmanyapples-
 exports.testH = function(test) {
    test.expect(1);
 
-   parser.printFunc(function(string) {
+   parser.printer(function(string) {
       test.equal(strip(string), expected)
       test.done();
    })
@@ -45,7 +45,7 @@ exports.testH = function(test) {
 exports.testHelp = function(test) {
    test.expect(1);
 
-   parser.printFunc(function(string) {
+   parser.printer(function(string) {
       test.equal(strip(string), expected)
       test.done();
    })
@@ -57,7 +57,7 @@ exports.testScriptName = function(test) {
 
    nomnom()
      .scriptName("test")
-     .printFunc(function(string) {
+     .printer(function(string) {
         test.equal(strip(string),"usage:test")
         test.done();
      })
@@ -69,7 +69,7 @@ exports.testUsage = function(test) {
 
    parser
       .usage("test usage")
-      .printFunc(function(string) {
+      .printer(function(string) {
          test.equal(string, "test usage")
          test.done();
       })
@@ -85,7 +85,7 @@ exports.testHidden = function(test) {
       }
    })
    .scriptName("test")
-   .printFunc(function(string) {
+   .printer(function(string) {
       test.equal(strip("usage:test[options]options:"), strip(string))
       test.done();
    })

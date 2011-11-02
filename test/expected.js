@@ -17,7 +17,7 @@ exports.testFlag = function(test) {
          position: 0,
       }
    })
-   .printFunc(function(string) {      
+   .printer(function(string) {      
       test.equal(0, string.indexOf("'--key1' expects a value"))
       test.done();
    })
@@ -32,7 +32,7 @@ exports.testRequired = function(test) {
          required: true
       }
    })
-   .printFunc(function(string) {      
+   .printer(function(string) {      
       test.equal(0, string.indexOf("file argument is required"))
       test.done();
    })
@@ -47,7 +47,7 @@ exports.testChoices = function(test) {
          choices: ['green', 'blue']
       }
    })
-   .printFunc(function(string) {
+   .printer(function(string) {
       test.equal(0, string.indexOf("color must be one of: green, blue"))
    });
    
