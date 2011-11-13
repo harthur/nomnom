@@ -2,7 +2,6 @@ var nomnom = require("../lib/nomnom");
 
 
 var config = {
-  printHelpOnNoCommands: true,
   commands: {
     "new": {
       help: "Create new project",

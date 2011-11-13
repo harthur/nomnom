@@ -27,6 +27,16 @@ spaces = (count) ->
   Array(+count + 1).join ' '
 
 
+setter = (prop) -> (val) ->
+  @[prop] = val
+  this
+
+
+booleanSetter = (prop) -> (val) ->
+  @[prop] = !!val
+  this
+
+
 extend = (obj) ->
   for source in [].slice.call(arguments, 1)
     obj[key] = val for own key, val of source
@@ -39,14 +49,11 @@ isEmptyObject = (object) ->
 
 
 parseArgument = (str) ->
-  abbrRegex = /^\-(\w+?)$/
-  fullRegex = /^\-\-(no\-)?(.+?)(?:=(.+))?$/
-  valRegex = /^[^\-].*/
-  charMatch = abbrRegex.exec(str)
+  charMatch = /^\-(\w+?)$/.exec str
   chars = charMatch and charMatch[1].split('')
-  fullMatch = fullRegex.exec(str)
+  fullMatch = /^\-\-(no\-)?(.+?)(?:=(.+))?$/.exec str
   full = fullMatch and fullMatch[2]
-  isValue = str? and (str is '' or valRegex.test(str))
+  isValue = str? and (str is '' or /^[^\-].*/.test str)
   if isValue
     value = str
   else if full
@@ -54,21 +61,20 @@ parseArgument = (str) ->
   {str, chars, full, value, isValue}
 
 
-parseOption = (opt) ->
+parseOption = (opt = {}) ->
   strings = (opt.string or '').split(',')
   for string in strings
     string = string.trim()
-    if matches = string.match(/^\-([^-])(?:\s+(.*))?$/)
+    if matches = string.match /^\-([^-])(?:\s+(.*))?$/
       abbr = matches[1]
       metavar = matches[2]
-    else if matches = string.match(/^\-\-(.+?)(?:[=\s]+(.+))?$/)
+    else if matches = string.match /^\-\-(.+?)(?:[=\s]+(.+))?$/
       full = matches[1]
-      metavar = metavar or matches[2]
-  matches = matches or []
+      metavar or= matches[2]
+  matches or= []
   abbr = opt.abbr or abbr
   full = opt.full or full
   metavar = opt.metavar or metavar
-
   if opt.string
     string = opt.string
   else if not opt.position?
@@ -122,7 +128,7 @@ class ArgumentParser
       usage: (usage) ->
         command._usage = usage
         chain
-      
+
       # Old API.
       opts: (specs) ->
         @options specs
@@ -131,40 +137,17 @@ class ArgumentParser
   nocommand: ->
     @command()
 
-  options: (specs) ->
-    @specs = specs
-    @
+  options: setter "specs"
+  usage: setter "_usage"
+  printer: setter "print"
+  script: setter "_script"
+  help: setter "_help"
+  withColors: booleanSetter "_withColors"
+  commandRequired: booleanSetter "_commandRequired"
 
   option: (name, spec) ->
     @specs[name] = spec
-    @
-
-  usage: (usage) ->
-    @_usage = usage
-    @
-
-  printer: (print) ->
-    @print = print
-    @
-
-  script: (scr) ->
-    @_script = scr
-    @
-
-  help: (help) ->
-    @_help = help
-    @
-
-  nom: (argv) ->
-    @parse argv
-
-  colors: ->
-    @_withColors = yes
-    @
-
-  printHelpOnNoCommands: (value) ->
-    @_printHelpOnNoCommands = !!value
-    @
+    this
 
   _colorize: (text, color) ->
     if @_withColors then colorize(text, color) else text
@@ -180,15 +163,12 @@ class ArgumentParser
     positionals = @specs
       .filter((opt) -> opt.position?)
       .sort((left, right) -> left.position > right.position)
-    options = @specs.filter((opt) -> not opt.position?)
+    options = @specs.filter (opt) -> not opt.position?
 
     if positionals.length
       for pos in positionals
         str += ' '
-        posStr = pos.string
-        unless posStr
-          posStr = '<' + (pos.name or 'arg' + pos.position) + '>'
-          posStr += '...' if pos.list
+        posStr = pos.string or "<#{pos.name or "arg#{pos.position}"}>#{['...' if pos.list]}"
         str += posStr
     else if @_printAllCommands
       str += ' [command] [options]'
@@ -206,7 +186,7 @@ class ArgumentParser
     longest = positionals.reduce ((max, pos) -> Math.max max, pos.name.length), 0
     for pos in positionals
       posStr = pos.string or pos.name
-      str += posStr + spaces(longest - posStr.length + 5)
+      str += posStr + spaces longest - posStr.length + 5
       str += @_colorize (pos.help or ''), 'gray'
       str += '\n'
     str += '\n' if positionals.length and options.length
@@ -215,40 +195,40 @@ class ArgumentParser
       str += @_colorize 'Options:\n', 'blue'
       longest = options
         .filter(visible)
-        .reduce ((max, opt) -> Math.max(max, opt.string.length)), 0
+        .reduce ((max, opt) -> Math.max max, opt.string.length), 0
       str += options
         .filter(visible)
         .map((opt) =>
-          indentation = spaces(longest - opt.string.length)
-          help = @_colorize((opt.help or ''), 'gray')
+          indentation = spaces longest - opt.string.length
+          help = @_colorize (opt.help or ''), 'gray'
           indent "#{opt.string} #{indentation} #{help}")
         .join('\n')
     str += "\n\nDescription:\n#{indent(@_help)}" if @_help
     str
 
   parse: (argv) ->
-    @print = @print or (str) ->
+    @print ?= (str) ->
       console.log str
       process.exit 0
 
-    @_help = @_help or ''
-    @_script = @_script or process.argv[0] + ' ' + path.basename(process.argv[1])
-    @specs = @specs or {}
+    @_help ?= ''
+    @_script ?= "#{process.argv[0]} #{path.basename(process.argv[1])}"
+    @specs ?= {}
 
-    process.argv[2] = '--help' if @_printHelpOnNoCommands and not process.argv[2]
+    process.argv[2] = '--help' if @_commandRequired and not process.argv[2]
 
-    argv = argv or process.argv.slice(2)
+    argv ?= process.argv[2..]
     arg = parseArgument(argv[0]).isValue and argv[0]
     command = arg and @commands[arg]
-    commandExpected = not isEmptyObject(@commands)
+    commandExpected = not isEmptyObject @commands
     if commandExpected
       if command
         extend @specs, command.specs
-        @_script += ' ' + command.name
-        @_help = command.help  if command.help
+        @_script += " #{command.name}"
+        @_help = command.help if command.help
         @command = command
       else if arg
-        return @print("#{@_script}: no such command '#{arg}'")
+        return @print "#{@_script}: no such command '#{arg}'"
       else
         @_printAllCommands = yes
         if @fallback
@@ -258,12 +238,12 @@ class ArgumentParser
       @specs = for key, value of @specs
         value.name = key
         value
-    @specs = @specs.map(parseOption)
+    @specs = @specs.map parseOption
 
     return @print @getUsage() if '--help' in argv or '-h' in argv
 
     options = {}
-    args = argv.map(parseArgument).concat(parseArgument())
+    args = argv.map(parseArgument).concat parseArgument()
     positionals = []
 
     args.reduce (arg, val) =>
@@ -311,19 +291,19 @@ class ArgumentParser
     options
 
   opt: (arg) ->
-    match = parseOption({})
-    for opt in @specs when opt.matches(arg)
+    match = parseOption()
+    for opt in @specs when opt.matches arg
       match = opt
     match
 
   setOption: (options, arg, value) ->
-    option = @opt(arg)
+    option = @opt arg
     if option.callback
-      message = option.callback(value)
+      message = option.callback value
       @print message if typeof message is 'string'
     if option.type isnt 'string'
       try
-        value = JSON.parse(value)
+        value = JSON.parse value
     name = option.name or arg
     if option.choices and value not in option.choices
       @print "#{name} must be one of: #{option.choices.join(', ')}"
@@ -338,26 +318,27 @@ class ArgumentParser
   scriptName: -> @script arguments...
   globalOpts: -> @options arguments...
   opts: -> @options arguments...
+  colors: -> @withColors arguments...
+  nom: (argv) -> @parse argv
   # Old API end.
 
   parseConfig: (config) ->
-    for name, data of config
-      switch name
-        when 'commands'
-          for commandName, commandData of data
-            command = @command commandName
-            for attrName, attrValue of commandData
-              command[attrName] attrValue
-        else
-          try
-            data = data @ if typeof data is 'function'
-            @[name] data
-          catch error
-    @
+    for own name, data of config
+      if name is 'commands'
+        for own commandName, commandData of data
+          command = @command commandName
+          for own attrName, attrValue of commandData
+            command[attrName] attrValue
+      else
+        try
+          data = data @ if typeof data is 'function'
+          @[name] data
+        catch error
+    this
 
 
 argumentParser = new ArgumentParser
 for i, method of argumentParser when typeof method is 'function'
-  ArgumentParser[i] = method.bind(argumentParser)
+  ArgumentParser[i] = method.bind argumentParser
 
 module.exports = ArgumentParser
