@@ -1,4 +1,4 @@
-var nomnom = require("../nomnom");
+var nomnom = require("../lib/nomnom");
 
 exports.testVersion = function(test) {
    test.expect(1);

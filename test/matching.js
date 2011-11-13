@@ -1,4 +1,4 @@
-var nomnom = require("../nomnom");
+var nomnom = require("../lib/nomnom");
     
 var opts = {
    pos1: {
