@@ -24,7 +24,7 @@ colorize = (text, color) ->
 
 
 spaces = (count) ->
-  (' ' while count--).join('')
+  Array(+count + 1).join ' '
 
 
 extend = (obj) ->
