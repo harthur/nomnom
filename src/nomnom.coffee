@@ -29,13 +29,12 @@ spaces = (count) ->
 
 extend = (obj) ->
   for source in [].slice.call(arguments, 1)
-    obj[key] = val for key, val of source
+    obj[key] = val for own key, val of source
   obj
 
 
 isEmptyObject = (object) ->
-  for key of object when object.hasOwnProperty(key)
-    return false
+  return false for own key of object
   true
 
 
