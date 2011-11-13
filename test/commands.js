@@ -1,4 +1,4 @@
-var nomnom = require("../nomnom");
+var nomnom = require("../lib/nomnom");
 
 function strip(str) {
   return str.replace(/\s+/g, '');  
@@ -40,11 +40,7 @@ exports.testNoCommand = function(test) {
    var parser = nomnom();
    
    parser.nocommand()
-     .options({
-        version: {
-           flag: true
-        }
-     })
+     .options({version: {flag: true}})
      .callback(function(options) {
         test.strictEqual(options.version, true);
      })
@@ -98,13 +94,13 @@ exports.testUsage = function(test) {
 
    parser = createParser();
    parser.printer(function(string) {
-      test.equal(strip(string), "usage:testrun[options]options:--debug--filefiletorunrunall");
+      test.equal(strip(string), "Usage:testrun[options]Options:--debug--filefiletorunDescription:runall");
    });
    parser.parse(["run", "-h"]);
 
    parser = createParser();
    parser.printer(function(string) {
-      test.equal(strip(string), "usage:test<command>[options]commandoneof:run,testoptions:--debug--verbosenocommand");
+      test.equal(strip(string), "Usage:test[command][options]Possiblecommandsare:testrun:runalltesttestTogethelponindividualcommand,execute`test<command>--help`[options]Options:--debug--verboseDescription:nocommand");
    });
    parser.parse(["-h"]);
    

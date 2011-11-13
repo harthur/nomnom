@@ -1,16 +1,12 @@
 {
     "name": "nomnom",
     "description": "Option parser with generated usage and commands",
-    "version": "1.5.1",
+    "version": "2.0.0-pre",
     "author": "Heather Arthur <fayearthur@gmail.com>",
     "repository": {
         "type": "git",
         "url": "http://github.com/harthur/nomnom.git"
     },
-    "main": "./nomnom",
-    "keywords": ["arguments", "option parser", "command line", "options", "parser"],
-    "dependencies": {
-      "underscore": "1.1.x",
-      "colors": "0.5.x"
-    }
+    "main": "./lib/nomnom",
+    "keywords": ["arguments", "option parser", "command line", "options", "parser"]
 }
