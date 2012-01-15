@@ -117,9 +117,9 @@ ArgParser.prototype = {
   },
 
   parse : function(argv) {
-    this.print = this.print || function(str) {
-      console.log(str);
-      process.exit(0);
+    this.print = this.print || function(str, code) {
+      console.log(str + '\n');
+      process.exit(code || 0);
     };
     this._help = this._help || "";
     this._script = this._script || process.argv[0] + " "
@@ -142,7 +142,7 @@ ArgParser.prototype = {
           this.command = command;
        }
        else if (arg) {
-          return this.print(this._script + ": no such command '" + arg + "'");            
+          return this.print(this._script + ": no such command '" + arg + "'", 1);
        }
        else {
           // no command but command expected e.g. 'git -v'
@@ -203,7 +203,7 @@ ArgParser.prototype = {
            }
            else {
               that.print("'-" + (that.opt(last).name || last) + "'"
-                + " expects a value\n\n" + that.getUsage());
+                + " expects a value\n\n" + that.getUsage(), 1);
            }
         }
         else {
@@ -225,7 +225,7 @@ ArgParser.prototype = {
             }
             else {
               that.print("'--" + (that.opt(arg.full).name || arg.full) + "'"
-                + " expects a value\n\n" + that.getUsage());                  
+                + " expects a value\n\n" + that.getUsage(), 1);
             }
           }
           else {
@@ -253,7 +253,7 @@ ArgParser.prototype = {
     // exit if required arg isn't present
     this.specs.forEach(function(opt) {
       if (opt.required && options[opt.name] === undefined) {
-         this.print(opt.name + " argument is required\n\n" + this.getUsage());           
+         this.print(opt.name + " argument is required\n\n" + this.getUsage(), 1);
       }
     }, this);
 
@@ -402,7 +402,7 @@ ArgParser.prototype.setOption = function(options, arg, value) {
     var message = option.callback(value);
 
     if (typeof message == "string") {
-      this.print(message);
+      this.print(message, 1);
     }
   }
 
@@ -416,7 +416,7 @@ ArgParser.prototype.setOption = function(options, arg, value) {
   
   var name = option.name || arg;
   if (option.choices && option.choices.indexOf(value) == -1) {
-     this.print(name + " must be one of: " + option.choices.join(", "));
+     this.print(name + " must be one of: " + option.choices.join(", "), 1);
   }
 
   if (option.list) {
