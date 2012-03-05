@@ -118,7 +118,12 @@ ArgParser.prototype = {
 
   parse : function(argv) {
     this.print = this.print || function(str, code) {
-      console.log(str + '\n');
+      var 
+        parts = str.split('\n'),
+        i = 0, l = parts.length;
+      for (; i < l; i++) {
+        console.log(parts[i]);
+      }
       process.exit(code || 0);
     };
     this._help = this._help || "";
