@@ -253,7 +253,7 @@ ArgParser.prototype = {
     // exit if required arg isn't present
     this.specs.forEach(function(opt) {
       if (opt.required && options[opt.name] === undefined) {
-         this.print(opt.name + " argument is required\n\n" + this.getUsage(), 1);
+         this.print("\n" + opt.name + " argument is required\n" + this.getUsage(), 1);
       }
     }, this);
 
