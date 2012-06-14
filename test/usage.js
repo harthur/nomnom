@@ -91,3 +91,25 @@ exports.testHidden = function(test) {
    })
    .parse(["-h"]);
 }
+
+exports.testRequiredOptional = function(test) {
+   test.expect(1);
+
+   nomnom().options({
+      foo: {
+         position: 0,
+         required: true,
+         help: 'The foo'
+      },
+      bar: {
+         position: 1,
+         help: 'The bar'
+      }
+   })
+   .scriptName("test")
+   .printer(function(string) {
+      test.equal(strip("Usage:test<foo>[bar]fooThefoobarThebar"), strip(string))
+      test.done();
+   })
+   .parse(["-h"]);
+}
