@@ -98,13 +98,13 @@ exports.testUsage = function(test) {
 
    parser = createParser();
    parser.printer(function(string) {
-      test.equal(strip(string), "usage:testrun[options]options:--debug--filefiletorunrunall");
+      test.equal(strip(string), "Usage:testrun[options]Options:--debug--filefiletorunrunall");
    });
    parser.parse(["run", "-h"]);
 
    parser = createParser();
    parser.printer(function(string) {
-      test.equal(strip(string), "usage:test<command>[options]commandoneof:run,testoptions:--debug--verbosenocommand");
+      test.equal(strip(string), "Usage:test[command][options]commandoneof:run,testOptions:--debug--verbosenocommand");
    });
    parser.parse(["-h"]);
    

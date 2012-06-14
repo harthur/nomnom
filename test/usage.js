@@ -30,7 +30,7 @@ var opts = {
 
 var parser = nomnom().options(opts).help("all the best foods").scriptName("test");
 
-var expected = "usage:test<egg>[options]eggrobinoptions:-a,--applehowmanyapples--b-nana-cNUM,--carrots=NUM--dillPICKLEallthebestfoods"
+var expected = "Usage:test[egg][options]eggrobinOptions:-a,--applehowmanyapples--b-nana-cNUM,--carrots=NUM--dillPICKLEallthebestfoods"
 
 exports.testH = function(test) {
    test.expect(1);
@@ -58,7 +58,7 @@ exports.testScriptName = function(test) {
    nomnom()
      .script("test")
      .printer(function(string) {
-        test.equal(strip(string),"usage:test")
+        test.equal(strip(string),"Usage:test")
         test.done();
      })
      .parse(["-h"]);
@@ -86,7 +86,7 @@ exports.testHidden = function(test) {
    })
    .scriptName("test")
    .printer(function(string) {
-      test.equal(strip("usage:test[options]options:"), strip(string))
+      test.equal(strip("Usage:test[options]Options:"), strip(string))
       test.done();
    })
    .parse(["-h"]);
