@@ -33,7 +33,7 @@ exports.testRequired = function(test) {
       }
    })
    .printer(function(string) {      
-      test.equal(0, string.indexOf("file argument is required"))
+      test.equal(0, string.trim().indexOf("file argument is required"))
       test.done();
    })
    .parse([]);
