@@ -253,7 +253,7 @@ ArgParser.prototype = {
     // exit if required arg isn't present
     this.specs.forEach(function(opt) {
       if (opt.required && options[opt.name] === undefined) {
-         this.print(opt.name + " argument is required\n\n" + this.getUsage(), 1);
+         this.print("\n" + opt.name + " argument is required\n" + this.getUsage(), 1);
       }
     }, this);
 
@@ -281,10 +281,10 @@ ArgParser.prototype = {
     // todo: use a template
     var str = "\n"
     if (this._colors) {
-      str += "usage:".bold;
+      str += "Usage:".bold;
     }
     else {
-      str += "usage:";
+      str += "Usage:";
     }
     str += " " + this._script;
 
@@ -303,7 +303,12 @@ ArgParser.prototype = {
       str += " ";
       var posStr = pos.string;
       if (!posStr) {
-        posStr = "<" + (pos.name || "arg" + pos.position) + ">";
+        posStr = pos.name || "arg" + pos.position;
+        if (pos.required) {
+            posStr = "<" + posStr + ">";
+        } else {
+            posStr = "[" + posStr + "]";
+        }
         if (pos.list) {
           posStr += "...";            
         }
@@ -353,10 +358,10 @@ ArgParser.prototype = {
 
     if (options.length) {
       if (this._colors) {
-        str += "options:".blue;
+        str += "Options:".blue;
       }
       else {
-        str += "options:";
+        str += "Options:";
       }
       str += "\n"
 
