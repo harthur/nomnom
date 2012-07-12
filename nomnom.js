@@ -153,6 +153,8 @@ ArgParser.prototype = {
           if (this.fallback) {
             _(this.specs).extend(this.fallback.specs);
             this._help = this.fallback.help;         
+          } else {
+            this.specs.command.required = true;
           }
        }
     }
