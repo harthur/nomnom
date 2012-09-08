@@ -57,3 +57,20 @@ exports.testChoices = function(test) {
    test.equal(options.color, 'green');
    test.done();
 }
+
+exports.testPositionalArgumentsRequired = function(test) {
+   test.expect(2);
+   var help = "something about positionals being required";
+
+   var parser = nomnom().positionals({
+     required: true, help: help, name: "foobarpositionals"
+   })
+   .printer(function(string) {
+      test.equal(0, string.indexOf(help))
+      test.ok(string.indexOf("<foobarpositionals>..." > 0));
+   });
+
+   parser.parse([]);
+
+   test.done();
+}
