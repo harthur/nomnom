@@ -5,6 +5,7 @@ var _ = require("underscore")._,
 function ArgParser() {
    this.commands = {};  // expected commands
    this.specs = {};     // option specifications
+   this.positional_spec = {}; // specification for positional arguments
 }
 
 ArgParser.prototype = {
@@ -74,6 +75,11 @@ ArgParser.prototype = {
   
   option : function(name, spec) {
     this.specs[name] = spec;
+    return this;
+  },
+
+  positionals : function(spec) {
+    this.positional_spec = spec;
     return this;
   },
 
@@ -244,8 +250,16 @@ ArgParser.prototype = {
       this.setOption(options, index, pos);
     }, this);
     
+    if (this.positional_spec.required && positionals.length == 0) {
+      if (this.positional_spec.help) {
+        this.print(this.positional_spec.help + "\n" + this.getUsage(), 1);
+      } else {
+        this.print("At least one positional argument is required\n" + this.getUsage(), 1);
+      }
+    }
+
     options._ = positionals;
-    
+
     this.specs.forEach(function(opt) {
       if (opt.default !== undefined && options[opt.name] === undefined) {
         options[opt.name] = opt.default;
@@ -327,6 +341,10 @@ ArgParser.prototype = {
         str += " [options]";
       }
     }
+
+    if (this.positional_spec.required) {
+      str += " <" + this.positional_spec.name + ">...";
+    };
     
     if (options.length || positionals.length) {
       str += "\n\n";
