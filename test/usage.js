@@ -1,7 +1,7 @@
 var nomnom = require("../nomnom");
 
 function strip(str) {
-  return str.replace(/\s+/g, '');  
+  return str.replace(/\s+/g, '');
 };
 
 var opts = {
@@ -9,19 +9,19 @@ var opts = {
       abbr: 'a',
       help: 'how many apples'
    },
-   
+
    banana: {
       full: "b-nana"
    },
-   
+
    carrot: {
       string: '-c NUM, --carrots=NUM'
    },
-   
+
    dill: {
       metavar: 'PICKLE'
    },
-   
+
    egg: {
       position: 0,
       help: 'robin'
@@ -73,7 +73,7 @@ exports.testUsage = function(test) {
          test.equal(string, "test usage")
          test.done();
       })
-      .parse(["--help"]);   
+      .parse(["--help"]);
 }
 
 exports.testHidden = function(test) {

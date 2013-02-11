@@ -376,7 +376,7 @@ ArgParser.prototype = {
           str += "   " + opt.string + spaces(longest - opt.string.length) + "   ";
 
           var defaults = (opt.default != null ? "  [" + opt.default + "]" : "");
-          var help = opt.help + defaults || "";
+          var help = opt.help ? opt.help + defaults : "";
           str += this._colors ? help.grey : help;
 
           str += "\n";
