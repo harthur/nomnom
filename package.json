@@ -1,7 +1,7 @@
 {
   "name": "nomnom",
   "description": "Option parser with generated usage and commands",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "author": "Heather Arthur <fayearthur@gmail.com>",
   "scripts": {
     "test": "./node_modules/.bin/nodeunit test/*.js"
