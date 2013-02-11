@@ -32,7 +32,7 @@ ArgParser.prototype = {
       opts : function(specs) {
         // old API
         return this.options(specs);
-      },      
+      },
       option : function(name, spec) {
         command.specs[name] = spec;
         return chain;
@@ -52,11 +52,11 @@ ArgParser.prototype = {
     };
     return chain;
   },
-  
+
   nocommand : function() {
     return this.command();
   },
-  
+
   options : function(specs) {
     this.specs = specs;
     return this;
@@ -66,12 +66,12 @@ ArgParser.prototype = {
     // old API
     return this.options(specs);
   },
-  
+
   globalOpts : function(specs) {
     // old API
     return this.options(specs);
   },
-  
+
   option : function(name, spec) {
     this.specs[name] = spec;
     return this;
@@ -81,17 +81,17 @@ ArgParser.prototype = {
     this._usage = usage;
     return this;
   },
-  
+
   printer : function(print) {
     this.print = print;
     return this;
   },
-  
+
   script : function(script) {
     this._script = script;
     return this;
   },
-  
+
   scriptName : function(script) {
     // old API
     return this.script(script);
@@ -101,17 +101,17 @@ ArgParser.prototype = {
     this._help = help;
     return this;
   },
-  
+
   colors : function() {
     this._colors = true;
     return this;
   },
-  
+
   parseArgs : function(argv) {
     // old API
     return this.parse(argv);
   },
-  
+
   nom : function(argv) {
     return this.parse(argv);
   },
@@ -123,18 +123,18 @@ ArgParser.prototype = {
     };
     this._help = this._help || "";
     this._script = this._script || process.argv[0] + " "
-          + require('path').basename(process.argv[1]);    
+          + require('path').basename(process.argv[1]);
     this.specs = this.specs || {};
 
     var argv = argv || process.argv.slice(2);
-    
+
     var arg = Arg(argv[0]).isValue && argv[0],
         command = arg && this.commands[arg],
         commandExpected = !_(this.commands).isEmpty();
-    
+
     if (commandExpected) {
        if (command) {
-          _(this.specs).extend(command.specs);  
+          _(this.specs).extend(command.specs);
           this._script += " " + command.name;
           if (command.help) {
             this._help = command.help;
@@ -152,7 +152,7 @@ ArgParser.prototype = {
           }
           if (this.fallback) {
             _(this.specs).extend(this.fallback.specs);
-            this._help = this.fallback.help;         
+            this._help = this.fallback.help;
           } else {
             this.specs.command.required = true;
           }
@@ -171,7 +171,7 @@ ArgParser.prototype = {
     });
 
     if (argv.indexOf("--help") >= 0 || argv.indexOf("-h") >= 0) {
-      return this.print(this.getUsage());        
+      return this.print(this.getUsage());
     }
 
     var options = {};
@@ -191,7 +191,7 @@ ArgParser.prototype = {
       }
       else if (arg.chars) {
         var last = arg.chars.pop();
-        
+
         /* -cfv */
         (arg.chars).forEach(function(ch) {
           that.setOption(options, ch, true);
@@ -201,7 +201,7 @@ ArgParser.prototype = {
         if (!that.opt(last).flag) {
            if (val.isValue)  {
               that.setOption(options, last, val.value);
-              return Arg(); // skip next turn - swallow arg                
+              return Arg(); // skip next turn - swallow arg
            }
            else {
               that.print("'-" + (that.opt(last).name || last) + "'"
@@ -223,7 +223,7 @@ ArgParser.prototype = {
           if (!that.opt(arg.full).flag) {
             if (val.isValue) {
               that.setOption(options, arg.full, val.value);
-              return Arg();           
+              return Arg();
             }
             else {
               that.print("'--" + (that.opt(arg.full).name || arg.full) + "'"
@@ -243,9 +243,9 @@ ArgParser.prototype = {
     positionals.forEach(function(pos, index) {
       this.setOption(options, index, pos);
     }, this);
-    
+
     options._ = positionals;
-    
+
     this.specs.forEach(function(opt) {
       if (opt.default !== undefined && options[opt.name] === undefined) {
         options[opt.name] = opt.default;
@@ -260,10 +260,10 @@ ArgParser.prototype = {
     }, this);
 
     if (command && command.cb) {
-      command.cb(options);        
+      command.cb(options);
     }
     else if (this.fallback && this.fallback.cb) {
-      this.fallback.cb(options);        
+      this.fallback.cb(options);
     }
 
     return options;
@@ -271,13 +271,13 @@ ArgParser.prototype = {
 
   getUsage : function() {
     if (this.command && this.command._usage) {
-      return this.command._usage;        
+      return this.command._usage;
     }
     else if (this.fallback && this.fallback._usage) {
       return this.fallback._usage;
     }
     if (this._usage) {
-      return this._usage;        
+      return this._usage;
     }
 
     // todo: use a template
@@ -312,7 +312,7 @@ ArgParser.prototype = {
             posStr = "[" + posStr + "]";
         }
         if (pos.list) {
-          posStr += "...";            
+          posStr += "...";
         }
       }
       str += posStr;
@@ -321,26 +321,26 @@ ArgParser.prototype = {
     if (options.length) {
       if (this._colors) {
         // must be a better way to do this
-        str += " [options]".blue;        
+        str += " [options]".blue;
       }
       else {
         str += " [options]";
       }
     }
-    
+
     if (options.length || positionals.length) {
       str += "\n\n";
     }
-  
+
     function spaces(length) {
       var spaces = "";
       for (var i = 0; i < length; i++) {
-        spaces += " ";          
+        spaces += " ";
       }
       return spaces;
     }
     var longest = positionals.reduce(function(max, pos) {
-      return pos.name.length > max ? pos.name.length : max; 
+      return pos.name.length > max ? pos.name.length : max;
     }, 0);
 
     positionals.forEach(function(pos) {
@@ -352,10 +352,10 @@ ArgParser.prototype = {
       else {
         str += (pos.help || "")
       }
-      str += "\n"; 
+      str += "\n";
     }, this);
     if (positionals.length && options.length) {
-      str += "\n";        
+      str += "\n";
     }
 
     if (options.length) {
@@ -368,19 +368,18 @@ ArgParser.prototype = {
       str += "\n"
 
       var longest = options.reduce(function(max, opt) {
-        return opt.string.length > max && !opt.hidden ? opt.string.length : max; 
+        return opt.string.length > max && !opt.hidden ? opt.string.length : max;
       }, 0);
 
       options.forEach(function(opt) {
         if (!opt.hidden) {
           str += "   " + opt.string + spaces(longest - opt.string.length) + "   ";
-          if (this._colors) {
-            str += ((opt.help + (opt.default != null ? "  [" + opt.default + "]" : "")) || "").grey;
-          }
-          else {
-            str += ((opt.help + (opt.default != null ? "  [" + opt.default + "]" : "")) || "")
-          }
-          str += "\n";     
+
+          var defaults = (opt.default != null ? "  [" + opt.default + "]" : "");
+          var help = opt.help + defaults || "";
+          str += this._colors ? help.grey : help;
+
+          str += "\n";
         }
       }, this);
     }
@@ -397,7 +396,7 @@ ArgParser.prototype.opt = function(arg) {
   var match = Opt({});
   this.specs.forEach(function(opt) {
     if (opt.matches(arg)) {
-       match = opt;         
+       match = opt;
     }
   });
   return match;
@@ -420,7 +419,7 @@ ArgParser.prototype.setOption = function(options, arg, value) {
      }
      catch(e) {}
   }
-  
+
   var name = option.name || arg;
   if (option.choices && option.choices.indexOf(value) == -1) {
      this.print(name + " must be one of: " + option.choices.join(", "), 1);
@@ -428,21 +427,21 @@ ArgParser.prototype.setOption = function(options, arg, value) {
 
   if (option.list) {
     if (!options[name]) {
-      options[name] = [value];         
+      options[name] = [value];
     }
     else {
-      options[name].push(value);        
+      options[name].push(value);
     }
   }
   else {
-    options[name] = value;      
+    options[name] = value;
   }
 };
 
 
-/* an arg is an item that's actually parsed from the command line 
+/* an arg is an item that's actually parsed from the command line
    e.g. "-l", "log.txt", or "--logfile=log.txt" */
-Arg = function(str) {  
+Arg = function(str) {
   var abbrRegex = /^\-(\w+?)$/,
       fullRegex = /^\-\-(no\-)?(.+?)(?:=(.+))?$/,
       valRegex = /^[^\-].*/;
@@ -456,10 +455,10 @@ Arg = function(str) {
   var isValue = str !== undefined && (str === "" || valRegex.test(str));
   var value;
   if (isValue) {
-    value = str;    
+    value = str;
   }
   else if (full) {
-    value = fullMatch[1] ? false : fullMatch[3];    
+    value = fullMatch[1] ? false : fullMatch[3];
   }
 
   return {
@@ -508,7 +507,7 @@ Opt = function(opt) {
     }
     string += "--" + (full || opt.name);
     if (metavar) {
-      string += " " + metavar;      
+      string += " " + metavar;
     }
   }
 
@@ -535,7 +534,7 @@ var nomnom = createParser();
 
 for (var i in nomnom) {
   if (typeof nomnom[i] == "function") {
-     createParser[i] = _(nomnom[i]).bind(nomnom);     
+     createParser[i] = _(nomnom[i]).bind(nomnom);
   }
 }
 
