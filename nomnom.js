@@ -375,10 +375,10 @@ ArgParser.prototype = {
         if (!opt.hidden) {
           str += "   " + opt.string + spaces(longest - opt.string.length) + "   ";
           if (this._colors) {
-            str += (opt.help || "").grey;
+            str += ((opt.help + (opt.default != null ? "  [" + opt.default + "]" : "")) || "").grey;
           }
           else {
-            str += (opt.help || "")
+            str += ((opt.help + (opt.default != null ? "  [" + opt.default + "]" : "")) || "")
           }
           str += "\n";     
         }
