@@ -4,7 +4,7 @@ var opts = {
    file: {
       position: 0,
       required: true
-   }  
+   }
 }
 
 var parser = nomnom().options(opts);
@@ -17,7 +17,7 @@ exports.testFlag = function(test) {
          position: 0,
       }
    })
-   .printer(function(string) {      
+   .printer(function(string) {
       test.equal(0, string.indexOf("'--key1' expects a value"))
       test.done();
    })
@@ -32,10 +32,11 @@ exports.testRequired = function(test) {
          required: true
       }
    })
-   .printer(function(string) {      
+   .printer(function(string) {
       test.equal(0, string.trim().indexOf("file argument is required"))
       test.done();
    })
+   .nocolors()
    .parse([]);
 }
 
@@ -50,9 +51,9 @@ exports.testChoices = function(test) {
    .printer(function(string) {
       test.equal(0, string.indexOf("color must be one of: green, blue"))
    });
-   
+
    parser.parse(['--color', 'red']);
-   
+
    var options = parser.parse(['--color', 'green']);
    test.equal(options.color, 'green');
    test.done();

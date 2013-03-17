@@ -28,7 +28,7 @@ var opts = {
    }
 }
 
-var parser = nomnom().options(opts).help("all the best foods").scriptName("test");
+var parser = nomnom().options(opts).help("all the best foods").scriptName("test").nocolors();
 
 var expected = "Usage:test[egg][options]eggrobinOptions:-a,--applehowmanyapples--b-nana-cNUM,--carrots=NUM--dillPICKLEallthebestfoods"
 
@@ -39,6 +39,7 @@ exports.testH = function(test) {
       test.equal(strip(string), expected)
       test.done();
    })
+   .nocolors()
    .parse(["-h"]);
 }
 
@@ -49,6 +50,7 @@ exports.testHelp = function(test) {
       test.equal(strip(string), expected)
       test.done();
    })
+   .nocolors()
    .parse(["--help"]);
 }
 
@@ -61,6 +63,7 @@ exports.testScriptName = function(test) {
         test.equal(strip(string),"Usage:test")
         test.done();
      })
+     .nocolors()
      .parse(["-h"]);
 }
 
@@ -73,6 +76,7 @@ exports.testUsage = function(test) {
          test.equal(string, "test usage")
          test.done();
       })
+      .nocolors()
       .parse(["--help"]);
 }
 
@@ -89,6 +93,7 @@ exports.testHidden = function(test) {
       test.equal(strip("Usage:test[options]Options:"), strip(string))
       test.done();
    })
+   .nocolors()
    .parse(["-h"]);
 }
 
@@ -111,5 +116,6 @@ exports.testRequiredOptional = function(test) {
       test.equal(strip("Usage:test<foo>[bar]fooThefoobarThebar"), strip(string))
       test.done();
    })
+   .nocolors()
    .parse(["-h"]);
 }

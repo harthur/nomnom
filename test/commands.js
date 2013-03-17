@@ -1,7 +1,7 @@
 var nomnom = require("../nomnom");
 
 function strip(str) {
-  return str.replace(/\s+/g, '');  
+  return str.replace(/\s+/g, '');
 }
 
 exports.testCallback = function(test) {
@@ -38,7 +38,7 @@ exports.testNoCommand = function(test) {
    test.expect(2);
 
    var parser = nomnom();
-   
+
    parser.nocommand()
      .options({
         version: {
@@ -49,11 +49,11 @@ exports.testNoCommand = function(test) {
         test.strictEqual(options.version, true);
      })
      .usage("fallback usage");
-   
+
    parser.command('run');
 
    var options = parser.parse(["--version"]);
-   
+
    test.strictEqual(options.version, true);
    test.done();
 }
@@ -89,32 +89,32 @@ function createParser() {
 
 exports.testUsage = function(test) {
    test.expect(4);
-   
+
    var parser = createParser();
    parser.printer(function(string) {
       test.equal(strip(string), "testusage");
    });
    parser.parse(["test", "-h"]);
 
-   parser = createParser();
+   parser = createParser().nocolors();
    parser.printer(function(string) {
       test.equal(strip(string), "Usage:testrun[options]Options:--debug--filefiletorunrunall");
    });
    parser.parse(["run", "-h"]);
 
-   parser = createParser();
+   parser = createParser().nocolors();
    parser.printer(function(string) {
       test.equal(strip(string), "Usage:test[command][options]commandoneof:run,testOptions:--debug--verbosenocommand");
    });
    parser.parse(["-h"]);
-   
-   parser = createParser();
+
+   parser = createParser().nocolors();
    parser.nocommand()
       .usage("fallback");
    parser.printer(function(string) {
       test.equal(strip(string), "fallback");
    });
    parser.parse(["-h"]);
-  
+
    test.done();
 }

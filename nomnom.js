@@ -102,8 +102,13 @@ ArgParser.prototype = {
     return this;
   },
 
-  colors : function() {
-    this._colors = true;
+  colors: function() {
+    // deprecated - colors are on by default now
+    return this;
+  },
+
+  nocolors : function() {
+    this._nocolors = true;
     return this;
   },
 
@@ -255,7 +260,9 @@ ArgParser.prototype = {
     // exit if required arg isn't present
     this.specs.forEach(function(opt) {
       if (opt.required && options[opt.name] === undefined) {
-         var msg = (opt.name + " argument is required").red;
+         var msg = opt.name + " argument is required";
+         msg = this._nocolors ? msg : msg.red;
+
          this.print("\n" + msg + "\n" + this.getUsage(), 1);
       }
     }, this);
@@ -283,7 +290,7 @@ ArgParser.prototype = {
 
     // todo: use a template
     var str = "\n"
-    if (this._colors) {
+    if (!this._nocolors) {
       str += "Usage:".bold;
     }
     else {
@@ -320,7 +327,7 @@ ArgParser.prototype = {
     });
 
     if (options.length) {
-      if (this._colors) {
+      if (!this._nocolors) {
         // must be a better way to do this
         str += " [options]".blue;
       }
@@ -347,7 +354,7 @@ ArgParser.prototype = {
     positionals.forEach(function(pos) {
       var posStr = pos.string || pos.name;
       str += posStr + spaces(longest - posStr.length) + "     ";
-      if (this._colors) {
+      if (!this._nocolors) {
         str += (pos.help || "").grey
       }
       else {
@@ -360,7 +367,7 @@ ArgParser.prototype = {
     }
 
     if (options.length) {
-      if (this._colors) {
+      if (!this._nocolors) {
         str += "Options:".blue;
       }
       else {
@@ -378,7 +385,7 @@ ArgParser.prototype = {
 
           var defaults = (opt.default != null ? "  [" + opt.default + "]" : "");
           var help = opt.help ? opt.help + defaults : "";
-          str += this._colors ? help.grey : help;
+          str += this._nocolors ? help: help.grey;
 
           str += "\n";
         }

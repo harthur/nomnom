@@ -25,7 +25,7 @@ var opts = require("nomnom")
 if (opts.debug)
    // do stuff
 ```
-	
+
 You don't have to specify anything if you don't want to:
 
 ```javascript
@@ -262,10 +262,6 @@ Nomnom can't detect the alias used to run your script. You can use `script` to p
 #### printer
 
 Overrides the usage printing function.
-
-#### colors
-
-calling `colors()` will cause usage printout to be slightly colorful.
 
 #### command
 
