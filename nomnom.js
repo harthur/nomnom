@@ -123,7 +123,7 @@ ArgParser.prototype = {
 
   parse : function(argv) {
     this.print = this.print || function(str, code) {
-      console.log(str + '\n');
+      console.log(str);
       process.exit(code || 0);
     };
     this._help = this._help || "";
@@ -395,7 +395,7 @@ ArgParser.prototype = {
     if (this._help) {
       str += "\n" + this._help;
     }
-    return str + "\n";
+    return str;
   }
 };
 
