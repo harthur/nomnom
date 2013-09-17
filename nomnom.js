@@ -150,11 +150,45 @@ ArgParser.prototype = {
           return this.print(this._script + ": no such command '" + arg + "'", 1);
        }
        else {
+       
           // no command but command expected e.g. 'git -v'
+         
+          var helpStringBuilder = {
+            list : function() {
+                return 'one of: ' + _(this.commands).keys().join(", ");
+            },
+            twoColumn : function() {
+              // find the longest command name to ensure horizontal alignment
+              var maxLength = _(this.commands).max(function (cmd) {
+                return cmd.name.length;
+              }).name.length;
+
+              // create the two column text strings 
+              var cmdHelp = _.map(this.commands, function(cmd, name) {
+                var diff = maxLength - name.length;
+                var pad = new Array(diff + 4).join(" ");
+                return "  " + [ name, pad, cmd.help ].join(" ");
+              });            
+              return "\n" + cmdHelp.join("\n");    
+            } 
+          };
+             
+          // if there are a small number of commands and all have help strings, 
+          // display them in a two column table; otherwise use the brief version.
+          // The arbitrary choice of "20" comes from the number commands git
+          // displays as "common commands"
+          var helpType = 'list';
+          if (_(this.commands).size() <= 20) {
+            if (_(this.commands).every(function (cmd) { return cmd.help; })) {
+                helpType = 'twoColumn';
+            }            
+          }
+                    
           this.specs.command = {
             position: 0,
-            help: 'one of: ' + _(this.commands).keys().join(", ")
+            help: helpStringBuilder[helpType].call(this)
           }
+          
           if (this.fallback) {
             _(this.specs).extend(this.fallback.specs);
             this._help = this.fallback.help;
