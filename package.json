@@ -19,8 +19,8 @@
     "parser"
   ],
   "dependencies": {
-    "colors": "0.5.x",
-    "underscore": "~1.4.4"
+    "underscore": "~1.4.4",
+    "chalk": "~0.4.0"
   },
   "devDependencies": {
     "nodeunit": "~0.7.4"

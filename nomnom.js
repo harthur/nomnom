@@ -1,5 +1,4 @@
-var _ = require("underscore"),
-    colors = require("colors");
+var _ = require("underscore"), chalk = require('chalk');
 
 
 function ArgParser() {
@@ -293,7 +292,7 @@ ArgParser.prototype = {
     this.specs.forEach(function(opt) {
       if (opt.required && options[opt.name] === undefined) {
          var msg = opt.name + " argument is required";
-         msg = this._nocolors ? msg : msg.red;
+         msg = this._nocolors ? msg : chalk.red(msg);
 
          this.print("\n" + msg + "\n" + this.getUsage(), 1);
       }
@@ -323,7 +322,7 @@ ArgParser.prototype = {
     // todo: use a template
     var str = "\n"
     if (!this._nocolors) {
-      str += "Usage:".bold;
+      str += chalk.bold("Usage:");
     }
     else {
       str += "Usage:";
@@ -361,7 +360,7 @@ ArgParser.prototype = {
     if (options.length) {
       if (!this._nocolors) {
         // must be a better way to do this
-        str += " [options]".blue;
+        str += chalk.blue(" [options]");
       }
       else {
         str += " [options]";
@@ -387,7 +386,7 @@ ArgParser.prototype = {
       var posStr = pos.string || pos.name;
       str += posStr + spaces(longest - posStr.length) + "     ";
       if (!this._nocolors) {
-        str += (pos.help || "").grey
+        str += chalk.grey(pos.help || "")
       }
       else {
         str += (pos.help || "")
@@ -400,7 +399,7 @@ ArgParser.prototype = {
 
     if (options.length) {
       if (!this._nocolors) {
-        str += "Options:".blue;
+        str += chalk.blue("Options:");
       }
       else {
         str += "Options:";
@@ -417,7 +416,7 @@ ArgParser.prototype = {
 
           var defaults = (opt.default != null ? "  [" + opt.default + "]" : "");
           var help = opt.help ? opt.help + defaults : "";
-          str += this._nocolors ? help: help.grey;
+          str += this._nocolors ? help: chalk.grey(help);
 
           str += "\n";
         }
