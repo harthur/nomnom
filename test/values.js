@@ -72,4 +72,9 @@ exports.testTypes = function(test) {
    test.done();
 }
 
+exports.testValues = function(test) {
+   var options = parser.parseArgs(["--num1", "-4 4"]);
 
+   test.strictEqual(options.num1, "-4 4");
+   test.done();
+}
