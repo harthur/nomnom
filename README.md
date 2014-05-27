@@ -173,6 +173,10 @@ A string description of the option for the usage printout.
 
 The value to give the option if it's not specified in the arguments.
 
+#### type
+
+If you don't want the option JSON-parsed, specify type `"string"`.
+
 #### callback
 
 A callback that will be executed as soon as the option is encountered. If the callback returns a string it will print the string and exit:
@@ -180,8 +184,9 @@ A callback that will be executed as soon as the option is encountered. If the ca
 ```javascript
 nomnom.option('count', {
    callback: function(count) {
-      if (count != parseInt(count))
+      if (count != parseInt(count)) {
          return "count must be an integer";
+      }
    }
 })
 ```
@@ -206,9 +211,18 @@ If this is set to `true` and the option isn't in the args, a message will be pri
 
 A list of the possible values for the option (e.g. `['run', 'test', 'open']`). If the parsed value isn't in the list a message will be printed and the program will exit.
 
-#### type
+#### transform
 
-If you don't want the option JSON-parsed, specify type `"string"`.
+A function that takes the value of the option as entered and returns a new value that will be seen as the value of the option.
+
+```javascript
+nomnom.option('date', {
+   abbr: 'd',
+   transform: function(timestamp) {
+     return new Date(timestamp);
+   }
+})
+```
 
 #### hidden
 

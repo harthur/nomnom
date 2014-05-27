@@ -459,6 +459,10 @@ ArgParser.prototype.setOption = function(options, arg, value) {
      catch(e) {}
   }
 
+  if (option.transform) {
+     value = option.transform(value);
+  }
+
   var name = option.name || arg;
   if (option.choices && option.choices.indexOf(value) == -1) {
      this.print(name + " must be one of: " + option.choices.join(", "), 1);
