@@ -285,6 +285,10 @@ Takes a command name and gives you a command object on which you can chain comma
 
 Gives a command object that will be used when no command is called.
 
+#### nocolors
+
+Disables coloring of the usage message.
+
 #### parse
 
 Parses node's `process.argv` and returns the parsed options hash. You can also provide argv:
