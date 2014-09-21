@@ -485,9 +485,9 @@ ArgParser.prototype.setOption = function(options, arg, value) {
 /* an arg is an item that's actually parsed from the command line
    e.g. "-l", "log.txt", or "--logfile=log.txt" */
 var Arg = function(str) {
-  var abbrRegex = /^\-(\w+?)$/,
+  var abbrRegex = /^\-([a-zA-Z]+?)$/,
       fullRegex = /^\-\-(no\-)?(.+?)(?:=(.+))?$/,
-      valRegex = /^[^\-].*/;
+      valRegex = /^[^\-].*|^\-[\d.]*$/;
 
   var charMatch = abbrRegex.exec(str),
       chars = charMatch && charMatch[1].split("");
