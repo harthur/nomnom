@@ -484,7 +484,7 @@ ArgParser.prototype.setOption = function(options, arg, value) {
 
 /* an arg is an item that's actually parsed from the command line
    e.g. "-l", "log.txt", or "--logfile=log.txt" */
-Arg = function(str) {
+var Arg = function(str) {
   var abbrRegex = /^\-(\w+?)$/,
       fullRegex = /^\-\-(no\-)?(.+?)(?:=(.+))?$/,
       valRegex = /^[^\-].*/;
@@ -515,7 +515,7 @@ Arg = function(str) {
 
 
 /* an opt is what's specified by the user in opts hash */
-Opt = function(opt) {
+var Opt = function(opt) {
   var strings = (opt.string || "").split(","),
       abbr, full, metavar;
   for (var i = 0; i < strings.length; i++) {
