@@ -12,9 +12,18 @@ var parser = nomnom().options(opts);
 exports.testFlag = function(test) {
    test.expect(1);
 
-   nomnom().options({
-      file: {
-         position: 0,
+   var options = nomnom().parse(["--key1"]);
+
+   test.equal(options.key1, undefined);
+   test.done();
+}
+
+exports.testExists = function(test) {
+   test.expect(1);
+
+   var options = nomnom().options({
+      key1: {
+         position: 0
       }
    })
    .printer(function(string) {

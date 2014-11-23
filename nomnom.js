@@ -239,7 +239,7 @@ ArgParser.prototype = {
               that.setOption(options, last, val.value);
               return Arg(); // skip next turn - swallow arg
            }
-           else {
+           else if (that.exists(last)) {
               that.print("'-" + (that.opt(last).name || last) + "'"
                 + " expects a value\n\n" + that.getUsage(), 1);
            }
@@ -261,7 +261,7 @@ ArgParser.prototype = {
               that.setOption(options, arg.full, val.value);
               return Arg();
             }
-            else {
+            else if (that.exists(arg.full)) {
               that.print("'--" + (that.opt(arg.full).name || arg.full) + "'"
                 + " expects a value\n\n" + that.getUsage(), 1);
             }
@@ -439,6 +439,12 @@ ArgParser.prototype.opt = function(arg) {
     }
   });
   return match;
+};
+
+ArgParser.prototype.exists = function(arg) {
+  return _.any(this.specs, function(opt) {
+    return opt.matches(arg);
+  });
 };
 
 ArgParser.prototype.setOption = function(options, arg, value) {
