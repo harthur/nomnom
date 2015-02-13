@@ -122,8 +122,13 @@ ArgParser.prototype = {
 
   parse : function(argv) {
     this.print = this.print || function(str, code) {
-      console.log(str);
-      process.exit(code || 0);
+      if (code > 0) {
+        console.error(str);
+        process.exit(code);
+      } else {
+        console.log(str);
+        process.exit(0);
+      }
     };
     this._help = this._help || "";
     this._script = this._script || process.argv[0] + " "
