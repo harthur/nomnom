@@ -288,7 +288,7 @@ ArgParser.prototype = {
         if (typeof opt.transform === 'function') {
           optValue = opt.transform(optValue);
         }
-        options[opt.name] = defaultValue;
+        options[opt.name] = optValue;
 
       }
     }, this);
