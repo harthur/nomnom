@@ -1,8 +1,12 @@
 var _ = require("underscore"), chalk = require('chalk');
 
+// The arbitrary choice of "20" comes from the number commands git
+// displays as "common commands"
+var MAX_HELP_COMMANDS = 20;
+
 
 function ArgParser() {
-   this.commands = {};  // expected commands
+   this.commands = [];  // expected commands
    this.specs = {};     // option specifications
 }
 
@@ -11,10 +15,11 @@ ArgParser.prototype = {
   command : function(name) {
     var command;
     if (name) {
-      command = this.commands[name] = {
+      command = {
         name: name,
         specs: {}
       };
+      this.commands.push(command);
     }
     else {
       command = this.fallback = {
@@ -132,11 +137,10 @@ ArgParser.prototype = {
 
     var argv = argv || process.argv.slice(2);
 
-    var arg = Arg(argv[0]).isValue && argv[0],
-        command = arg && this.commands[arg],
-        commandExpected = !_(this.commands).isEmpty();
+    var arg = Arg(argv[0]).isValue && argv[0];
 
-    if (commandExpected) {
+    if (this.commands.length > 0) {
+       var command = _.find(this.commands, function (command) { return command.name === arg });
        if (command) {
           _(this.specs).extend(command.specs);
           this._script += " " + command.name;
@@ -150,40 +154,42 @@ ArgParser.prototype = {
        }
        else {
           // no command but command expected e.g. 'git -v'
-          var helpStringBuilder = {
-            list : function() {
-               return 'one of: ' + _(this.commands).keys().join(", ");
-            },
-            twoColumn : function() {
+          function helpStringBuilder (commands) {
+            var helpCommands = [], extraCommands = [];
+            commands.forEach(function (cmd) {
+              if (cmd.help && helpCommands.length < MAX_HELP_COMMANDS) {
+                helpCommands.push(cmd);
+              } else {
+                extraCommands.push(cmd);
+              }
+            });
+
+            var extraCommandOutput = extraCommands.map(function (cmd) { return cmd.name }).join(", ");
+
+            if (helpCommands.length === 0) {
+              return 'one of: ' + extraCommandOutput;
+            } else {
               // find the longest command name to ensure horizontal alignment
-              var maxLength = _(this.commands).max(function (cmd) {
+              var maxLength = _(helpCommands).max(function (cmd) {
                 return cmd.name.length;
               }).name.length;
 
               // create the two column text strings
-              var cmdHelp = _.map(this.commands, function(cmd, name) {
-                var diff = maxLength - name.length;
+              var cmdHelp = _.map(helpCommands, function (cmd) {
+                var diff = maxLength - cmd.name.length;
                 var pad = new Array(diff + 4).join(" ");
-                return "  " + [ name, pad, cmd.help ].join(" ");
-              });
+                return "  " + [ cmd.name, pad, cmd.help ].join(" ");
+              })
+              if (extraCommands.length > 0) {
+                cmdHelp.push('also: ' + extraCommandOutput);
+              }
               return "\n" + cmdHelp.join("\n");
-            }
-          };
-
-          // if there are a small number of commands and all have help strings,
-          // display them in a two column table; otherwise use the brief version.
-          // The arbitrary choice of "20" comes from the number commands git
-          // displays as "common commands"
-          var helpType = 'list';
-          if (_(this.commands).size() <= 20) {
-            if (_(this.commands).every(function (cmd) { return cmd.help; })) {
-                helpType = 'twoColumn';
             }
           }
 
           this.specs.command = {
             position: 0,
-            help: helpStringBuilder[helpType].call(this)
+            help: helpStringBuilder(this.commands)
           }
 
           if (this.fallback) {
