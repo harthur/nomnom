@@ -90,7 +90,7 @@ exports.testHidden = function(test) {
    })
    .scriptName("test")
    .printer(function(string) {
-      test.equal(strip("Usage:test[options]Options:"), strip(string))
+      test.equal(strip("Usage:test"), strip(string))
       test.done();
    })
    .nocolors()
