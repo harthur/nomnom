@@ -104,7 +104,7 @@ exports.testUsage = function(test) {
 
    parser = createParser().nocolors();
    parser.printer(function(string) {
-      test.equal(strip(string), "Usage:test[command][options]commandoneof:run,testOptions:--debug--verbosenocommand");
+      test.equal(strip(string), "Usage:test[command][options]commandrunrunallalso:testOptions:--debug--verbosenocommand");
    });
    parser.parse(["-h"]);
 
