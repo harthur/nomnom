@@ -41,6 +41,14 @@ exports.testFlag = function(test) {
    test.done();
 }
 
+exports.testNotFlags = function(test) {
+  var options = parser.parse(["--", "foo", "--no-verbose"]);
+
+  test.strictEqual(options.verbose, true);
+  test.deepEqual(options["--"], ["foo", "--no-verbose"]);
+  test.done();
+}
+
 exports.testList = function(test) {
    var options = parser.parse(["pos0", "pos1", "--list1=val0", "--list2", "val1",
      "--list2", "val2", "pos2"]);

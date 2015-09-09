@@ -132,6 +132,13 @@ ArgParser.prototype = {
 
     var argv = argv || process.argv.slice(2);
 
+    var notFlags = [];
+    var doubleDashIndex = argv.indexOf("--");
+    if (doubleDashIndex > -1) {
+      notFlags = argv.slice(doubleDashIndex + 1);
+      argv = argv.slice(0, doubleDashIndex);
+    }
+
     var arg = Arg(argv[0]).isValue && argv[0],
         command = arg && this.commands[arg],
         commandExpected = !_(this.commands).isEmpty();
@@ -211,6 +218,12 @@ ArgParser.prototype = {
     }
 
     var options = {};
+
+    /* -- cmd --flags */
+    if (notFlags.length){
+      this.setOption(options, "--", notFlags);
+    }
+
     var args = argv.map(function(arg) {
       return Arg(arg);
     })
