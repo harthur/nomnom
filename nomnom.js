@@ -1,6 +1,30 @@
 var _ = require("underscore"), chalk = require('chalk');
 
 
+var retArgs = function(){return Array.prototype.slice.call(arguments);};
+
+var noColorConfig = {
+  usageHeadingColor: retArgs,
+  usageStringColor: retArgs,
+  positionalHelpColor: retArgs,
+  optionsHeaderColor: retArgs,
+  helpColor: retArgs,
+  requiredArgColor: retArgs
+};
+
+var isWin = /^win/.test(process.platform);
+
+
+var defaultColorConfig = _.extend(noColorConfig, {
+  usageHeadingColor: chalk.bold,
+  usageStringColor: chalk.stripColor,
+  positionalHelpColor: chalk.grey,
+  optionsHeaderColor: isWin ? chalk.cyan : chalk.blue,
+  helpColor: chalk.stripColor,
+  requiredArgColor: chalk.red
+});
+
+
 function ArgParser() {
    this.commands = {};  // expected commands
    this.specs = {};     // option specifications
@@ -106,8 +130,16 @@ ArgParser.prototype = {
     return this;
   },
 
+  _colorConfig: _.extend(defaultColorConfig),
+
+  setColors: function(colorConfig) {
+    this._colorConfig = _.extend(defaultColorConfig, colorConfig);
+    // deprecated - colors are on by default now
+    return this;
+  },
+
   nocolors : function() {
-    this._nocolors = true;
+    this._colorConfig = _.extend(noColorConfig);
     return this;
   },
 
@@ -292,7 +324,8 @@ ArgParser.prototype = {
     this.specs.forEach(function(opt) {
       if (opt.required && options[opt.name] === undefined) {
          var msg = opt.name + " argument is required";
-         msg = this._nocolors ? msg : chalk.red(msg);
+         msg = this._colorConfig.requiredArgColor(msg);
+         //msg = this._nocolors ? msg : chalk.red(msg);
 
          this.print("\n" + msg + "\n" + this.getUsage(), 1);
       }
@@ -320,18 +353,15 @@ ArgParser.prototype = {
     }
 
     // todo: use a template
-    var str = "\n"
-    if (!this._nocolors) {
-      str += chalk.bold("Usage:");
-    }
-    else {
-      str += "Usage:";
-    }
-    str += " " + this._script;
+    var str = "\n";
+
+    str += this._colorConfig.usageHeadingColor("Usage:");
+    str += this._colorConfig.usageStringColor(" " + this._script);
+
 
     var positionals = _(this.specs).select(function(opt) {
       return opt.position != undefined;
-    })
+    });
     positionals = _(positionals).sortBy(function(opt) {
       return opt.position;
     });
@@ -341,7 +371,9 @@ ArgParser.prototype = {
 
     // assume there are no gaps in the specified pos. args
     positionals.forEach(function(pos) {
-      str += " ";
+
+      str += this._colorConfig.usageStringColor(" ");
+
       var posStr = pos.string;
       if (!posStr) {
         posStr = pos.name || "arg" + pos.position;
@@ -354,21 +386,15 @@ ArgParser.prototype = {
           posStr += "...";
         }
       }
-      str += posStr;
-    });
+      str += this._colorConfig.usageStringColor(posStr);
+    }, this);
 
     if (options.length) {
-      if (!this._nocolors) {
-        // must be a better way to do this
-        str += chalk.blue(" [options]");
-      }
-      else {
-        str += " [options]";
-      }
+      str += this._colorConfig.optionsHeaderColor(" [options]");
     }
 
     if (options.length || positionals.length) {
-      str += "\n\n";
+      str += this._colorConfig.usageStringColor("\n\n");
     }
 
     function spaces(length) {
@@ -384,27 +410,20 @@ ArgParser.prototype = {
 
     positionals.forEach(function(pos) {
       var posStr = pos.string || pos.name;
-      str += posStr + spaces(longest - posStr.length) + "     ";
-      if (!this._nocolors) {
-        str += chalk.grey(pos.help || "")
-      }
-      else {
-        str += (pos.help || "")
-      }
-      str += "\n";
+      str += this._colorConfig.usageStringColor(posStr + spaces(longest - posStr.length) + "     ");
+
+      str += this._colorConfig.positionalHelpColor(pos.help || "");
+      str += this._colorConfig.usageStringColor("\n");
+
     }, this);
     if (positionals.length && options.length) {
-      str += "\n";
+      str += this._colorConfig.usageStringColor("\n");
     }
 
     if (options.length) {
-      if (!this._nocolors) {
-        str += chalk.blue("Options:");
-      }
-      else {
-        str += "Options:";
-      }
-      str += "\n"
+
+      str += this._colorConfig.optionsHeaderColor("Options:");
+      str += this._colorConfig.usageStringColor("\n");
 
       var longest = options.reduce(function(max, opt) {
         return opt.string.length > max && !opt.hidden ? opt.string.length : max;
@@ -412,19 +431,18 @@ ArgParser.prototype = {
 
       options.forEach(function(opt) {
         if (!opt.hidden) {
-          str += "   " + opt.string + spaces(longest - opt.string.length) + "   ";
+          str += this._colorConfig.usageStringColor("   " + opt.string + spaces(longest - opt.string.length) + "   ");
 
           var defaults = (opt.default != null ? "  [" + opt.default + "]" : "");
           var help = opt.help ? opt.help + defaults : "";
-          str += this._nocolors ? help: chalk.grey(help);
-
-          str += "\n";
+          str += this._colorConfig.helpColor(help);
+          str += this._colorConfig.usageStringColor("\n");
         }
       }, this);
     }
 
     if (this._help) {
-      str += "\n" + this._help;
+      str += this._colorConfig.usageStringColor("\n"+ this._help);
     }
     return str;
   }

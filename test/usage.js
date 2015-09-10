@@ -36,6 +36,8 @@ exports.testH = function(test) {
    test.expect(1);
 
    parser.printer(function(string) {
+      console.log('\n EXPECTED: ', expected);
+      console.log('\n   ACTUAL: ', strip(string));
       test.equal(strip(string), expected)
       test.done();
    })
