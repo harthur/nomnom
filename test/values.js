@@ -44,7 +44,7 @@ exports.testFlag = function(test) {
 exports.testList = function(test) {
    var options = parser.parse(["pos0", "pos1", "--list1=val0", "--list2", "val1",
      "--list2", "val2", "pos2"]);
-  
+
    test.deepEqual(options.list1, ["val0"]);
    test.deepEqual(options.list2, ["val1", "val2"]);
    test.deepEqual(options.list3, ["pos1", "pos2"]);
@@ -63,7 +63,7 @@ exports.testDefault = function(test) {
 exports.testTypes = function(test) {
    var options = parser.parseArgs(["", "-x", "3.14", "-w", "true", "-q", "120",
      "--num1", "4"]);
-     
+
    test.strictEqual(options[0], "");
    test.strictEqual(options.x, 3.14);
    test.strictEqual(options.w, true);
@@ -72,4 +72,16 @@ exports.testTypes = function(test) {
    test.done();
 }
 
+exports.testDash = function(test) {
+  var options = parser.parseArgs(['--num1', '-']);
 
+  test.strictEqual(options.num1, '-');
+  test.done();
+};
+
+exports.testNumbers = function(test) {
+  var options = parser.parseArgs(['sum', '-1', '2.5', '-3.5', '4']);
+
+  test.deepEqual(options.list3, ['-1', '2.5', '-3.5', '4']);
+  test.done();
+};
