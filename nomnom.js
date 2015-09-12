@@ -487,7 +487,7 @@ ArgParser.prototype.setOption = function(options, arg, value) {
 var Arg = function(str) {
   var abbrRegex = /^\-(\w+?)$/,
       fullRegex = /^\-\-(no\-)?(.+?)(?:=(.+))?$/,
-      valRegex = /^[^\-].*/;
+      valRegex = /\s|^[^\-].*/;
 
   var charMatch = abbrRegex.exec(str),
       chars = charMatch && charMatch[1].split("");
