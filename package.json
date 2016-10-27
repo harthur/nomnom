@@ -1,14 +1,17 @@
 {
-  "name": "nomnom",
+  "name": "@carbon-io/nomnom",
   "description": "Option parser with generated usage and commands",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "author": "Heather Arthur <fayearthur@gmail.com>",
+  "contributors": [
+    "Greg Banks <greg@objectlabs.com>"
+  ],
   "scripts": {
     "test": "./node_modules/.bin/nodeunit test/*.js"
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/harthur/nomnom.git"
+    "url": "http://github.com/carbon-io/nomnom.git"
   },
   "main": "./nomnom",
   "keywords": [
@@ -23,6 +26,6 @@
     "chalk": "~0.4.0"
   },
   "devDependencies": {
-    "nodeunit": "~0.7.4"
+    "nodeunit": "~0.10.0"
   }
 }
