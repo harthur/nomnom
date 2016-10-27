@@ -1,7 +1,3 @@
-# deprecation notice
-
-Nomnom is deprecated. Check out https://github.com/tj/commander.js, which should have most, if not all of the capability that nomnom had. Thank you!
-
 # nomnom
 nomnom is an option parser for node. It noms your args and gives them back to you in a hash.
 
