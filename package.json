@@ -2,6 +2,7 @@
   "name": "nomnom",
   "description": "Option parser with generated usage and commands",
   "version": "1.8.1",
+  "license": "MIT",
   "author": "Heather Arthur <fayearthur@gmail.com>",
   "scripts": {
     "test": "./node_modules/.bin/nodeunit test/*.js"
