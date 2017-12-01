@@ -3,6 +3,7 @@
   "description": "Option parser with generated usage and commands",
   "version": "1.8.1",
   "author": "Heather Arthur <fayearthur@gmail.com>",
+  "license" : "MIT",
   "scripts": {
     "test": "./node_modules/.bin/nodeunit test/*.js"
   },
