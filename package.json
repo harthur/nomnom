@@ -24,5 +24,6 @@
   },
   "devDependencies": {
     "nodeunit": "~0.7.4"
-  }
+  },
+  "license": "MIT"
 }
